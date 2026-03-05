@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library · Blackboard 2.0</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* (ALL YOUR EXISTING STYLES REMAIN THE SAME) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #4338ca;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #64748b;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --card-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--darker);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+      /* NAVBAR */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.logo:hover .logo-image {
+  transform: rotate(-5deg) scale(1.1);
+}
+
+.logo-text {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--gray-dark);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 8px 0;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.nav-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--darker);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+
+        .upload-btn {
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .upload-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* MAIN CONTENT */
+        .main-container {
+            max-width: 1400px;
+            margin: 5rem auto 2rem;
+            padding: 0 2rem;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            color: var(--gray-dark);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* SEARCH AND FILTERS */
+        .search-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--light);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .filter-dropdown {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            background: var(--light);
+            cursor: pointer;
+            min-width: 180px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+        }
+
+        .filter-dropdown:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* STATS CARDS */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--light) 0%, #fefefe 100%);
+            padding: 1.5rem;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .stat-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.pdf { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .stat-icon.doc { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .stat-icon.slides { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .stat-icon.notes { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--dark);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+        }
+
+        /* CONTENT GRID */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .content-card {
+            background: linear-gradient(135deg, var(--light) 0%, #fefefe 100%);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .file-type {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .file-type.pdf { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .file-type.doc { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .file-type.pptx { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .file-type.txt { background: rgba(148, 163, 184, 0.1); color: var(--gray); }
+        .file-type.zip { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+        .file-type.book { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+            line-height: 1.4;
+        }
+
+        .content-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+        }
+
+        .content-description {
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            padding: 1.25rem 1.5rem;
+            background: var(--light-gray);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .file-size {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--light);
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .action-btn:disabled:hover {
+            background: var(--light);
+            color: var(--primary);
+            transform: none;
+            border-color: var(--border-color);
+        }
+/* UPLOAD MODAL STYLES - Add these to your existing CSS */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: var(--light);
+    border-radius: var(--card-radius);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 0.95rem;
+}
+
+.required {
+    color: var(--danger);
+}
+
+.form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background: var(--light);
+    font-family: 'Inter', sans-serif;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.file-drop-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 10px;
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--light-gray);
+}
+
+.file-drop-area:hover, .file-drop-area.dragover {
+    border-color: var(--primary);
+    background: rgba(79, 70, 229, 0.05);
+}
+
+.file-info {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--gray-dark);
+}
+
+.upload-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--light-gray);
+    border-radius: 8px;
+    display: none;
+}
+
+.file-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.simple-tip {
+    background: var(--light-gray);
+    border-left: 4px solid var(--primary);
+    padding: 0.75rem 1rem;
+    border-radius: 0 8px 8px 0;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--gray-dark);
+}
+
+.simple-tip strong {
+    color: var(--dark);
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: var(--light-gray);
+    color: var(--dark);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--border-color);
+}
+
+/* Book-specific author field */
+#authorFieldGroup {
+    display: none;
+}
+
+/* Quick upload tip */
+.quick-upload-tip {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(8, 145, 178, 0.05));
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.quick-upload-tip h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+    font-size: 0.95rem;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-top: 1rem;
+    display: none;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--gray-dark);
+    margin-top: 0.5rem;
+}
+
+/* Responsive for modal */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 0.5rem;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
+        /* NEW STYLES FOR RECOMMENDATIONS */
+        .recommendation-section {
+            margin: 2rem 0 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.03), rgba(8, 145, 178, 0.03));
+            border-radius: 20px;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            display: none;
+        }
+
+        .recommendation-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendation-header i {
+            font-size: 1.8rem;
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 0.8rem;
+            border-radius: 12px;
+        }
+
+        .recommendation-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .recommendation-header p {
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .rec-badge {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.8rem;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        }
+        .rec-badge i {
+            font-size: 0.7rem;
+        }
+        
+        .action-btn.view-btn {
+            width: auto;
+            padding: 0 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+        .action-btn.view-btn i {
+            font-size: 0.8rem;
+        }
+        .action-btn.view-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        .category-pill {
+            background: var(--light-gray);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--gray-dark);
+            border: 1px solid var(--border-color);
+        }
+    
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+       
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        <div class="page-header">
+            <h1 class="page-title">Digital Content Library</h1>
+            <p class="page-subtitle">Discover, share, and access educational resources. Keep learning organized.</p>
+            <div class="header-actions">
+                <button class="upload-btn" id="openUploadModalMobile">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Resource
+                </button>
+            </div>
+        </div>
+
+        <!-- RECOMMENDATION SECTION - DYNAMICALLY UPDATED -->
+        <div class="recommendation-section" id="recommendationSection">
+            <div class="recommendation-header">
+                <i class="fas fa-magic"></i>
+                <div>
+                    <h2>You may also like <span id="currentCategoryName"></span></h2>
+                    <p>Based on your interest in this category</p>
+                </div>
+            </div>
+            <div class="recommendation-grid" id="recommendationGrid">
+                <!-- Recommendations will be injected here -->
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon pdf">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">PDF Documents</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon doc">
+                        <i class="fas fa-file-word"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Word Documents</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon slides">
+                        <i class="fas fa-file-powerpoint"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Presentations</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon notes">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Study Notes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search resources, topics, keywords...">
+            </div>
+            <select class="filter-dropdown" id="typeFilter">
+                <option value="all">All Types</option>
+                <option value="pdf">PDF</option>
+                <option value="doc">Word</option>
+                <option value="slides">Presentations</option>
+                <option value="notes">Notes</option>
+                <option value="book">Books</option>
+                <option value="other">Other</option>
+            </select>
+            <select class="filter-dropdown" id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="programming">Programming</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="science">Science</option>
+                <option value="design">Design</option>
+                <option value="business">Business</option>
+            </select>
+        </div>
+
+        <div class="content-grid" id="contentGrid">
+            <!-- Main content will be populated here -->
+        </div>
+
+        <div id="noResults" style="display: none; text-align: center; padding: 4rem 1rem;">
+            <div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(8, 145, 178, 0.1)); width: 6rem; height: 6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                <i class="fas fa-search" style="font-size: 2.5rem; color: var(--primary);"></i>
+            </div>
+            <h3 style="color: var(--dark); margin-bottom: 0.75rem; font-size: 1.5rem;">No resources found</h3>
+            <p style="color: var(--gray-dark); max-width: 400px; margin: 0 auto;">Try different keywords or browse all categories</p>
+        </div>
+    </div>
+
+    <!-- UPLOAD MODAL (unchanged) -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Upload Resource</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label class="form-label">Resource Title <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="fileTitle" placeholder="e.g., Python Functions Guide" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description (Optional)</label>
+                        <textarea class="form-textarea" id="fileDescription" placeholder="Briefly describe..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category <span class="required">*</span></label>
+                        <select class="form-select" id="fileCategory" required>
+                            <option value="">Select</option>
+                            <option value="programming">Programming</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="science">Science</option>
+                            <option value="design">Design</option>
+                            <option value="business">Business</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Resource Type <span class="required">*</span></label>
+                        <select class="form-select" id="fileType" required>
+                            <option value="">Select</option>
+                            <option value="pdf">PDF</option>
+                            <option value="doc">Word</option>
+                            <option value="slides">Presentation</option>
+                            <option value="notes">Notes</option>
+                            <option value="book">Book</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="authorFieldGroup">
+                        <label class="form-label">Author (optional)</label>
+                        <input type="text" class="form-input" id="fileAuthor">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keywords (Optional)</label>
+                        <input type="text" class="form-input" id="fileKeywords" placeholder="python, functions">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select File <span class="required">*</span></label>
+                        <div class="file-drop-area" id="dropArea">
+                            <i class="fas fa-cloud-upload-alt" style="font-size:2.5rem;color:var(--primary); margin-bottom:1rem;"></i>
+                            <p style="margin-bottom:0.5rem;font-weight:600;">Drag & drop or click</p>
+                            <input type="file" id="fileInput" style="display:none;">
+                            <button type="button" class="btn-secondary" onclick="document.getElementById('fileInput').click()">Choose File</button>
+                            <p class="file-info">Max 50MB</p>
+                        </div>
+                        <div class="upload-preview" id="filePreview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:flex; align-items:flex-start; gap:0.5rem;">
+                            <input type="checkbox" id="termsCheckbox" required> 
+                            <span>I confirm this content follows guidelines</span>
+                        </label>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn-secondary" id="cancelUpload">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ================= SUPABASE INIT ================= */
+    const supabaseUrl = "https://wbdurdtfwhmrhahexexw.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndiZHVyZHRmd2htcmhhaGV4ZXh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3NDA4NTQsImV4cCI6MjA4NzMxNjg1NH0.WUVzMOG6gsi0Zh8cszp-K5XaK7R6E7BKFau3lFPP_e4";
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let currentData = [];
+    let userViewHistory = []; // Track which categories user views
+
+    /* ================= MODAL ================= */
+    const uploadModal = document.getElementById('uploadModal');
+    const openModalBtns = document.querySelectorAll('[id^="openUploadModal"]');
+    const closeModalBtn = document.getElementById('closeModal');
+    const cancelUploadBtn = document.getElementById('cancelUpload');
+
+    function openModal() { uploadModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal() { uploadModal.style.display = 'none'; document.body.style.overflow = 'auto'; document.getElementById('uploadForm').reset(); document.getElementById('filePreview').style.display = 'none'; }
+    openModalBtns.forEach(btn => btn.addEventListener('click', openModal));
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelUploadBtn.addEventListener('click', closeModal);
+    uploadModal.addEventListener('click', (e) => { if (e.target === uploadModal) closeModal(); });
+
+    /* ================= LOAD CONTENT ================= */
+    async function loadContent() {
+        const { data, error } = await supabaseClient
+            .from("library_items")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        currentData = data || [];
+        renderContentGrid(currentData);
+        updateStats();
+    }
+
+    /* ================= RENDER MAIN GRID ================= */
+    function renderContentGrid(content) {
+        const grid = document.getElementById("contentGrid");
+        const noResults = document.getElementById("noResults");
+
+        if (!content.length) {
+            grid.innerHTML = "";
+            noResults.style.display = "block";
+            return;
+        }
+
+        noResults.style.display = "none";
+
+        grid.innerHTML = content.map(item => `
+            <div class="content-card" data-category="${item.category}" onclick="trackCategoryView('${item.category}')">
+                <div class="card-header">
+                    <div style="width:100%;">
+                        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+                            <h3 class="content-title" style="margin-bottom:0;">${item.title}</h3>
+                        </div>
+                        <div class="content-meta">
+                            <span class="meta-item"><i class="fas fa-user"></i> ${item.author || "Unknown"}</span>
+                            <span class="meta-item"><i class="fas fa-calendar"></i> ${new Date(item.created_at).toLocaleDateString()}</span>
+                            <span class="category-pill"><i class="fas fa-tag"></i> ${item.category}</span>
+                        </div>
+                    </div>
+                    <span class="file-type ${item.type}">${item.type.toUpperCase()}</span>
+                </div>
+
+                <div class="card-body">
+                    <p class="content-description">${item.description || "No description available."}</p>
+                </div>
+
+                <div class="card-footer">
+                    <span class="file-size">${item.file_size || "—"}</span>
+                    <div class="action-buttons">
+                        <button class="action-btn view-btn" onclick="window.open('${item.file_url}','_blank')">
+                            <i class="fas fa-book-open"></i> View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    /* ========== TRACK USER VIEWS AND SHOW RECOMMENDATIONS ========== */
+    window.trackCategoryView = function(category) {
+        // Add to view history (keep last 5 views)
+        userViewHistory.push(category);
+        if (userViewHistory.length > 5) userViewHistory.shift();
+        
+        // Get most viewed category
+        const categoryCounts = {};
+        userViewHistory.forEach(cat => {
+            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+        });
+        
+        let mostViewedCategory = null;
+        let maxCount = 0;
+        for (const [cat, count] of Object.entries(categoryCounts)) {
+            if (count > maxCount) {
+                maxCount = count;
+                mostViewedCategory = cat;
+            }
+        }
+        
+        // Show recommendations based on most viewed category
+        if (mostViewedCategory) {
+            showRecommendations(mostViewedCategory);
+        }
+    };
+
+    /* ========== SHOW RECOMMENDATIONS BASED ON CATEGORY ========== */
+    function showRecommendations(category) {
+        const recSection = document.getElementById('recommendationSection');
+        const recGrid = document.getElementById('recommendationGrid');
+        const categoryNameSpan = document.getElementById('currentCategoryName');
+        
+        // Format category name for display
+        const displayName = category.charAt(0).toUpperCase() + category.slice(1);
+        categoryNameSpan.innerHTML = `in ${displayName}`;
+        
+        // Find items in the same category (excluding ones user might have seen)
+        // In real app, you'd exclude viewed items - here we'll just show 4 random ones
+        const categoryItems = currentData.filter(item => 
+            item.category === category
+        ).slice(0, 4); // Show max 4 recommendations
+        
+        if (categoryItems.length > 0) {
+            recGrid.innerHTML = categoryItems.map(item => `
+                <div class="content-card" style="transform: scale(0.98);">
+                    <div class="card-header">
+                        <div style="width:100%;">
+                            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+                                <h3 class="content-title" style="margin-bottom:0; font-size:1.1rem;">${item.title}</h3>
+                                <span class="rec-badge"><i class="fas fa-thumbs-up"></i> Recommended</span>
+                            </div>
+                            <div class="content-meta">
+                                <span class="meta-item"><i class="fas fa-user"></i> ${item.author || "Unknown"}</span>
+                            </div>
+                        </div>
+                        <span class="file-type ${item.type}">${item.type.toUpperCase()}</span>
+                    </div>
+                    <div class="card-footer" style="border-top: none; padding-top: 0;">
+                        <span class="file-size">${item.file_size || "—"}</span>
+                        <button class="action-btn view-btn" onclick="window.open('${item.file_url}','_blank')">
+                            <i class="fas fa-book-open"></i> View
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            recSection.style.display = 'block';
+        } else {
+            recSection.style.display = 'none';
+        }
+    }
+
+    /* ================= STATS ================= */
+    function updateStats() {
+        const pdf = currentData.filter(i => i.type === 'pdf').length;
+        const doc = currentData.filter(i => i.type === 'doc').length;
+        const slides = currentData.filter(i => i.type === 'slides').length;
+        const notes = currentData.filter(i => i.type === 'notes').length;
+        document.querySelectorAll('.stat-number')[0].textContent = pdf;
+        document.querySelectorAll('.stat-number')[1].textContent = doc;
+        document.querySelectorAll('.stat-number')[2].textContent = slides;
+        document.querySelectorAll('.stat-number')[3].textContent = notes;
+    }
+
+    /* ================= UPLOAD ================= */
+    document.getElementById("uploadForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const file = document.getElementById("fileInput").files[0];
+        if (!file) return alert("Select a file");
+
+        const title = document.getElementById("fileTitle").value.trim();
+        const description = document.getElementById("fileDescription").value.trim();
+        const category = document.getElementById("fileCategory").value;
+        const type = document.getElementById("fileType").value;
+        const author = document.getElementById("fileAuthor").value.trim();
+        const keywords = document.getElementById("fileKeywords").value ? document.getElementById("fileKeywords").value.split(",").map(k => k.trim()) : [];
+
+        const fileName = Date.now() + "_" + file.name;
+
+        const { error: uploadError } = await supabaseClient.storage
+            .from("library-files")
+            .upload(fileName, file);
+        if (uploadError) return alert(uploadError.message);
+
+        const { data } = supabaseClient.storage.from("library-files").getPublicUrl(fileName);
+        const fileUrl = data.publicUrl;
+
+        const { error } = await supabaseClient.from("library_items").insert([{
+            title, description, category, type, author, keywords,
+            file_url: fileUrl,
+            file_size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
+        }]);
+
+        if (error) return alert(error.message);
+        alert("Upload successful!");
+        location.reload();
+    });
+
+    /* ================= FILTER ================= */
+    function filterContent() {
+        const search = document.getElementById("searchInput").value.toLowerCase();
+        const type = document.getElementById("typeFilter").value;
+        const category = document.getElementById("categoryFilter").value;
+
+        const filtered = currentData.filter(item => {
+            const matchesSearch =
+                item.title.toLowerCase().includes(search) ||
+                (item.description && item.description.toLowerCase().includes(search));
+            const matchesType = type === "all" || item.type === type;
+            const matchesCategory = category === "all" || item.category === category;
+            return matchesSearch && matchesType && matchesCategory;
+        });
+
+        renderContentGrid(filtered);
+    }
+
+    document.getElementById("searchInput").addEventListener("input", filterContent);
+    document.getElementById("typeFilter").addEventListener("change", filterContent);
+    document.getElementById("categoryFilter").addEventListener("change", filterContent);
+
+    // Add click listeners to all cards for tracking
+    setTimeout(() => {
+        document.querySelectorAll('.content-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on button
+                if (e.target.closest('.action-btn')) return;
+                const category = this.dataset.category;
+                trackCategoryView(category);
+            });
+        });
+    }, 1000);
+
+    loadContent();
+});
+</script>
+</body>
+</html>

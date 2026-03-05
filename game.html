@@ -1,0 +1,4239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoLens · Complete DS & ML · All Types Included</title>
+    <!-- Chart.js (for ML plots) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter + Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ========== crisp white/blue theme, professional ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #4338ca;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #64748b;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --border-color: #e2e8f0;
+        }
+        
+        body {
+            background: linear-gradient(165deg, #f0f9ff 0%, #e1effa 100%);
+            font-family: 'Inter', sans-serif;
+            color: #023047;
+            padding: 24px;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+       /* ==========  IMPROVED NAV (keep original links)  ========== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 60px;
+  background: var(--light);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  box-shadow: 0 8px 25px -8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.logo-image {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(145deg, var(--primary), var(--secondary));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  filter: drop-shadow(0 8px 12px rgba(79, 70, 229, 0.3));
+  transition: all 0.2s ease;
+}
+
+.logo:hover .logo-image {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.logo-text {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(130deg, #2c3e9b, #0f5e7a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.3px;
+}
+
+/* desktop menu - exactly same links, now with "features" integrated as dropdown */
+.nav-menu {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--gray-dark);
+  font-size: 14.5px;
+  font-weight: 550;
+  padding: 5px 6px;
+  border-radius: 40px;
+  transition: all 0.15s;
+  white-space: nowrap;
+  position: relative;
+}
+
+.nav-link i {
+  margin-right: 6px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+  background: rgba(79, 70, 229, 0.05);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+        .app-wrapper {
+            display: flex;
+            gap: 30px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        /* ---------- LEFT NAV : complete DS classification ---------- */
+        .nav-panel {
+            flex: 0 0 320px;
+            background: white;
+            border-radius: 40px;
+            padding: 30px 20px;
+            box-shadow: 0 18px 36px -8px rgba(0,87,128,0.08);
+            border: 1px solid #c4dff2;
+            height: fit-content;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding-left: 8px;
+        }
+        .nav-brand i {
+            font-size: 2.4rem;
+            color: #0070a0;
+            background: #d9edff;
+            padding: 10px;
+            border-radius: 22px;
+        }
+        .nav-brand h2 {
+            font-weight: 700;
+            color: #023b5c;
+            font-size: 1.9rem;
+            letter-spacing: -0.5px;
+        }
+        .nav-section {
+            margin-bottom: 26px;
+        }
+        .nav-section-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #00527a;
+            padding-bottom: 6px;
+            border-bottom: 4px solid #afd6ff;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-list {
+            list-style: none;
+        }
+        .nav-item {
+            padding: 10px 15px;
+            margin-bottom: 2px;
+            border-radius: 20px;
+            font-weight: 500;
+            color: #025873;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.15s;
+            cursor: pointer;
+            background: #fafdff;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+        }
+        .nav-item i {
+            width: 24px;
+            color: #0079b0;
+            font-size: 1.1rem;
+        }
+        .nav-item:hover {
+            background: #dceeff;
+            border-color: #78c4ff;
+            transform: translateX(5px);
+        }
+        .nav-item.active {
+            background: #0077b6;
+            color: white;
+            box-shadow: 0 10px 16px -6px #0077b6b0;
+        }
+        .nav-item.active i {
+            color: white;
+        }
+        .nav-subitem {
+            padding-left: 45px;
+            font-size: 0.9rem;
+            background: #f5faff;
+        }
+        /* primitive chips */
+        .primitive-chip {
+            background: #ebf6fe;
+            border-radius: 26px;
+            padding: 18px;
+            border: 2px solid #b0d3f0;
+            margin-top: 20px;
+        }
+        .primitive-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            margin-top: 10px;
+        }
+        .primitive-badge {
+            background: white;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-weight: 600;
+            color: #014b70;
+            border: 2px solid #1e88e5;
+            box-shadow: 0 3px 0 #7bb9e4;
+            font-size: 0.9rem;
+        }
+        /* ---------- MAIN PANEL ---------- */
+        .main-panel {
+            flex: 1;
+            background: white;
+            border-radius: 48px;
+            padding: 36px 38px;
+            box-shadow: 0 24px 44px -12px rgba(0,98,128,0.12);
+            border: 1px solid #bad4ec;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .topic-title {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .topic-title i {
+            font-size: 2.5rem;
+            color: #0077b6;
+            background: #e5f2ff;
+            padding: 12px;
+            border-radius: 24px;
+        }
+        .topic-name {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #012f44;
+            letter-spacing: -0.01em;
+        }
+        .viz-card {
+            background: #f2faff;
+            border-radius: 36px;
+            padding: 28px;
+            border: 2px solid #b3daf5;
+            margin-bottom: 30px;
+        }
+        .ds-visual {
+            background: white;
+            border-radius: 32px;
+            padding: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            min-height: 140px;
+            border: 3px dashed #60b5f0;
+            box-shadow: inset 0 4px 14px #cfe7fc;
+        }
+        .stack-item, .queue-item, .linked-node, .array-cell, .tree-node, .graph-node {
+            background: linear-gradient(145deg, #3399cc, #1f6680);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 24px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            box-shadow: 0 7px 0 #0f4559, 0 10px 18px rgba(0,90,130,0.2);
+            border: 2px solid #d3f2ff;
+            min-width: 80px;
+            text-align: center;
+        }
+        .array-cell { background: #2a8eb3; box-shadow: 0 5px 0 #094458; font-size: 1.4rem; }
+        .linked-node { background: #fcaa5e; color: #003153; border: 5px solid #ffeac2; box-shadow: 0 7px 0 #a1531e; }
+        .tree-node { background: #45a56e; box-shadow: 0 7px 0 #1e4a2e; }
+        .graph-node { background: #9b59b6; box-shadow: 0 7px 0 #4a235a; }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin: 24px 0 12px;
+        }
+        .btn {
+            background: white;
+            border: 2.5px solid #0077b6;
+            color: #0077b6;
+            padding: 14px 28px;
+            border-radius: 80px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.12s;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #b6d9fc;
+        }
+        .btn i { color: #0077b6; }
+        .btn:hover {
+            background: #0077b6;
+            color: white;
+            transform: scale(1.02);
+            box-shadow: 0 8px 0 #004f77;
+        }
+        .btn:hover i { color: white; }
+        .btn-solid {
+            background: #0077b6;
+            color: white;
+            box-shadow: 0 8px 0 #00496b;
+        }
+        .btn-solid i { color: white; }
+        .input-field {
+            background: #f6fdff;
+            border: 3px solid #b0d6f5;
+            padding: 14px 24px;
+            border-radius: 80px;
+            width: 160px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #003952;
+        }
+        .code-panel {
+            background: #f0f8ff;
+            border-radius: 28px;
+            padding: 24px;
+            border-left: 16px solid #0077b6;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin: 28px 0 24px;
+            border: 1.5px solid #b3d9f2;
+            border-left-width: 18px;
+            color: #01415b;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-weight: 500;
+        }
+        .explain-card {
+            background: #e3f0fa;
+            border-radius: 28px;
+            padding: 28px;
+            color: #01445b;
+            border: 2px solid #7eb9dc;
+            font-size: 1.1rem;
+            line-height: 1.65;
+            box-shadow: 0 8px 0 #9ec6e7;
+        }
+        .tag-ds {
+            background: #c5e4ff;
+            padding: 10px 24px;
+            border-radius: 60px;
+            color: #004a70;
+            font-weight: 650;
+        }
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .type-card {
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            border-left: 8px solid #0077b6;
+        }
+        .type-card h4 {
+            color: #0077b6;
+            margin-bottom: 10px;
+        }
+        .edge-line {
+            height: 4px;
+            background: #333;
+            width: 50px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+   
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+
+<div class="app-wrapper">
+    <!-- LEFT NAV : complete DS taxonomy with all subtypes -->
+    <div class="nav-panel">
+        <div class="nav-brand">
+            <i class="fas fa-sitemap"></i>
+            <h2>Structify Pro</h2>
+        </div>
+
+        <!-- PRIMITIVE -->
+        <div class="nav-section">
+            <div class="nav-section-title"><i class="fas fa-cube"></i> Primitive</div>
+            <ul class="nav-list">
+                <li class="nav-item" id="nav-int"><i class="fas fa-hashtag"></i> Integer</li>
+                <li class="nav-item" id="nav-float"><i class="fas fa-divide"></i> Float</li>
+                <li class="nav-item" id="nav-char"><i class="fas fa-font"></i> Character</li>
+                <li class="nav-item" id="nav-bool"><i class="fas fa-toggle-off"></i> Boolean</li>
+                <li class="nav-item" id="nav-pointer"><i class="fas fa-memory"></i> Pointer</li>
+            </ul>
+        </div>
+
+        <!-- LINEAR - with all subtypes -->
+        <div class="nav-section">
+            <div class="nav-section-title"><i class="fas fa-chart-line"></i> Linear DS</div>
+            <ul class="nav-list">
+                <li class="nav-item" id="nav-array"><i class="fas fa-table-cells-large"></i> Array</li>
+                <li class="nav-item" id="nav-stack"><i class="fas fa-layer-group"></i> Stack</li>
+                <li class="nav-item" id="nav-queue"><i class="fas fa-list"></i> Queue</li>
+                <li class="nav-item nav-subitem" id="nav-simplequeue">‣ Simple Queue</li>
+                <li class="nav-item nav-subitem" id="nav-circularqueue">‣ Circular Queue</li>
+                <li class="nav-item nav-subitem" id="nav-priorityqueue">‣ Priority Queue</li>
+                <li class="nav-item nav-subitem" id="nav-deque">‣ Deque (Double-ended)</li>
+                <li class="nav-item" id="nav-linkedlist"><i class="fas fa-link"></i> Linked List</li>
+                <li class="nav-item nav-subitem" id="nav-singlyll">‣ Singly Linked</li>
+                <li class="nav-item nav-subitem" id="nav-doublyll">‣ Doubly Linked</li>
+                <li class="nav-item nav-subitem" id="nav-circularll">‣ Circular Linked</li>
+            </ul>
+        </div>
+
+        <!-- NON-LINEAR - all types -->
+        <div class="nav-section">
+            <div class="nav-section-title"><i class="fas fa-share-nodes"></i> Non‑linear</div>
+            <ul class="nav-list">
+                <li class="nav-item" id="nav-tree"><i class="fas fa-tree"></i> Tree</li>
+                <li class="nav-item nav-subitem" id="nav-binarytree">‣ Binary Tree</li>
+                <li class="nav-item nav-subitem" id="nav-bst">‣ Binary Search Tree</li>
+                <li class="nav-item nav-subitem" id="nav-avl">‣ AVL Tree</li>
+                <li class="nav-item nav-subitem" id="nav-heap">‣ Heap (Min/Max)</li>
+                <li class="nav-item" id="nav-graph"><i class="fas fa-diagram-project"></i> Graph</li>
+                <li class="nav-item nav-subitem" id="nav-directed">‣ Directed Graph</li>
+                <li class="nav-item nav-subitem" id="nav-undirected">‣ Undirected Graph</li>
+                <li class="nav-item nav-subitem" id="nav-weighted">‣ Weighted Graph</li>
+                <li class="nav-item nav-subitem" id="nav-unweighted">‣ Unweighted Graph</li>
+                <li class="nav-item" id="nav-hash"><i class="fas fa-hashtag"></i> Hash Table</li>
+            </ul>
+        </div>
+
+        <!-- ML models section in nav -->
+<div class="nav-section">
+    <div class="nav-section-title"><i class="fas fa-brain"></i> ML models</div>
+    <ul class="nav-list">
+        <li class="nav-item" id="nav-linreg"><i class="fas fa-chart-line"></i> Linear Regression</li>
+        <li class="nav-item" id="nav-logreg"><i class="fas fa-sigmoid"></i> Logistic Regression</li>
+        <li class="nav-item" id="nav-knn"><i class="fas fa-vector-square"></i> k‑NN (k=3)</li>
+        <li class="nav-item" id="nav-svm"><i class="fas fa-vector-square"></i> SVM</li>
+        <li class="nav-item" id="nav-decisiontree"><i class="fas fa-tree"></i> Decision Tree</li>
+        <li class="nav-item" id="nav-randomforest"><i class="fas fa-forest"></i> Random Forest</li>
+        <li class="nav-item" id="nav-kmeans"><i class="fas fa-circle-nodes"></i> K-Means</li>
+    </ul>
+</div>
+
+        <!-- classification reminder -->
+        <div class="primitive-chip">
+            <span style="font-weight:800;">📐 classification</span>
+            <div class="primitive-grid">
+                <span class="primitive-badge">int, float, char, bool, ptr</span>
+                <span class="primitive-badge">linear (stack, queue, LL, array)</span>
+                <span class="primitive-badge">non‑linear (tree, graph, hash)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <div class="main-panel" id="mainPanel"></div>
+</div>
+
+<script>
+    // ---------- GLOBAL STATE ----------
+    let stackArray = [72, 41, 93];       
+    let queueArray = [28, 55, 67];       
+    let linkedListNodes = [15, 42, 78];  
+    let arrayDemo = [10, 23, 45, 68];    
+    // primitive states
+    let intVal = 42;
+    let floatVal = 3.14159;
+    let charVal = 'A';
+    let boolVal = true;
+    let pointerAddr = "0x7ffe2b";
+
+    // ---------- HELPER ----------
+    function setActive(id) {
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // ========== RENDER FUNCTIONS FOR ALL TYPES ==========
+    
+    function renderInt() {
+        setActive('nav-int');
+        mainPanel.innerHTML = `
+        <div class="topic-header">
+            <div class="topic-title"><i class="fas fa-hashtag"></i><span class="topic-name">Integer · Primitive</span></div>
+            <span class="tag-ds">whole numbers</span>
+        </div>
+        <div class="viz-card">
+            <div class="ds-visual"><div class="stack-item" style="background:#206a92;">${intVal}</div></div>
+            <div class="controls">
+                <input id="intField" class="input-field" value="${intVal}">
+                <button class="btn btn-solid" id="updateInt"><i class="fas fa-sync"></i> Update</button>
+            </div>
+        </div>
+        <div class="code-panel">// Integer (32-bit signed)\nCurrent: ${intVal}\nBinary: ${(intVal >>> 0).toString(2)}</div>
+        <div class="explain-card">
+<strong>🎓 INTEGER · Detailed Explanation</strong><br><br>
+
+<b>Definition:</b><br>
+An Integer is a primitive data type used to store whole numbers (numbers without fractional or decimal parts). 
+It represents discrete numeric values such as -10, -1, 0, 5, 42, 1000.<br><br>
+
+<b>Memory Representation:</b><br>
+• Typically stored in 32 bits (4 bytes) in most systems.<br>
+• Uses Two's Complement representation for signed integers.<br>
+• Range (32-bit signed): -2,147,483,648 to 2,147,483,647.<br>
+• 64-bit systems may use 8 bytes for larger range.<br><br>
+
+<b>Binary Storage:</b><br>
+Integers are stored internally in binary form (base-2). 
+Example: 5 → 00000000 00000000 00000000 00000101.<br><br>
+
+<b>Operations (All O(1)):</b><br>
+• Addition (+)<br>
+• Subtraction (-)<br>
+• Multiplication (*)<br>
+• Division (/)<br>
+• Modulus (%)<br><br>
+
+<b>Overflow:</b><br>
+If a value exceeds its maximum range, integer overflow occurs, causing wrap-around behavior.<br><br>
+
+<b>Applications:</b><br>
+• Loop counters<br>
+• Array indexing<br>
+• ID generation<br>
+• Hash functions<br>
+• Memory addressing offsets<br><br>
+
+Integers are fundamental to algorithms, data structures, arithmetic computation, and system-level programming.
+</div>`;
+        document.getElementById('updateInt')?.addEventListener('click', ()=>{
+            let newV = parseInt(document.getElementById('intField').value);
+            if (!isNaN(newV)) intVal = newV;
+            renderInt();
+        });
+    }
+
+    function renderFloat() {
+        setActive('nav-float');
+        mainPanel.innerHTML = `
+        <div class="topic-header">
+            <div class="topic-title"><i class="fas fa-divide"></i><span class="topic-name">Float · Primitive</span></div>
+            <span class="tag-ds">real numbers</span>
+        </div>
+        <div class="viz-card">
+            <div class="ds-visual"><div class="stack-item" style="background:#206a92;">${floatVal}</div></div>
+            <div class="controls">
+                <input id="floatField" class="input-field" value="${floatVal}">
+                <button class="btn btn-solid" id="updateFloat">Update</button>
+            </div>
+        </div>
+        <div class="code-panel">// IEEE 754 32-bit\nCurrent: ${floatVal}</div>
+        <div class="explain-card">
+<strong>🎓 FLOAT · Detailed Explanation</strong><br><br>
+
+<b>Definition:</b><br>
+A Float is a primitive data type used to store real numbers that contain decimal or fractional values 
+such as 3.14, -2.5, 0.001.<br><br>
+
+<b>Memory Representation:</b><br>
+• Stored using IEEE 754 standard.<br>
+• 32-bit structure:<br>
+&nbsp;&nbsp;– 1 bit → Sign<br>
+&nbsp;&nbsp;– 8 bits → Exponent<br>
+&nbsp;&nbsp;– 23 bits → Mantissa (fractional part)<br><br>
+
+<b>Range:</b><br>
+Approximately ±1.4 × 10⁻⁴⁵ to ±3.4 × 10³⁸.<br><br>
+
+<b>Precision:</b><br>
+• Accurate up to about 6–7 decimal digits.<br>
+• May cause rounding errors due to binary fraction storage.<br><br>
+
+<b>Operations:</b><br>
+Arithmetic operations take constant time O(1), but may introduce precision loss.<br><br>
+
+<b>Applications:</b><br>
+• Scientific calculations<br>
+• Machine learning models<br>
+• Graphics rendering<br>
+• Physics simulations<br><br>
+
+Floats allow representation of continuous numeric values but sacrifice exact precision.
+</div>`;
+        document.getElementById('updateFloat')?.addEventListener('click', ()=>{
+            let newV = parseFloat(document.getElementById('floatField').value);
+            if (!isNaN(newV)) floatVal = newV;
+            renderFloat();
+        });
+    }
+
+    function renderChar() {
+        setActive('nav-char');
+        let asciiCode = charVal.charCodeAt(0);
+        mainPanel.innerHTML = `
+        <div class="topic-header">
+            <div class="topic-title"><i class="fas fa-font"></i><span class="topic-name">Character · Primitive</span></div>
+            <span class="tag-ds">single symbol</span>
+        </div>
+        <div class="viz-card">
+            <div class="ds-visual"><div class="stack-item" style="background:#206a92;">'${charVal}'</div></div>
+            <div class="controls">
+                <input id="charField" class="input-field" maxlength="1" value="${charVal}">
+                <button class="btn btn-solid" id="updateChar">Set</button>
+            </div>
+        </div>
+        <div class="code-panel">// ASCII: ${asciiCode} (0x${asciiCode.toString(16)})</div>
+        <div class="explain-card">
+<strong>🎓 CHARACTER · Detailed Explanation</strong><br><br>
+
+<b>Definition:</b><br>
+Character (char) is a primitive data type used to store a single symbol such as a letter, digit, or special character.<br><br>
+
+<b>Memory Representation:</b><br>
+• ASCII (8-bit) → 1 byte (0–127 range).<br>
+• Unicode (UTF-16) → 2 bytes or more.<br>
+• Internally stored as integer code values.<br><br>
+
+<b>Example:</b><br>
+'A' → ASCII 65<br>
+'0' → ASCII 48<br><br>
+
+<b>Operations:</b><br>
+• Comparison (==, !=)<br>
+• Increment/Decrement (based on ASCII values)<br>
+• Conversion to integer code<br><br>
+
+<b>Applications:</b><br>
+• Text processing<br>
+• String manipulation<br>
+• Parsing input<br>
+• Encoding systems<br><br>
+
+Characters form the building blocks of strings and textual data.
+</div>`;
+        document.getElementById('updateChar')?.addEventListener('click', ()=>{
+            let inp = document.getElementById('charField').value;
+            if(inp.length > 0) charVal = inp[0];
+            renderChar();
+        });
+    }
+
+    function renderBool() {
+        setActive('nav-bool');
+        mainPanel.innerHTML = `
+        <div class="topic-header">
+            <div class="topic-title"><i class="fas fa-toggle-off"></i><span class="topic-name">Boolean · Primitive</span></div>
+            <span class="tag-ds">true/false</span>
+        </div>
+        <div class="viz-card">
+            <div class="ds-visual"><div class="stack-item" style="background:#206a92;">${boolVal ? 'true' : 'false'}</div></div>
+            <div class="controls">
+                <button class="btn btn-solid" id="toggleBool">Toggle</button>
+            </div>
+        </div>
+        <div class="code-panel">// bool = ${boolVal} (${boolVal ? 1 : 0})</div>
+        <div class="explain-card">
+<strong>🎓 BOOLEAN · Detailed Explanation</strong><br><br>
+
+<b>Definition:</b><br>
+Boolean is a primitive data type that stores only two logical values: true or false.<br><br>
+
+<b>Memory Representation:</b><br>
+• Typically stored as 1 byte.<br>
+• Internally represented as:<br>
+&nbsp;&nbsp;true → 1<br>
+&nbsp;&nbsp;false → 0<br><br>
+
+<b>Logical Operations:</b><br>
+• AND (&&)<br>
+• OR (||)<br>
+• NOT (!)<br><br>
+
+<b>Used In:</b><br>
+• Conditional statements (if, while)<br>
+• Flags and state tracking<br>
+• Decision making<br>
+• Loop termination<br><br>
+
+Boolean values are fundamental for control flow in programming.
+</div>`;
+        document.getElementById('toggleBool')?.addEventListener('click', ()=>{ boolVal = !boolVal; renderBool(); });
+    }
+
+    function renderPointer() {
+        setActive('nav-pointer');
+        mainPanel.innerHTML = `
+        <div class="topic-header">
+            <div class="topic-title"><i class="fas fa-memory"></i><span class="topic-name">Pointer · Primitive</span></div>
+            <span class="tag-ds">memory address</span>
+        </div>
+        <div class="viz-card">
+            <div class="ds-visual"><div class="linked-node">Address: ${pointerAddr}</div></div>
+            <div class="controls">
+                <button class="btn btn-solid" id="newAddr">New Random Address</button>
+            </div>
+        </div>
+        <div class="code-panel">// int* ptr = &x;  // ptr stores address</div>
+       <div class="explain-card">
+<strong>🎓 POINTER · Detailed Explanation</strong><br><br>
+
+<b>Definition:</b><br>
+A Pointer is a variable that stores the memory address of another variable rather than the value itself.<br><br>
+
+<b>Memory Representation:</b><br>
+• 32-bit system → 4 bytes<br>
+• 64-bit system → 8 bytes<br>
+• Stores hexadecimal address (e.g., 0x7ffe2b).<br><br>
+
+<b>Syntax (C Example):</b><br>
+int x = 10;<br>
+int* ptr = &x;  // ptr stores address of x<br><br>
+
+<b>Operations:</b><br>
+• Dereferencing (*ptr)<br>
+• Address-of operator (&)<br>
+• Pointer arithmetic<br><br>
+
+<b>Applications:</b><br>
+• Dynamic memory allocation (malloc/free)<br>
+• Linked lists<br>
+• Trees and graphs<br>
+• System-level programming<br><br>
+
+Pointers enable efficient memory manipulation and dynamic data structures.
+</div>`;
+        document.getElementById('newAddr')?.addEventListener('click', ()=>{
+            pointerAddr = "0x" + Math.floor(Math.random()*65535).toString(16);
+            renderPointer();
+        });
+    }
+
+    // ========== LINEAR DS ==========
+    
+    function renderStackUI() {
+        setActive('nav-stack');
+        let html = `
+        <div class="topic-header">
+            <div class="topic-title"><i class="fas fa-layer-group"></i><span class="topic-name">Stack · LIFO</span></div>
+            <span class="tag-ds">linear · dynamic</span>
+        </div>
+        <div class="viz-card">
+            <div id="stackVisual" class="ds-visual">${renderStackItems(stackArray)}</div>
+            <div class="controls">
+                <input id="stackInput" class="input-field" type="number" value="50">
+                <button class="btn btn-solid" id="pushCustomBtn"><i class="fas fa-arrow-up"></i> Push</button>
+                <button class="btn" id="popBtn"><i class="fas fa-arrow-down"></i> Pop</button>
+                <button class="btn" id="peekBtn">Peek</button>
+                <button class="btn" id="resetStackBtn">Reset</button>
+            </div>
+        </div>
+        <div class="code-panel" id="stackCodeBlock">// Stack operations</div>
+       <div class="explain-card">
+<strong>📚 STACK · Complete Theoretical Explanation</strong><br><br>
+
+<b>Definition:</b><br>
+A Stack is a linear data structure that follows the <b>Last-In, First-Out (LIFO)</b> principle. 
+The element inserted last is the first one to be removed, similar to a stack of plates.<br><br>
+
+<b>Core Structure:</b><br>
+• Contains a single access point called the <b>Top</b>.<br>
+• Insertions and deletions occur only at the top.<br><br>
+
+<b>Primary Operations:</b><br>
+• push(x) → Insert element at top → O(1)<br>
+• pop() → Remove top element → O(1)<br>
+• peek() → View top element → O(1)<br>
+• isEmpty() → Check if stack is empty<br><br>
+
+<b>Implementation Approaches:</b><br>
+1. Array-based (fixed size)<br>
+2. Linked List-based (dynamic size)<br><br>
+
+<b>Overflow & Underflow:</b><br>
+• Overflow → When pushing into full stack.<br>
+• Underflow → When popping from empty stack.<br><br>
+
+<b>Applications:</b><br>
+• Function call stack (recursion)<br>
+• Expression evaluation (infix → postfix)<br>
+• Parenthesis checking<br>
+• Undo/Redo systems<br>
+• Depth First Search (DFS)<br><br>
+
+Stacks are fundamental in compiler design, memory management, and algorithm execution flow.
+</div>`;
+        mainPanel.innerHTML = html;
+        attachStackEvents();
+    }
+
+    function renderStackItems(arr) {
+        if(arr.length===0) return '<span>🕳️ empty</span>';
+        return arr.slice().reverse().map((v,i) => `<div class="stack-item">${v}${i===0?' ⬆️ top':''}</div>`).join('');
+    }
+
+    function attachStackEvents() {
+        document.getElementById('pushCustomBtn')?.addEventListener('click', ()=>{
+            let inp = document.getElementById('stackInput'); 
+            let val = parseInt(inp.value,10); if(isNaN(val)) val=0;
+            stackArray.push(val);
+            document.querySelector('#stackVisual').innerHTML = renderStackItems(stackArray);
+            document.getElementById('stackCodeBlock').innerHTML = `// PUSH ${val} → top = ${val}`;
+        });
+        document.getElementById('popBtn')?.addEventListener('click', ()=>{
+            if(stackArray.length===0) return;
+            let popped = stackArray.pop();
+            document.querySelector('#stackVisual').innerHTML = renderStackItems(stackArray);
+            document.getElementById('stackCodeBlock').innerHTML = `// POP → removed ${popped}`;
+        });
+        document.getElementById('peekBtn')?.addEventListener('click', ()=>{
+            if(stackArray.length===0) return;
+            document.getElementById('stackCodeBlock').innerHTML = `// PEEK → top = ${stackArray[stackArray.length-1]}`;
+        });
+        document.getElementById('resetStackBtn')?.addEventListener('click', ()=>{ stackArray = [72,41,93]; document.querySelector('#stackVisual').innerHTML = renderStackItems(stackArray); });
+    }
+// QUEUE TYPES - WITH WORKING OPERATIONS
+function renderSimpleQueue() {
+    setActive('nav-simplequeue');
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-list"></i><span class="topic-name">Simple Queue · FIFO</span></div>
+        <span class="tag-ds">linear · basic queue</span>
+    </div>
+    <div class="viz-card">
+        <div id="queueVisual" class="ds-visual">${queueArray.map((v,i)=>`<div class="queue-item">${v}${i===0?' ⬅️front':''}${i===queueArray.length-1?' rear':''}</div>`).join('')}</div>
+        <div class="controls">
+            <input id="queueInput" class="input-field" value="88">
+            <button class="btn btn-solid" id="enqueueBtn">Enqueue</button>
+            <button class="btn" id="dequeueBtn">Dequeue</button>
+            <button class="btn" id="resetQueueBtn">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="queueCodeBlock"><i class="fas fa-code"></i> // Simple Queue operations</div>
+    <div class="explain-card">
+        <strong>📚 SIMPLE QUEUE · Complete Explanation</strong><br><br>
+        
+        <b>Definition:</b><br>
+        A Queue is a linear data structure that follows the <b>First-In, First-Out (FIFO)</b> principle. 
+        The first element inserted is the first to be removed.<br><br>
+        
+        <b>Structure:</b><br>
+        • Two pointers: <b>Front</b> and <b>Rear</b><br>
+        • Enqueue happens at Rear<br>
+        • Dequeue happens at Front<br><br>
+        
+        <b>Operations:</b><br>
+        • enqueue(x) → Insert at rear → O(1)<br>
+        • dequeue() → Remove from front → O(1)<br>
+        • front() → View first element<br>
+        • isEmpty()<br><br>
+        
+        <b>Problem in Array Implementation:</b><br>
+        Unused space occurs after multiple dequeues (wasted memory).<br><br>
+        
+        <b>Applications:</b><br>
+        • CPU scheduling<br>
+        • Printer spooling<br>
+        • Breadth First Search (BFS)<br>
+        • IO buffers<br><br>
+        
+        Queues are essential in process management and scheduling systems.
+    </div>`;
+    mainPanel.innerHTML = html;
+    attachQueueEvents();
+}
+
+function attachQueueEvents() {
+    document.getElementById('enqueueBtn')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('queueInput').value)||0; 
+        queueArray.push(v); 
+        renderSimpleQueue();
+    });
+    document.getElementById('dequeueBtn')?.addEventListener('click', ()=>{ 
+        if(queueArray.length > 0) {
+            let removed = queueArray.shift();
+            document.getElementById('queueCodeBlock').innerHTML = `// Dequeued: ${removed}`;
+            renderSimpleQueue();
+        } else {
+            alert('Queue is empty!');
+        }
+    });
+    document.getElementById('resetQueueBtn')?.addEventListener('click', ()=>{ 
+        queueArray = [28,55,67]; 
+        renderSimpleQueue(); 
+    });
+}
+
+function renderCircularQueue() {
+    setActive('nav-circularqueue');
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-sync-alt"></i><span class="topic-name">Circular Queue</span></div>
+        <span class="tag-ds">linear · reuses space</span>
+    </div>
+    <div class="viz-card">
+        <div id="circularVisual" class="ds-visual" style="flex-direction:column; align-items:center;">
+            <div style="position:relative; width:300px; height:300px; border-radius:50%; border:4px solid #0077b6;">
+                <div style="position:absolute; top:40px; left:140px; background:#3399cc; color:white; padding:10px; border-radius:20px;">front → ${queueArray[0] || 'empty'}</div>
+                <div style="position:absolute; bottom:40px; right:140px; background:#3399cc; color:white; padding:10px; border-radius:20px;">rear → ${queueArray[queueArray.length-1] || 'empty'}</div>
+                <div style="position:absolute; top:140px; left:30px;">index 0</div>
+                <div style="position:absolute; top:140px; right:30px;">index 4</div>
+            </div>
+            <div style="margin-top:20px;">Elements: [${queueArray.join(', ')}]</div>
+        </div>
+        <div class="controls">
+            <input id="circularInput" class="input-field" value="88">
+            <button class="btn btn-solid" id="circularEnqueue">Enqueue</button>
+            <button class="btn" id="circularDequeue">Dequeue</button>
+            <button class="btn" id="circularReset">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="circularCodeBlock"><i class="fas fa-code"></i> // Circular Queue operations</div>
+    <div class="explain-card">
+        <strong>📚 CIRCULAR QUEUE · Complete Explanation</strong><br><br>
+        
+        <b>Definition:</b><br>
+        A Circular Queue connects the last position of the queue back to the first position, 
+        forming a circular structure to efficiently reuse memory.<br><br>
+        
+        <b>Why Needed:</b><br>
+        In a simple array queue, empty spaces at the front cannot be reused. 
+        Circular queue solves this using modular arithmetic.<br><br>
+        
+        <b>Index Calculation:</b><br>
+        rear = (rear + 1) % size<br>
+        front = (front + 1) % size<br><br>
+        
+        <b>Advantages:</b><br>
+        • Efficient space utilization<br>
+        • No memory wastage<br>
+        • Suitable for fixed-size buffers<br><br>
+        
+        <b>Applications:</b><br>
+        • Streaming data systems<br>
+        • Traffic light control<br>
+        • Round-robin scheduling<br>
+        • Real-time operating systems<br><br>
+        
+        Circular queues are widely used in embedded systems.
+    </div>`;
+    mainPanel.innerHTML = html;
+    attachCircularEvents();
+}
+
+function attachCircularEvents() {
+    document.getElementById('circularEnqueue')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('circularInput').value)||0; 
+        if(queueArray.length < 5) {  // Simulating fixed size
+            queueArray.push(v); 
+            document.getElementById('circularCodeBlock').innerHTML = `// Enqueued ${v} at rear`;
+            renderCircularQueue();
+        } else {
+            alert('Circular Queue is full! (max size 5)');
+        }
+    });
+    document.getElementById('circularDequeue')?.addEventListener('click', ()=>{ 
+        if(queueArray.length > 0) {
+            let removed = queueArray.shift();
+            document.getElementById('circularCodeBlock').innerHTML = `// Dequeued ${removed} from front`;
+            renderCircularQueue();
+        } else {
+            alert('Queue is empty!');
+        }
+    });
+    document.getElementById('circularReset')?.addEventListener('click', ()=>{ 
+        queueArray = [28,55,67]; 
+        renderCircularQueue(); 
+    });
+}
+
+function renderPriorityQueue() {
+    setActive('nav-priorityqueue');
+    // Sort by priority (higher number = higher priority)
+    let priorityQueue = [...queueArray].sort((a,b) => b - a);
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-sort-numeric-up"></i><span class="topic-name">Priority Queue</span></div>
+        <span class="tag-ds">heap-based</span>
+    </div>
+    <div class="viz-card">
+        <div id="priorityVisual" class="ds-visual" style="gap:15px; flex-direction:column;">
+            <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                ${priorityQueue.map((v,i)=>`
+                    <div class="queue-item" style="background:${i===0?'#27ae60':'#f39c12'};">
+                        ${v} ${i===0?'(highest)':''}
+                    </div>
+                `).join('')}
+            </div>
+            <div>Elements by priority (highest first)</div>
+        </div>
+        <div class="controls">
+            <input id="priorityInput" class="input-field" value="50">
+            <button class="btn btn-solid" id="priorityEnqueue">Add with priority</button>
+            <button class="btn" id="priorityDequeue">Extract max</button>
+            <button class="btn" id="priorityReset">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="priorityCodeBlock"><i class="fas fa-code"></i> // Priority Queue (max-heap behavior)</div>
+    <div class="explain-card">
+        <strong>📚 PRIORITY QUEUE · Complete Explanation</strong><br><br>
+        
+        <b>Definition:</b><br>
+        A Priority Queue is a specialized queue where each element has an associated priority. 
+        Elements with higher priority are removed before lower priority elements.<br><br>
+        
+        <b>Behavior:</b><br>
+        Not strictly FIFO — priority determines order.<br><br>
+        
+        <b>Implementation:</b><br>
+        • Binary Heap (most common)<br>
+        • Fibonacci Heap (advanced)<br><br>
+        
+        <b>Time Complexity (Heap-based):</b><br>
+        • Insert → O(log n)<br>
+        • Extract Min/Max → O(log n)<br>
+        • Peek → O(1)<br><br>
+        
+        <b>Types:</b><br>
+        • Min Priority Queue<br>
+        • Max Priority Queue<br><br>
+        
+        <b>Applications:</b><br>
+        • Dijkstra’s shortest path algorithm<br>
+        • CPU scheduling<br>
+        • Event simulation<br>
+        • Huffman coding<br><br>
+        
+        Priority queues are fundamental in greedy algorithms and graph algorithms.
+    </div>`;
+    mainPanel.innerHTML = html;
+    attachPriorityEvents();
+}
+
+function attachPriorityEvents() {
+    document.getElementById('priorityEnqueue')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('priorityInput').value)||0; 
+        queueArray.push(v); 
+        document.getElementById('priorityCodeBlock').innerHTML = `// Inserted ${v} (priority = value itself)`;
+        renderPriorityQueue();
+    });
+    document.getElementById('priorityDequeue')?.addEventListener('click', ()=>{ 
+        if(queueArray.length > 0) {
+            let maxIndex = 0;
+            for(let i=1; i<queueArray.length; i++) {
+                if(queueArray[i] > queueArray[maxIndex]) maxIndex = i;
+            }
+            let removed = queueArray.splice(maxIndex, 1)[0];
+            document.getElementById('priorityCodeBlock').innerHTML = `// Extracted max: ${removed}`;
+            renderPriorityQueue();
+        } else {
+            alert('Queue is empty!');
+        }
+    });
+    document.getElementById('priorityReset')?.addEventListener('click', ()=>{ 
+        queueArray = [28,55,67]; 
+        renderPriorityQueue(); 
+    });
+}
+
+function renderDeque() {
+    setActive('nav-deque');
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-arrows-alt-h"></i><span class="topic-name">Deque · Double-ended</span></div>
+        <span class="tag-ds">insert/remove both ends</span>
+    </div>
+    <div class="viz-card">
+        <div id="dequeVisual" class="ds-visual" style="gap:10px;">
+            <div class="queue-item" style="background:#8e44ad;">← front</div>
+            ${queueArray.map((v,i)=>`<div class="queue-item">${v}</div>`).join('')}
+            <div class="queue-item" style="background:#8e44ad;">rear →</div>
+        </div>
+        <div class="controls" style="flex-wrap:wrap;">
+            <input id="dequeInput" class="input-field" value="99">
+            <button class="btn btn-solid" id="pushFrontBtn"><i class="fas fa-arrow-left"></i> Push Front</button>
+            <button class="btn" id="pushRearBtn"><i class="fas fa-arrow-right"></i> Push Rear</button>
+            <button class="btn" id="popFrontBtn"><i class="fas fa-arrow-left"></i> Pop Front</button>
+            <button class="btn" id="popRearBtn"><i class="fas fa-arrow-right"></i> Pop Rear</button>
+            <button class="btn" id="dequeReset">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="dequeCodeBlock"><i class="fas fa-code"></i> // Deque operations (double-ended)</div>
+    <div class="explain-card">
+        <strong>📚 DEQUE (Double Ended Queue) · Complete Explanation</strong><br><br>
+        
+        <b>Definition:</b><br>
+        A Deque allows insertion and deletion from both the front and rear ends.<br><br>
+        
+        <b>Operations:</b><br>
+        • insertFront()<br>
+        • insertRear()<br>
+        • deleteFront()<br>
+        • deleteRear()<br><br>
+        
+        <b>Time Complexity:</b><br>
+        All major operations are O(1).<br><br>
+        
+        <b>Types:</b><br>
+        • Input Restricted Deque<br>
+        • Output Restricted Deque<br><br>
+        
+        <b>Implementation:</b><br>
+        • Circular Array<br>
+        • Doubly Linked List<br><br>
+        
+        <b>Applications:</b><br>
+        • Sliding window maximum problem<br>
+        • Palindrome checking<br>
+        • Task scheduling<br><br>
+        
+        Deque combines functionality of both stack and queue.
+    </div>`;
+    mainPanel.innerHTML = html;
+    attachDequeEvents();
+}
+
+function attachDequeEvents() {
+    document.getElementById('pushFrontBtn')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('dequeInput').value)||0; 
+        queueArray.unshift(v);
+        document.getElementById('dequeCodeBlock').innerHTML = `// pushFront(${v}) → added at front`;
+        renderDeque();
+    });
+    document.getElementById('pushRearBtn')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('dequeInput').value)||0; 
+        queueArray.push(v);
+        document.getElementById('dequeCodeBlock').innerHTML = `// pushRear(${v}) → added at rear`;
+        renderDeque();
+    });
+    document.getElementById('popFrontBtn')?.addEventListener('click', ()=>{
+        if(queueArray.length > 0) {
+            let removed = queueArray.shift();
+            document.getElementById('dequeCodeBlock').innerHTML = `// popFront() → removed ${removed}`;
+            renderDeque();
+        }
+    });
+    document.getElementById('popRearBtn')?.addEventListener('click', ()=>{
+        if(queueArray.length > 0) {
+            let removed = queueArray.pop();
+            document.getElementById('dequeCodeBlock').innerHTML = `// popRear() → removed ${removed}`;
+            renderDeque();
+        }
+    });
+    document.getElementById('dequeReset')?.addEventListener('click', ()=>{ 
+        queueArray = [28,55,67]; 
+        renderDeque(); 
+    });
+}
+
+// LINKED LIST TYPES WITH WORKING OPERATIONS
+function renderSinglyLL() {
+    setActive('nav-singlyll');
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-link"></i><span class="topic-name">Singly Linked List</span></div>
+        <span class="tag-ds">one-way traversal</span>
+    </div>
+    <div class="viz-card">
+        <div id="llVisual" class="ds-visual">
+            ${linkedListNodes.map((v,i)=>`<div class="linked-node">${v}${i===0?'(head)':''} → </div>`).join('')}
+            <div style="background:#b2defc;padding:12px 18px;border-radius:40px;">null</div>
+        </div>
+        <div class="controls">
+            <input id="llInput" class="input-field" value="99">
+            <button class="btn btn-solid" id="prependBtn">Prepend (head)</button>
+            <button class="btn" id="appendBtn">Append (tail)</button>
+            <button class="btn" id="insertAtBtn">Insert at pos</button>
+            <button class="btn" id="deleteHeadBtn">Delete head</button>
+            <button class="btn" id="resetLLBtn">Reset</button>
+        </div>
+        <div style="margin-top:15px;"><input id="llPosition" class="input-field" placeholder="position (0-based)" value="1" style="width:140px;"></div>
+    </div>
+    <div class="code-panel" id="llCodeBlock"><i class="fas fa-code"></i> // Singly Linked List operations</div>
+    <div class="explain-card">
+        <strong>📚 SINGLY LINKED LIST · Complete Explanation</strong><br><br>
+        
+        <b>Definition:</b><br>
+        A Singly Linked List is a linear data structure consisting of nodes, 
+        where each node contains data and a pointer to the next node.<br><br>
+        
+        <b>Structure:</b><br>
+        [Data | Next] → [Data | Next] → null<br><br>
+        
+        <b>Characteristics:</b><br>
+        • Dynamic size<br>
+        • Non-contiguous memory<br>
+        • Traversal only forward<br><br>
+        
+        <b>Time Complexity:</b><br>
+        • Insert at head → O(1)<br>
+        • Insert at tail → O(n)<br>
+        • Search → O(n)<br>
+        • Delete → O(n)<br><br>
+        
+        <b>Advantages:</b><br>
+        • No fixed size limitation<br>
+        • Efficient insertion at beginning<br><br>
+        
+        <b>Applications:</b><br>
+        • Implementing stacks & queues<br>
+        • Graph adjacency lists<br>
+        • Memory management systems
+    </div>`;
+    mainPanel.innerHTML = html;
+    attachLLEvents();
+}
+
+function attachLLEvents() {
+    document.getElementById('prependBtn')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('llInput').value)||0; 
+        linkedListNodes = [v, ...linkedListNodes];
+        document.getElementById('llCodeBlock').innerHTML = `// Prepended ${v} as new head`;
+        renderSinglyLL();
+    });
+    document.getElementById('appendBtn')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('llInput').value)||0; 
+        linkedListNodes.push(v);
+        document.getElementById('llCodeBlock').innerHTML = `// Appended ${v} at tail`;
+        renderSinglyLL();
+    });
+    document.getElementById('insertAtBtn')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('llInput').value)||0;
+        let pos = parseInt(document.getElementById('llPosition').value)||0;
+        if(pos >= 0 && pos <= linkedListNodes.length) {
+            linkedListNodes.splice(pos, 0, v);
+            document.getElementById('llCodeBlock').innerHTML = `// Inserted ${v} at position ${pos}`;
+            renderSinglyLL();
+        } else {
+            alert('Invalid position');
+        }
+    });
+    document.getElementById('deleteHeadBtn')?.addEventListener('click', ()=>{
+        if(linkedListNodes.length > 0) {
+            let removed = linkedListNodes.shift();
+            document.getElementById('llCodeBlock').innerHTML = `// Deleted head: ${removed}`;
+            renderSinglyLL();
+        }
+    });
+    document.getElementById('resetLLBtn')?.addEventListener('click', ()=>{
+        linkedListNodes = [15,42,78];
+        renderSinglyLL();
+    });
+}
+
+function renderDoublyLL() {
+    setActive('nav-doublyll');
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-link"></i><span class="topic-name">Doubly Linked List</span></div>
+        <span class="tag-ds">two-way traversal</span>
+    </div>
+    <div class="viz-card">
+        <div id="doublyVisual" class="ds-visual" style="gap:5px;">
+            <div>null ↔</div>
+            ${linkedListNodes.map((v,i)=>`
+                <div class="linked-node" style="background:#e67e22; display:flex; gap:5px;">
+                    ${i===0?'head':''} ${v} ⇄
+                </div>
+            `).join('')}
+            <div>↔ null</div>
+        </div>
+        <div class="controls">
+            <input id="doublyInput" class="input-field" value="99">
+            <button class="btn btn-solid" id="doublyPrepend">Prepend</button>
+            <button class="btn" id="doublyAppend">Append</button>
+            <button class="btn" id="doublyDeleteHead">Delete head</button>
+            <button class="btn" id="doublyDeleteTail">Delete tail</button>
+            <button class="btn" id="doublyReset">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="doublyCodeBlock"><i class="fas fa-code"></i> // Doubly Linked List operations</div>
+    <div class="explain-card">
+        <strong>📚 DOUBLY LINKED LIST · Complete Explanation</strong><br><br>
+        
+        <b>Definition:</b><br>
+        A Doubly Linked List is a linked structure where each node contains 
+        a pointer to both the next and previous node.<br><br>
+        
+        <b>Structure:</b><br>
+        [Prev | Data | Next]<br><br>
+        
+        <b>Advantages:</b><br>
+        • Bidirectional traversal<br>
+        • Efficient deletion without needing previous pointer externally<br><br>
+        
+        <b>Time Complexity:</b><br>
+        • Insert/Delete at ends → O(1)<br>
+        • Search → O(n)<br><br>
+        
+        <b>Disadvantages:</b><br>
+        • Extra memory for prev pointer<br><br>
+        
+        <b>Applications:</b><br>
+        • Browser history navigation<br>
+        • Music playlist systems<br>
+        • Undo/Redo mechanisms
+    </div>`;
+    mainPanel.innerHTML = html;
+    attachDoublyEvents();
+}
+
+function attachDoublyEvents() {
+    document.getElementById('doublyPrepend')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('doublyInput').value)||0; 
+        linkedListNodes = [v, ...linkedListNodes];
+        document.getElementById('doublyCodeBlock').innerHTML = `// Prepended ${v} as new head`;
+        renderDoublyLL();
+    });
+    document.getElementById('doublyAppend')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('doublyInput').value)||0; 
+        linkedListNodes.push(v);
+        document.getElementById('doublyCodeBlock').innerHTML = `// Appended ${v} at tail`;
+        renderDoublyLL();
+    });
+    document.getElementById('doublyDeleteHead')?.addEventListener('click', ()=>{
+        if(linkedListNodes.length > 0) {
+            let removed = linkedListNodes.shift();
+            document.getElementById('doublyCodeBlock').innerHTML = `// Deleted head: ${removed}`;
+            renderDoublyLL();
+        }
+    });
+    document.getElementById('doublyDeleteTail')?.addEventListener('click', ()=>{
+        if(linkedListNodes.length > 0) {
+            let removed = linkedListNodes.pop();
+            document.getElementById('doublyCodeBlock').innerHTML = `// Deleted tail: ${removed}`;
+            renderDoublyLL();
+        }
+    });
+    document.getElementById('doublyReset')?.addEventListener('click', ()=>{
+        linkedListNodes = [15,42,78];
+        renderDoublyLL();
+    });
+}
+
+function renderCircularLL() {
+    setActive('nav-circularll');
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-circle-notch"></i><span class="topic-name">Circular Linked List</span></div>
+        <span class="tag-ds">last points to first</span>
+    </div>
+    <div class="viz-card">
+        <div id="circularLLVisual" class="ds-visual" style="justify-content:center; flex-direction:column;">
+            <div style="width:250px; height:250px; border:4px solid #0077b6; border-radius:50%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <div>${linkedListNodes.join(' → ')}</div>
+                <div style="margin-top:20px;">↻ back to ${linkedListNodes[0]}</div>
+            </div>
+        </div>
+        <div class="controls">
+            <input id="circularLLInput" class="input-field" value="99">
+            <button class="btn btn-solid" id="circularLLInsert">Insert</button>
+            <button class="btn" id="circularLLDelete">Delete head</button>
+            <button class="btn" id="circularLLReset">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="circularLLCodeBlock"><i class="fas fa-code"></i> // Circular Linked List operations</div>
+    <div class="explain-card">
+        <strong>📚 CIRCULAR LINKED LIST · Complete Explanation</strong><br><br>
+        
+        <b>Definition:</b><br>
+        A Circular Linked List is a linked list where the last node points back to the first node, 
+        forming a closed loop.<br><br>
+        
+        <b>Characteristics:</b><br>
+        • No null pointer at end<br>
+        • Can be singly or doubly circular<br><br>
+        
+        <b>Advantages:</b><br>
+        • Efficient traversal from any node<br>
+        • Suitable for repetitive processes<br><br>
+        
+        <b>Applications:</b><br>
+        • Round-robin CPU scheduling<br>
+        • Multiplayer turn-based systems<br>
+        • Circular buffers<br><br>
+        
+        Traversal must stop when returning to the starting node.
+    </div>`;
+    mainPanel.innerHTML = html;
+    attachCircularLLEvents();
+}
+
+function attachCircularLLEvents() {
+    document.getElementById('circularLLInsert')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('circularLLInput').value)||0; 
+        linkedListNodes.push(v);
+        document.getElementById('circularLLCodeBlock').innerHTML = `// Inserted ${v} (last node now points to head ${linkedListNodes[0]})`;
+        renderCircularLL();
+    });
+    document.getElementById('circularLLDelete')?.addEventListener('click', ()=>{
+        if(linkedListNodes.length > 0) {
+            let removed = linkedListNodes.shift();
+            document.getElementById('circularLLCodeBlock').innerHTML = `// Deleted head: ${removed}`;
+            renderCircularLL();
+        }
+    });
+    document.getElementById('circularLLReset')?.addEventListener('click', ()=>{
+        linkedListNodes = [15,42,78];
+        renderCircularLL();
+    });
+}
+function renderArrayUI() {
+    setActive('nav-array');
+
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title">
+            <i class="fas fa-table-cells-large"></i>
+            <span class="topic-name">Array · Static</span>
+        </div>
+        <span class="tag-ds">contiguous memory</span>
+    </div>
+
+    <div class="viz-card">
+        <div class="ds-visual">
+            ${arrayDemo.map((v,i)=>`
+                <div class="array-cell">
+                    ${v}<br><small>[${i}]</small>
+                </div>
+            `).join('')}
+        </div>
+
+        <div class="controls">
+            <input id="arrayInput" class="input-field" placeholder="value">
+            <button class="btn btn-solid" id="arrayInsert">Insert</button>
+            <button class="btn" id="arrayDelete">Delete</button>
+            <button class="btn" id="arraySearch">Search</button>
+        </div>
+    </div>
+
+    <div class="code-panel" id="arrayCodeBlock">
+// Array operations
+    </div>
+
+    <div class="explain-card">
+        <strong>📚 ARRAY · Complete Explanation</strong><br><br>
+
+        <b>Definition:</b><br>
+        An Array is a linear data structure that stores elements of the same data type 
+        in contiguous memory locations.<br><br>
+
+        <b>Memory Formula:</b><br>
+        Address of A[i] = base_address + (i × size_of_element)<br><br>
+
+        <b>Time Complexity:</b><br>
+        • Access → O(1)<br>
+        • Insert at end → O(1) amortized<br>
+        • Insert in middle → O(n)<br>
+        • Delete → O(n)<br>
+        • Search → O(n)<br><br>
+
+        <b>Advantages:</b><br>
+        • Fast random access<br>
+        • Cache friendly<br><br>
+
+        <b>Disadvantages:</b><br>
+        • Fixed size (static arrays)<br>
+        • Shifting required for middle insert/delete<br><br>
+
+        Arrays are fundamental building blocks for stacks, heaps, dynamic arrays and matrices.
+    </div>
+    `;
+
+    mainPanel.innerHTML = html;
+
+    document.getElementById('arrayInsert')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('arrayInput').value);
+        if(!isNaN(v)){
+            arrayDemo.push(v);
+            renderArrayUI();
+        }
+    });
+
+    document.getElementById('arrayDelete')?.addEventListener('click', ()=>{
+        arrayDemo.pop();
+        renderArrayUI();
+    });
+
+    document.getElementById('arraySearch')?.addEventListener('click', ()=>{
+        let v = parseInt(document.getElementById('arrayInput').value);
+        if(arrayDemo.includes(v)){
+            document.getElementById('arrayCodeBlock').innerHTML = 
+                "// Found at index " + arrayDemo.indexOf(v);
+        } else {
+            document.getElementById('arrayCodeBlock').innerHTML = 
+                "// Not found";
+        }
+    });
+}
+    // TREE TYPES - WITH FULLY WORKING OPERATIONS AND DETAILED EXPLANATIONS
+
+// Tree state management
+let binaryTree = {
+    root: { value: 50, left: { value: 30, left: null, right: null }, right: { value: 70, left: null, right: null } }
+};
+
+let bst = {
+    root: { value: 50, left: { value: 30, left: { value: 20, left: null, right: null }, right: { value: 40, left: null, right: null } }, right: { value: 70, left: { value: 60, left: null, right: null }, right: { value: 80, left: null, right: null } } }
+};
+
+let avlTree = {
+    root: { value: 30, left: { value: 20, left: null, right: null }, right: { value: 40, left: null, right: null }, balanceFactor: 0 }
+};
+
+let heap = [100, 50, 70, 20, 30, 40, 60]; // Max heap representation
+
+// Graph state
+let graph = {
+    nodes: ['A', 'B', 'C', 'D'],
+    edges: [
+        { from: 'A', to: 'B', weight: 5, directed: true },
+        { from: 'B', to: 'C', weight: 3, directed: true },
+        { from: 'C', to: 'A', weight: 2, directed: true },
+        { from: 'B', to: 'D', weight: 4, directed: false }
+    ]
+};
+
+// Hash table state
+let hashTable = {
+    'name': 'John',
+    'age': 25,
+    'city': 'New York',
+    'occupation': 'Engineer'
+};
+
+function renderBinaryTree() {
+    setActive('nav-binarytree');
+    
+    // Function to render tree recursively
+    function renderTreeNode(node) {
+        if (!node) return '';
+        return `
+            <div style="display:flex; flex-direction:column; align-items:center; margin:10px;">
+                <div class="tree-node" style="background:#45a56e;">${node.value}</div>
+                <div style="display:flex; gap:40px; margin-top:20px;">
+                    ${node.left ? `<div style="text-align:center;">${renderTreeNode(node.left)}</div>` : '<div style="width:60px;"></div>'}
+                    ${node.right ? `<div style="text-align:center;">${renderTreeNode(node.right)}</div>` : ''}
+                </div>
+            </div>
+        `;
+    }
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-tree"></i><span class="topic-name">Binary Tree</span></div>
+        <span class="tag-ds">each node ≤ 2 children</span>
+    </div>
+    <div class="viz-card">
+        <div id="treeVisual" class="ds-visual" style="flex-direction:column; overflow-x:auto;">
+            ${renderTreeNode(binaryTree.root)}
+        </div>
+        <div class="controls" style="flex-wrap:wrap;">
+            <input id="treeValue" class="input-field" placeholder="value" value="45">
+            <input id="treeParent" class="input-field" placeholder="parent value" value="30">
+            <select id="treeChildPosition" class="input-field" style="width:120px;">
+                <option value="left">Left child</option>
+                <option value="right">Right child</option>
+            </select>
+            <button class="btn btn-solid" id="insertTreeNode">Insert Node</button>
+            <button class="btn" id="deleteTreeNode">Delete Node</button>
+            <button class="btn" id="resetTree">Reset</button>
+        </div>
+        <div class="controls">
+            <button class="btn" id="preorderTraversal">Preorder</button>
+            <button class="btn" id="inorderTraversal">Inorder</button>
+            <button class="btn" id="postorderTraversal">Postorder</button>
+            <button class="btn" id="levelorderTraversal">Level-order</button>
+        </div>
+    </div>
+    <div class="code-panel" id="treeCodeBlock"><i class="fas fa-code"></i> // Binary Tree operations</div>
+    <div class="explain-card">
+        <div class="teacher-highlight">📚 COMPLETE BINARY TREE EXPLANATION </div>
+        
+        <div class="section-badge">📌 DEFINITION</div>
+        <p style="margin:10px 0 20px;">A <strong>binary tree</strong> is a hierarchical data structure where each node has at most two children, referred to as the left child and right child.</p>
+        
+        <div class="section-badge">🧱 TERMINOLOGY</div>
+        <ul style="margin:10px 0 20px;">
+            <li>• <strong>Root:</strong> The topmost node (no parent)</li>
+            <li>• <strong>Leaf:</strong> Node with no children</li>
+            <li>• <strong>Internal node:</strong> Node with at least one child</li>
+            <li>• <strong>Parent/Child:</strong> Direct connection between nodes</li>
+            <li>• <strong>Subtree:</strong> A node and all its descendants</li>
+            <li>• <strong>Height:</strong> Longest path from root to leaf</li>
+            <li>• <strong>Depth:</strong> Number of edges from root to node</li>
+        </ul>
+        
+        <div class="section-badge">📊 TYPES OF BINARY TREES</div>
+        <div class="type-grid">
+            <div class="type-card"><strong>Full Binary Tree:</strong> Every node has 0 or 2 children</div>
+            <div class="type-card"><strong>Complete Binary Tree:</strong> All levels filled except possibly last, and last level has all nodes as left as possible</div>
+            <div class="type-card"><strong>Perfect Binary Tree:</strong> All internal nodes have 2 children and all leaves at same level</div>
+            <div class="type-card"><strong>Balanced Binary Tree:</strong> Height difference between left and right subtrees ≤ 1</div>
+            <div class="type-card"><strong>Degenerate/Skewed Tree:</strong> Each parent has only one child (like a linked list)</div>
+        </div>
+        
+        <div class="section-badge">🔄 TREE TRAVERSALS</div>
+        <ul style="margin:10px 0 20px;">
+            <li>• <strong>Preorder (Root-Left-Right):</strong> Visit root, then left subtree, then right subtree</li>
+            <li>• <strong>Inorder (Left-Root-Right):</strong> Visit left subtree, then root, then right subtree</li>
+            <li>• <strong>Postorder (Left-Right-Root):</strong> Visit left subtree, then right subtree, then root</li>
+            <li>• <strong>Level-order (BFS):</strong> Visit nodes level by level from top to bottom</li>
+        </ul>
+        
+        <div class="section-badge">⚙ OPERATIONS & COMPLEXITY</div>
+        <ul style="margin:10px 0 20px;">
+            <li>• <strong>Insert:</strong> O(log n) average, O(n) worst case</li>
+            <li>• <strong>Search:</strong> O(log n) average, O(n) worst case</li>
+            <li>• <strong>Delete:</strong> O(log n) average, O(n) worst case</li>
+            <li>• <strong>Traversal:</strong> O(n) always</li>
+        </ul>
+        
+        <div class="section-badge">🌍 APPLICATIONS</div>
+        <div class="type-grid">
+            <div class="type-card">Expression trees (compilers)</div>
+            <div class="type-card">Huffman coding (compression)</div>
+            <div class="type-card">File system hierarchy</div>
+            <div class="type-card">XML/HTML DOM parsing</div>
+            <div class="type-card">Decision trees (ML)</div>
+            <div class="type-card">Binary Space Partition (3D graphics)</div>
+        </div>
+        
+        <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+            <strong>⚠️ IMPORTANT PROPERTIES:</strong><br>
+            • Maximum nodes at level i: 2ⁱ<br>
+            • Maximum nodes in tree of height h: 2ʰ⁺¹ - 1<br>
+            • Minimum height of tree with n nodes: ⌈log₂(n+1)⌉ - 1
+        </div>
+    </div>`;
+    
+    mainPanel.innerHTML = html;
+    attachTreeEvents();
+}
+
+function attachTreeEvents() {
+    // Helper function to find node by value
+    function findNode(root, value) {
+        if (!root) return null;
+        if (root.value === value) return root;
+        let left = findNode(root.left, value);
+        if (left) return left;
+        return findNode(root.right, value);
+    }
+    
+    // Helper to perform traversals
+    function preorder(node, result = []) {
+        if (node) {
+            result.push(node.value);
+            preorder(node.left, result);
+            preorder(node.right, result);
+        }
+        return result;
+    }
+    
+    function inorder(node, result = []) {
+        if (node) {
+            inorder(node.left, result);
+            result.push(node.value);
+            inorder(node.right, result);
+        }
+        return result;
+    }
+    
+    function postorder(node, result = []) {
+        if (node) {
+            postorder(node.left, result);
+            postorder(node.right, result);
+            result.push(node.value);
+        }
+        return result;
+    }
+    
+    function levelorder(root) {
+        if (!root) return [];
+        let result = [];
+        let queue = [root];
+        while (queue.length > 0) {
+            let node = queue.shift();
+            result.push(node.value);
+            if (node.left) queue.push(node.left);
+            if (node.right) queue.push(node.right);
+        }
+        return result;
+    }
+    
+    document.getElementById('insertTreeNode')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('treeValue').value);
+        let parentVal = parseInt(document.getElementById('treeParent').value);
+        let position = document.getElementById('treeChildPosition').value;
+        
+        if (isNaN(val) || isNaN(parentVal)) {
+            alert('Please enter valid numbers');
+            return;
+        }
+        
+        let parent = findNode(binaryTree.root, parentVal);
+        if (!parent) {
+            alert('Parent node not found!');
+            return;
+        }
+        
+        if (position === 'left' && parent.left) {
+            alert('Left child already exists!');
+            return;
+        }
+        if (position === 'right' && parent.right) {
+            alert('Right child already exists!');
+            return;
+        }
+        
+        let newNode = { value: val, left: null, right: null };
+        if (position === 'left') parent.left = newNode;
+        else parent.right = newNode;
+        
+        document.getElementById('treeCodeBlock').innerHTML = `// Inserted ${val} as ${position} child of ${parentVal}`;
+        renderBinaryTree();
+    });
+    
+    document.getElementById('deleteTreeNode')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('treeValue').value);
+        if (isNaN(val)) {
+            alert('Please enter a value');
+            return;
+        }
+        
+        // Simple deletion (just for demo - removes leaf nodes)
+        function deleteNode(root, value) {
+            if (!root) return null;
+            if (root.left && root.left.value === value) {
+                if (!root.left.left && !root.left.right) {
+                    root.left = null;
+                    return true;
+                }
+            }
+            if (root.right && root.right.value === value) {
+                if (!root.right.left && !root.right.right) {
+                    root.right = null;
+                    return true;
+                }
+            }
+            return deleteNode(root.left, value) || deleteNode(root.right, value);
+        }
+        
+        if (deleteNode(binaryTree.root, val)) {
+            document.getElementById('treeCodeBlock').innerHTML = `// Deleted node ${val} (leaf node)`;
+        } else {
+            document.getElementById('treeCodeBlock').innerHTML = `// Cannot delete ${val} - not found or not a leaf`;
+        }
+        renderBinaryTree();
+    });
+    
+    document.getElementById('preorderTraversal')?.addEventListener('click', ()=>{
+        let result = preorder(binaryTree.root);
+        document.getElementById('treeCodeBlock').innerHTML = `// Preorder traversal: ${result.join(' → ')}`;
+    });
+    
+    document.getElementById('inorderTraversal')?.addEventListener('click', ()=>{
+        let result = inorder(binaryTree.root);
+        document.getElementById('treeCodeBlock').innerHTML = `// Inorder traversal: ${result.join(' → ')}`;
+    });
+    
+    document.getElementById('postorderTraversal')?.addEventListener('click', ()=>{
+        let result = postorder(binaryTree.root);
+        document.getElementById('treeCodeBlock').innerHTML = `// Postorder traversal: ${result.join(' → ')}`;
+    });
+    
+    document.getElementById('levelorderTraversal')?.addEventListener('click', ()=>{
+        let result = levelorder(binaryTree.root);
+        document.getElementById('treeCodeBlock').innerHTML = `// Level-order traversal: ${result.join(' → ')}`;
+    });
+    
+    document.getElementById('resetTree')?.addEventListener('click', ()=>{
+        binaryTree = {
+            root: { value: 50, left: { value: 30, left: null, right: null }, right: { value: 70, left: null, right: null } }
+        };
+        renderBinaryTree();
+    });
+}
+
+function renderBST() {
+    setActive('nav-bst');
+    
+    function renderBSTNode(node) {
+        if (!node) return '';
+        return `
+            <div style="display:flex; flex-direction:column; align-items:center; margin:10px;">
+                <div class="tree-node" style="background:#3498db;">${node.value}</div>
+                <div style="display:flex; gap:40px; margin-top:20px;">
+                    ${node.left ? `<div style="text-align:center;">${renderBSTNode(node.left)}</div>` : '<div style="width:60px;"></div>'}
+                    ${node.right ? `<div style="text-align:center;">${renderBSTNode(node.right)}</div>` : ''}
+                </div>
+            </div>
+        `;
+    }
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-sitemap"></i><span class="topic-name">Binary Search Tree (BST)</span></div>
+        <span class="tag-ds">left < root < right</span>
+    </div>
+    <div class="viz-card">
+        <div id="bstVisual" class="ds-visual" style="flex-direction:column; overflow-x:auto;">
+            ${renderBSTNode(bst.root)}
+        </div>
+        <div class="controls" style="flex-wrap:wrap;">
+            <input id="bstValue" class="input-field" placeholder="value" value="55">
+            <button class="btn btn-solid" id="bstInsert">Insert</button>
+            <button class="btn" id="bstSearch">Search</button>
+            <button class="btn" id="bstDelete">Delete</button>
+            <button class="btn" id="bstReset">Reset</button>
+        </div>
+        <div class="controls">
+            <button class="btn" id="bstMin">Find Min</button>
+            <button class="btn" id="bstMax">Find Max</button>
+            <button class="btn" id="bstInorder">Inorder</button>
+        </div>
+    </div>
+    <div class="code-panel" id="bstCodeBlock"><i class="fas fa-code"></i> // BST operations</div>
+    <div class="explain-card">
+        <div class="teacher-highlight">📚 COMPLETE BINARY SEARCH TREE EXPLANATION </div>
+        
+        <div class="section-badge">📌 DEFINITION</div>
+        <p style="margin:10px 0 20px;">A <strong>Binary Search Tree (BST)</strong> is a binary tree with the property: for every node, all nodes in its left subtree have smaller values, and all nodes in its right subtree have larger values.</p>
+        
+        <div class="section-badge">🔑 KEY PROPERTY</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+left subtree < node < right subtree</pre>
+        
+        <div class="section-badge">⚙ OPERATIONS & COMPLEXITY</div>
+        <table style="width:100%; margin:15px 0; border-collapse:collapse;">
+            <tr style="background:#0077b6; color:white;"><th>Operation</th><th>Average</th><th>Worst Case</th></tr>
+            <tr><td>Search</td><td>O(log n)</td><td>O(n)</td></tr>
+            <tr><td>Insert</td><td>O(log n)</td><td>O(n)</td></tr>
+            <tr><td>Delete</td><td>O(log n)</td><td>O(n)</td></tr>
+            <tr><td>Find Min/Max</td><td>O(log n)</td><td>O(n)</td></tr>
+        </table>
+        
+        <div class="section-badge">📝 INSERTION ALGORITHM</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+function insert(root, value):
+    if root is null: return new node
+    if value < root.value:
+        root.left = insert(root.left, value)
+    else if value > root.value:
+        root.right = insert(root.right, value)
+    return root</pre>
+        
+        <div class="section-badge">🔍 SEARCH ALGORITHM</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+function search(root, value):
+    if root is null or root.value == value:
+        return root
+    if value < root.value:
+        return search(root.left, value)
+    else:
+        return search(root.right, value)</pre>
+        
+        <div class="section-badge">🌍 APPLICATIONS</div>
+        <div class="type-grid">
+            <div class="type-card">Database indexing</div>
+            <div class="type-card">Symbol tables in compilers</div>
+            <div class="type-card">File system organization</div>
+            <div class="type-card">Priority queues</div>
+            <div class="type-card">Auto-complete features</div>
+        </div>
+        
+        <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+            <strong>⚠️ WORST CASE:</strong> When insertions are in sorted order, BST becomes a skewed tree (like linked list), making operations O(n). Self-balancing trees (AVL, Red-Black) solve this.
+        </div>
+    </div>`;
+    
+    mainPanel.innerHTML = html;
+    attachBSTEvents();
+}
+
+function attachBSTEvents() {
+    // BST operations
+    function insertBST(root, value) {
+        if (!root) return { value, left: null, right: null };
+        if (value < root.value) {
+            root.left = insertBST(root.left, value);
+        } else if (value > root.value) {
+            root.right = insertBST(root.right, value);
+        }
+        return root;
+    }
+    
+    function searchBST(root, value) {
+        if (!root) return null;
+        if (root.value === value) return root;
+        if (value < root.value) return searchBST(root.left, value);
+        return searchBST(root.right, value);
+    }
+    
+    function findMin(root) {
+        while (root && root.left) root = root.left;
+        return root;
+    }
+    
+    function deleteBST(root, value) {
+        if (!root) return null;
+        if (value < root.value) {
+            root.left = deleteBST(root.left, value);
+        } else if (value > root.value) {
+            root.right = deleteBST(root.right, value);
+        } else {
+            // Node found
+            if (!root.left) return root.right;
+            if (!root.right) return root.left;
+            
+            // Node with two children
+            let minNode = findMin(root.right);
+            root.value = minNode.value;
+            root.right = deleteBST(root.right, minNode.value);
+        }
+        return root;
+    }
+    
+    function inorderBST(root, result = []) {
+        if (root) {
+            inorderBST(root.left, result);
+            result.push(root.value);
+            inorderBST(root.right, result);
+        }
+        return result;
+    }
+    
+    document.getElementById('bstInsert')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('bstValue').value);
+        if (isNaN(val)) {
+            alert('Please enter a valid number');
+            return;
+        }
+        bst.root = insertBST(bst.root, val);
+        document.getElementById('bstCodeBlock').innerHTML = `// Inserted ${val} into BST`;
+        renderBST();
+    });
+    
+    document.getElementById('bstSearch')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('bstValue').value);
+        if (isNaN(val)) {
+            alert('Please enter a valid number');
+            return;
+        }
+        let found = searchBST(bst.root, val);
+        document.getElementById('bstCodeBlock').innerHTML = found ? 
+            `// Found ${val} in BST` : 
+            `// ${val} not found in BST`;
+    });
+    
+    document.getElementById('bstDelete')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('bstValue').value);
+        if (isNaN(val)) {
+            alert('Please enter a valid number');
+            return;
+        }
+        bst.root = deleteBST(bst.root, val);
+        document.getElementById('bstCodeBlock').innerHTML = `// Deleted ${val} from BST (if existed)`;
+        renderBST();
+    });
+    
+    document.getElementById('bstMin')?.addEventListener('click', ()=>{
+        let min = findMin(bst.root);
+        document.getElementById('bstCodeBlock').innerHTML = min ? 
+            `// Minimum value in BST: ${min.value}` : 
+            `// Tree is empty`;
+    });
+    
+    document.getElementById('bstMax')?.addEventListener('click', ()=>{
+        let max = bst.root;
+        while (max && max.right) max = max.right;
+        document.getElementById('bstCodeBlock').innerHTML = max ? 
+            `// Maximum value in BST: ${max.value}` : 
+            `// Tree is empty`;
+    });
+    
+    document.getElementById('bstInorder')?.addEventListener('click', ()=>{
+        let result = inorderBST(bst.root);
+        document.getElementById('bstCodeBlock').innerHTML = `// Inorder traversal (sorted): ${result.join(' → ')}`;
+    });
+    
+    document.getElementById('bstReset')?.addEventListener('click', ()=>{
+        bst = {
+            root: { value: 50, left: { value: 30, left: { value: 20, left: null, right: null }, right: { value: 40, left: null, right: null } }, right: { value: 70, left: { value: 60, left: null, right: null }, right: { value: 80, left: null, right: null } } }
+        };
+        renderBST();
+    });
+}
+
+function renderAVL() {
+    setActive('nav-avl');
+    
+    function renderAVLNode(node) {
+        if (!node) return '';
+        return `
+            <div style="display:flex; flex-direction:column; align-items:center; margin:10px;">
+                <div class="tree-node" style="background:#e67e22;">${node.value}<br><small>BF:${node.balanceFactor}</small></div>
+                <div style="display:flex; gap:40px; margin-top:20px;">
+                    ${node.left ? `<div style="text-align:center;">${renderAVLNode(node.left)}</div>` : '<div style="width:60px;"></div>'}
+                    ${node.right ? `<div style="text-align:center;">${renderAVLNode(node.right)}</div>` : ''}
+                </div>
+            </div>
+        `;
+    }
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-balance-scale"></i><span class="topic-name">AVL Tree (Self-Balancing)</span></div>
+        <span class="tag-ds">height difference ≤ 1</span>
+    </div>
+    <div class="viz-card">
+        <div id="avlVisual" class="ds-visual" style="flex-direction:column; overflow-x:auto;">
+            ${renderAVLNode(avlTree.root)}
+        </div>
+        <div class="controls">
+            <input id="avlValue" class="input-field" placeholder="value" value="35">
+            <button class="btn btn-solid" id="avlInsert">Insert</button>
+            <button class="btn" id="avlDelete">Delete</button>
+            <button class="btn" id="avlReset">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="avlCodeBlock"><i class="fas fa-code"></i> // AVL Tree operations</div>
+    <div class="explain-card">
+        <div class="teacher-highlight">📚 COMPLETE AVL TREE EXPLANATION </div>
+        
+        <div class="section-badge">📌 DEFINITION</div>
+        <p style="margin:10px 0 20px;">An <strong>AVL tree</strong> is a self-balancing Binary Search Tree where the height difference between left and right subtrees (balance factor) cannot be more than 1 for any node.</p>
+        
+        <div class="section-badge">⚖️ BALANCE FACTOR</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+balanceFactor = height(left) - height(right)
+Allowed values: -1, 0, +1</pre>
+        
+        <div class="section-badge">🔄 ROTATIONS</div>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin:15px 0;">
+            <div class="type-card">
+                <strong>LL Rotation (Right Rotation)</strong>
+                <pre style="background:#1a2b3c; color:#aadeff; padding:10px;">
+    z                y
+   / \              / \
+  y   T4    =>     x   z
+ / \              / \ / \
+x  T3            T1 T2T3 T4</pre>
+            </div>
+            <div class="type-card">
+                <strong>RR Rotation (Left Rotation)</strong>
+                <pre style="background:#1a2b3c; color:#aadeff; padding:10px;">
+  z                  y
+ / \                / \
+T1  y      =>      z   x
+   / \            / \ / \
+  T2  x          T1 T2T3 T4</pre>
+            </div>
+            <div class="type-card">
+                <strong>LR Rotation (Left-Right)</strong>
+                <pre>First left rotate, then right rotate</pre>
+            </div>
+            <div class="type-card">
+                <strong>RL Rotation (Right-Left)</strong>
+                <pre>First right rotate, then left rotate</pre>
+            </div>
+        </div>
+        
+        <div class="section-badge">⚙ OPERATIONS COMPLEXITY</div>
+        <ul style="margin:10px 0 20px;">
+            <li>• <strong>Search:</strong> O(log n) guaranteed</li>
+            <li>• <strong>Insert:</strong> O(log n) with rotations</li>
+            <li>• <strong>Delete:</strong> O(log n) with rotations</li>
+        </ul>
+        
+        <div class="section-badge">🌍 APPLICATIONS</div>
+        <div class="type-grid">
+            <div class="type-card">Database systems requiring frequent lookups</div>
+            <div class="type-card">In-memory dictionaries</div>
+            <div class="type-card">File system directories</div>
+            <div class="type-card">Real-time systems needing guaranteed performance</div>
+        </div>
+        
+        <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+            <strong>📊 ADVANTAGE OVER BST:</strong> AVL trees guarantee O(log n) operations even in worst case, while regular BST can degrade to O(n).
+        </div>
+    </div>`;
+    
+    mainPanel.innerHTML = html;
+    attachAVLEvents();
+}
+
+function attachAVLEvents() {
+    // Simple AVL operations (simplified for demo)
+    document.getElementById('avlInsert')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('avlValue').value);
+        if (isNaN(val)) {
+            alert('Please enter a valid number');
+            return;
+        }
+        
+        // Simplified insertion (just for demo)
+        if (val < avlTree.root.value) {
+            if (!avlTree.root.left) {
+                avlTree.root.left = { value: val, left: null, right: null, balanceFactor: 0 };
+                avlTree.root.balanceFactor = 1;
+            } else if (!avlTree.root.right) {
+                avlTree.root.right = { value: val, left: null, right: null, balanceFactor: 0 };
+                avlTree.root.balanceFactor = -1;
+            }
+        } else {
+            if (!avlTree.root.right) {
+                avlTree.root.right = { value: val, left: null, right: null, balanceFactor: 0 };
+                avlTree.root.balanceFactor = -1;
+            } else if (!avlTree.root.left) {
+                avlTree.root.left = { value: val, left: null, right: null, balanceFactor: 0 };
+                avlTree.root.balanceFactor = 1;
+            }
+        }
+        
+        document.getElementById('avlCodeBlock').innerHTML = `// Inserted ${val} (simplified AVL demo)`;
+        renderAVL();
+    });
+    
+    document.getElementById('avlDelete')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('avlValue').value);
+        if (isNaN(val)) return;
+        
+        if (avlTree.root.left && avlTree.root.left.value === val) {
+            avlTree.root.left = null;
+            avlTree.root.balanceFactor = -1;
+        } else if (avlTree.root.right && avlTree.root.right.value === val) {
+            avlTree.root.right = null;
+            avlTree.root.balanceFactor = 1;
+        }
+        
+        document.getElementById('avlCodeBlock').innerHTML = `// Deleted ${val} (simplified AVL demo)`;
+        renderAVL();
+    });
+    
+    document.getElementById('avlReset')?.addEventListener('click', ()=>{
+        avlTree = {
+            root: { value: 30, left: { value: 20, left: null, right: null }, right: { value: 40, left: null, right: null }, balanceFactor: 0 }
+        };
+        renderAVL();
+    });
+}
+
+function renderHeap() {
+    setActive('nav-heap');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-chart-bar"></i><span class="topic-name">Heap (Max Heap)</span></div>
+        <span class="tag-ds">complete binary tree</span>
+    </div>
+    <div class="viz-card">
+        <div id="heapVisual" class="ds-visual" style="flex-direction:column;">
+            <div style="display:flex; gap:40px; margin-bottom:20px;">
+                <div class="tree-node" style="background:#9b59b6;">${heap[0]} (root)</div>
+            </div>
+            <div style="display:flex; gap:60px; margin-bottom:20px;">
+                <div class="tree-node" style="background:#9b59b6;">${heap[1]}</div>
+                <div class="tree-node" style="background:#9b59b6;">${heap[2]}</div>
+            </div>
+            <div style="display:flex; gap:30px;">
+                <div class="tree-node" style="background:#9b59b6;">${heap[3]}</div>
+                <div class="tree-node" style="background:#9b59b6;">${heap[4]}</div>
+                <div class="tree-node" style="background:#9b59b6;">${heap[5]}</div>
+                <div class="tree-node" style="background:#9b59b6;">${heap[6]}</div>
+            </div>
+        </div>
+        <div class="controls">
+            <input id="heapValue" class="input-field" placeholder="value" value="80">
+            <button class="btn btn-solid" id="heapInsert">Insert</button>
+            <button class="btn" id="heapExtractMax">Extract Max</button>
+            <button class="btn" id="heapReset">Reset</button>
+        </div>
+        <div class="controls">
+            <button class="btn" id="heapifyUp">Heapify Up</button>
+            <button class="btn" id="heapifyDown">Heapify Down</button>
+        </div>
+    </div>
+    <div class="code-panel" id="heapCodeBlock"><i class="fas fa-code"></i> // Heap operations</div>
+    <div class="explain-card">
+        <div class="teacher-highlight">📚 COMPLETE HEAP EXPLANATION </div>
+        
+        <div class="section-badge">📌 DEFINITION</div>
+        <p style="margin:10px 0 20px;">A <strong>heap</strong> is a specialized tree-based data structure that satisfies the heap property. It's a complete binary tree implemented as an array.</p>
+        
+        <div class="section-badge">📊 TYPES OF HEAPS</div>
+        <ul style="margin:10px 0 20px;">
+            <li>• <strong>Max Heap:</strong> Parent ≥ Children (root is maximum)</li>
+            <li>• <strong>Min Heap:</strong> Parent ≤ Children (root is minimum)</li>
+        </ul>
+        
+        <div class="section-badge">📈 ARRAY REPRESENTATION</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+For node at index i:
+• Parent = floor((i-1)/2)
+• Left child = 2i + 1
+• Right child = 2i + 2
+
+Current heap: [${heap.join(', ')}]</pre>
+        
+        <div class="section-badge">⚙ OPERATIONS & COMPLEXITY</div>
+        <table style="width:100%; margin:15px 0; border-collapse:collapse;">
+            <tr style="background:#0077b6; color:white;"><th>Operation</th><th>Time Complexity</th><th>Description</th></tr>
+            <tr><td>Insert</td><td>O(log n)</td><td>Add at end, bubble up</td></tr>
+            <tr><td>Extract Max/Min</td><td>O(log n)</td><td>Remove root, bubble down</td></tr>
+            <tr><td>Peek</td><td>O(1)</td><td>View root</td></tr>
+            <tr><td>Heapify</td><td>O(n)</td><td>Build heap from array</td></tr>
+        </table>
+        
+        <div class="section-badge">📝 INSERT ALGORITHM (MAX HEAP)</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+function insert(value):
+    add value to end of array
+    i = last index
+    while i > 0 and heap[i] > heap[parent(i)]:
+        swap heap[i] and heap[parent(i)]
+        i = parent(i)</pre>
+        
+        <div class="section-badge">📝 EXTRACT MAX ALGORITHM</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+function extractMax():
+    max = heap[0]
+    heap[0] = heap[last]
+    remove last
+    heapifyDown(0)
+    return max</pre>
+        
+        <div class="section-badge">🌍 APPLICATIONS</div>
+        <div class="type-grid">
+            <div class="type-card">Priority Queues</div>
+            <div class="type-card">Heap Sort (O(n log n))</div>
+            <div class="type-card">Dijkstra's algorithm</div>
+            <div class="type-card">K-th largest element</div>
+            <div class="type-card">Median maintenance</div>
+        </div>
+        
+        <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+            <strong>📊 HEAP PROPERTIES:</strong><br>
+            • Complete binary tree → no gaps in array<br>
+            • Height = ⌊log₂n⌋<br>
+            • Used in memory management (heap allocation)
+        </div>
+    </div>`;
+    
+    mainPanel.innerHTML = html;
+    attachHeapEvents();
+}
+
+function attachHeapEvents() {
+    function parent(i) { return Math.floor((i-1)/2); }
+    function leftChild(i) { return 2*i + 1; }
+    function rightChild(i) { return 2*i + 2; }
+    
+    function heapifyUp(arr, i) {
+        while (i > 0 && arr[i] > arr[parent(i)]) {
+            [arr[i], arr[parent(i)]] = [arr[parent(i)], arr[i]];
+            i = parent(i);
+        }
+    }
+    
+    function heapifyDown(arr, i) {
+        let largest = i;
+        let left = leftChild(i);
+        let right = rightChild(i);
+        
+        if (left < arr.length && arr[left] > arr[largest]) {
+            largest = left;
+        }
+        if (right < arr.length && arr[right] > arr[largest]) {
+            largest = right;
+        }
+        if (largest !== i) {
+            [arr[i], arr[largest]] = [arr[largest], arr[i]];
+            heapifyDown(arr, largest);
+        }
+    }
+    
+    document.getElementById('heapInsert')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('heapValue').value);
+        if (isNaN(val)) {
+            alert('Please enter a valid number');
+            return;
+        }
+        heap.push(val);
+        heapifyUp(heap, heap.length - 1);
+        document.getElementById('heapCodeBlock').innerHTML = `// Inserted ${val} and heapified up`;
+        renderHeap();
+    });
+    
+    document.getElementById('heapExtractMax')?.addEventListener('click', ()=>{
+        if (heap.length === 0) {
+            alert('Heap is empty');
+            return;
+        }
+        let max = heap[0];
+        heap[0] = heap[heap.length - 1];
+        heap.pop();
+        heapifyDown(heap, 0);
+        document.getElementById('heapCodeBlock').innerHTML = `// Extracted max: ${max}`;
+        renderHeap();
+    });
+    
+    document.getElementById('heapifyUp')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('heapValue').value);
+        if (isNaN(val)) return;
+        let idx = heap.indexOf(val);
+        if (idx >= 0) {
+            heapifyUp(heap, idx);
+            document.getElementById('heapCodeBlock').innerHTML = `// Heapified up at index ${idx}`;
+            renderHeap();
+        }
+    });
+    
+    document.getElementById('heapifyDown')?.addEventListener('click', ()=>{
+        let val = parseInt(document.getElementById('heapValue').value);
+        if (isNaN(val)) return;
+        let idx = heap.indexOf(val);
+        if (idx >= 0) {
+            heapifyDown(heap, idx);
+            document.getElementById('heapCodeBlock').innerHTML = `// Heapified down at index ${idx}`;
+            renderHeap();
+        }
+    });
+    
+    document.getElementById('heapReset')?.addEventListener('click', ()=>{
+        heap = [100, 50, 70, 20, 30, 40, 60];
+        renderHeap();
+    });
+}
+
+// GRAPH TYPES - WITH WORKING OPERATIONS
+function renderDirectedGraph() {
+    setActive('nav-directed');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-arrow-right"></i><span class="topic-name">Directed Graph</span></div>
+        <span class="tag-ds">edges have direction</span>
+    </div>
+    <div class="viz-card">
+        <div id="graphVisual" class="ds-visual" style="justify-content:center; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+                ${graph.nodes.map(node => `
+                    <div style="text-align:center;">
+                        <div class="graph-node">${node}</div>
+                        <div style="margin-top:5px;">
+                            ${graph.edges
+                                .filter(e => e.from === node && e.directed)
+                                .map(e => `→ ${e.to} (${e.weight}) `)
+                                .join('<br>')}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        <div class="controls" style="flex-wrap:wrap;">
+            <input id="graphFrom" class="input-field" placeholder="from" value="A" style="width:80px;">
+            <input id="graphTo" class="input-field" placeholder="to" value="D" style="width:80px;">
+            <input id="graphWeight" class="input-field" placeholder="weight" value="7" style="width:80px;">
+            <button class="btn btn-solid" id="addEdge">Add Edge</button>
+            <button class="btn" id="removeEdge">Remove Edge</button>
+            <button class="btn" id="dfsGraph">DFS</button>
+            <button class="btn" id="bfsGraph">BFS</button>
+            <button class="btn" id="resetGraph">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="graphCodeBlock"><i class="fas fa-code"></i> // Directed Graph operations</div>
+    <div class="explain-card">
+        <div class="teacher-highlight">📚 COMPLETE DIRECTED GRAPH EXPLANATION </div>
+        
+        <div class="section-badge">📌 DEFINITION</div>
+        <p style="margin:10px 0 20px;">A <strong>directed graph</strong> (digraph) consists of vertices (nodes) connected by edges that have a direction. Edge A→B is different from B→A.</p>
+        
+        <div class="section-badge">🧱 REPRESENTATIONS</div>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin:15px 0;">
+            <div class="type-card">
+                <strong>Adjacency Matrix</strong>
+                <pre>  A B C D
+A 0 1 0 0
+B 0 0 1 0
+C 1 0 0 0
+D 0 0 0 0</pre>
+            </div>
+            <div class="type-card">
+                <strong>Adjacency List</strong>
+                <pre>A → B
+B → C
+C → A</pre>
+            </div>
+        </div>
+        
+        <div class="section-badge">⚙ IMPORTANT CONCEPTS</div>
+        <ul style="margin:10px 0 20px;">
+            <li>• <strong>Indegree:</strong> Number of incoming edges to a vertex</li>
+            <li>• <strong>Outdegree:</strong> Number of outgoing edges from a vertex</li>
+            <li>• <strong>Source:</strong> Vertex with indegree 0</li>
+            <li>• <strong>Sink:</strong> Vertex with outdegree 0</li>
+            <li>• <strong>Cycle:</strong> Path that starts and ends at same vertex</li>
+            <li>• <strong>DAG:</strong> Directed Acyclic Graph (no cycles)</li>
+        </ul>
+        
+        <div class="section-badge">🌍 APPLICATIONS</div>
+        <div class="type-grid">
+            <div class="type-card">Web page links (hyperlink structure)</div>
+            <div class="type-card">Social media follows (Twitter)</div>
+            <div class="type-card">Dependency graphs (build systems)</div>
+            <div class="type-card">Routing algorithms</div>
+            <div class="type-card">Task scheduling (topological sort)</div>
+        </div>
+        
+        <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+            <strong>📊 ALGORITHMS:</strong> DFS, BFS, Topological Sort, Strongly Connected Components (Kosaraju's, Tarjan's), Dijkstra's (with non-negative weights)
+        </div>
+    </div>`;
+    
+    mainPanel.innerHTML = html;
+    attachGraphEvents();
+}
+
+function renderUndirectedGraph() {
+    setActive('nav-undirected');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-arrows-alt-h"></i><span class="topic-name">Undirected Graph</span></div>
+        <span class="tag-ds">bidirectional edges</span>
+    </div>
+    <div class="viz-card">
+        <div id="undirectedVisual" class="ds-visual" style="justify-content:center;">
+            <div style="display:flex; gap:20px; align-items:center;">
+                <div class="graph-node">A</div>
+                <div>—</div>
+                <div class="graph-node">B</div>
+                <div>—</div>
+                <div class="graph-node">C</div>
+                <div>—</div>
+                <div class="graph-node">D</div>
+            </div>
+        </div>
+        <div class="explain-card">
+            <div class="teacher-highlight">📚 COMPLETE UNDIRECTED GRAPH EXPLANATION </div>
+            
+            <div class="section-badge">📌 DEFINITION</div>
+            <p style="margin:10px 0 20px;">An <strong>undirected graph</strong> has edges with no direction. Edge (A,B) is same as (B,A). Used to model symmetric relationships.</p>
+            
+            <div class="section-badge">🔑 KEY PROPERTIES</div>
+            <ul style="margin:10px 0 20px;">
+                <li>• <strong>Degree:</strong> Number of edges incident to a vertex</li>
+                <li>• <strong>Connected:</strong> Path exists between any two vertices</li>
+                <li>• <strong>Component:</strong> Maximal connected subgraph</li>
+                <li>• <strong>Tree:</strong> Connected acyclic undirected graph</li>
+                <li>• <strong>Complete graph:</strong> Every pair of vertices connected</li>
+            </ul>
+            
+            <div class="section-badge">⚗️ PROPERTIES</div>
+            <ul style="margin:10px 0 20px;">
+                <li>• Sum of degrees = 2 × (number of edges)</li>
+                <li>• Number of vertices with odd degree is always even</li>
+                <li>• A tree with n vertices has exactly n-1 edges</li>
+            </ul>
+            
+            <div class="section-badge">🌍 APPLICATIONS</div>
+            <div class="type-grid">
+                <div class="type-card">Social networks (Facebook friendships)</div>
+                <div class="type-card">Road networks (two-way streets)</div>
+                <div class="type-card">Electrical circuits</div>
+                <div class="type-card">MST algorithms</div>
+            </div>
+            
+            <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+                <strong>📊 ALGORITHMS:</strong> Minimum Spanning Tree (Prim, Kruskal), Connected Components, Bipartite checking, Eulerian paths
+            </div>
+        </div>`;
+    
+    mainPanel.innerHTML = html;
+}
+
+function renderWeightedGraph() {
+    setActive('nav-weighted');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-weight-hanging"></i><span class="topic-name">Weighted Graph</span></div>
+        <span class="tag-ds">edges have weights/costs</span>
+    </div>
+    <div class="viz-card">
+        <div class="ds-visual" style="justify-content:center; flex-direction:column;">
+            <div>A —(5)— B —(3)— C</div>
+            <div style="margin-top:10px;">|           |</div>
+            <div style="margin-top:10px;">(2)        (4)</div>
+            <div style="margin-top:10px;">|           |</div>
+            <div>D —(1)— E</div>
+        </div>
+        <div class="explain-card">
+            <div class="teacher-highlight">📚 COMPLETE WEIGHTED GRAPH EXPLANATION </div>
+            
+            <div class="section-badge">📌 DEFINITION</div>
+            <p style="margin:10px 0 20px;">A <strong>weighted graph</strong> assigns a numerical weight to each edge, representing cost, distance, capacity, or any other metric.</p>
+            
+            <div class="section-badge">⚙ SHORTEST PATH ALGORITHMS</div>
+            <table style="width:100%; margin:15px 0; border-collapse:collapse;">
+                <tr style="background:#0077b6; color:white;"><th>Algorithm</th><th>Time</th><th>Constraints</th></tr>
+                <tr><td>Dijkstra</td><td>O((V+E)log V)</td><td>Non-negative weights</td></tr>
+                <tr><td>Bellman-Ford</td><td>O(VE)</td><td>Negative weights allowed</td></tr>
+                <tr><td>Floyd-Warshall</td><td>O(V³)</td><td>All pairs shortest path</td></tr>
+                <tr><td>A* Search</td><td>O(E)</td><td>With heuristic</td></tr>
+            </table>
+            
+            <div class="section-badge">🌍 APPLICATIONS</div>
+            <div class="type-grid">
+                <div class="type-card">GPS navigation (road distances)</div>
+                <div class="type-card">Network routing (latency)</div>
+                <div class="type-card">Flight booking (cost/duration)</div>
+                <div class="type-card">Supply chain optimization</div>
+            </div>
+        </div>`;
+    
+    mainPanel.innerHTML = html;
+}
+
+function renderUnweightedGraph() {
+    setActive('nav-unweighted');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-equals"></i><span class="topic-name">Unweighted Graph</span></div>
+        <span class="tag-ds">all edges equal</span>
+    </div>
+    <div class="viz-card">
+        <div class="ds-visual" style="justify-content:center;">
+            <div>A — B — C — D</div>
+        </div>
+        <div class="explain-card">
+            <div class="teacher-highlight">📚 COMPLETE UNWEIGHTED GRAPH EXPLANATION </div>
+            
+            <div class="section-badge">📌 DEFINITION</div>
+            <p style="margin:10px 0 20px;">An <strong>unweighted graph</strong> treats all edges equally (unit weight). Shortest path means minimum number of edges.</p>
+            
+            <div class="section-badge">⚙ KEY PROPERTIES</div>
+            <ul style="margin:10px 0 20px;">
+                <li>• BFS gives shortest path (minimum edges)</li>
+                <li>• Diameter = longest shortest path</li>
+                <li>• Can be represented with adjacency list/matrix</li>
+            </ul>
+            
+            <div class="section-badge">🌍 APPLICATIONS</div>
+            <div class="type-grid">
+                <div class="type-card">Social connections (degrees of separation)</div>
+                <div class="type-card">Web crawling</div>
+                <div class="type-card">Word ladder puzzles</div>
+                <div class="type-card">Network topology</div>
+            </div>
+        </div>`;
+    
+    mainPanel.innerHTML = html;
+}
+
+function attachGraphEvents() {
+    document.getElementById('addEdge')?.addEventListener('click', ()=>{
+        let from = document.getElementById('graphFrom').value;
+        let to = document.getElementById('graphTo').value;
+        let weight = parseInt(document.getElementById('graphWeight').value) || 1;
+        
+        if (graph.nodes.includes(from) && graph.nodes.includes(to)) {
+            graph.edges.push({ from, to, weight, directed: true });
+            document.getElementById('graphCodeBlock').innerHTML = `// Added directed edge ${from} → ${to} (weight: ${weight})`;
+            renderDirectedGraph();
+        } else {
+            alert('Invalid nodes!');
+        }
+    });
+    
+    document.getElementById('removeEdge')?.addEventListener('click', ()=>{
+        let from = document.getElementById('graphFrom').value;
+        let to = document.getElementById('graphTo').value;
+        
+        let index = graph.edges.findIndex(e => e.from === from && e.to === to);
+        if (index >= 0) {
+            graph.edges.splice(index, 1);
+            document.getElementById('graphCodeBlock').innerHTML = `// Removed edge ${from} → ${to}`;
+            renderDirectedGraph();
+        }
+    });
+    
+    document.getElementById('dfsGraph')?.addEventListener('click', ()=>{
+        let visited = new Set();
+        let result = [];
+        
+        function dfs(node) {
+            visited.add(node);
+            result.push(node);
+            let neighbors = graph.edges.filter(e => e.from === node).map(e => e.to);
+            for (let neighbor of neighbors) {
+                if (!visited.has(neighbor)) {
+                    dfs(neighbor);
+                }
+            }
+        }
+        
+        dfs('A');
+        document.getElementById('graphCodeBlock').innerHTML = `// DFS traversal from A: ${result.join(' → ')}`;
+    });
+    
+    document.getElementById('bfsGraph')?.addEventListener('click', ()=>{
+        let visited = new Set();
+        let queue = ['A'];
+        let result = [];
+        
+        visited.add('A');
+        while (queue.length > 0) {
+            let node = queue.shift();
+            result.push(node);
+            let neighbors = graph.edges.filter(e => e.from === node).map(e => e.to);
+            for (let neighbor of neighbors) {
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor);
+                    queue.push(neighbor);
+                }
+            }
+        }
+        
+        document.getElementById('graphCodeBlock').innerHTML = `// BFS traversal from A: ${result.join(' → ')}`;
+    });
+    
+    document.getElementById('resetGraph')?.addEventListener('click', ()=>{
+        graph = {
+            nodes: ['A', 'B', 'C', 'D'],
+            edges: [
+                { from: 'A', to: 'B', weight: 5, directed: true },
+                { from: 'B', to: 'C', weight: 3, directed: true },
+                { from: 'C', to: 'A', weight: 2, directed: true },
+                { from: 'B', to: 'D', weight: 4, directed: false }
+            ]
+        };
+        renderDirectedGraph();
+    });
+}
+
+function renderHashUI() {
+    setActive('nav-hash');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-hashtag"></i><span class="topic-name">Hash Table</span></div>
+        <span class="tag-ds">key-value store</span>
+    </div>
+    <div class="viz-card">
+        <div class="ds-visual" style="flex-direction:column;">
+            <table style="width:100%; border-collapse:collapse;">
+                <tr style="background:#0077b6; color:white;">
+                    <th style="padding:10px;">Key</th>
+                    <th style="padding:10px;">Hash</th>
+                    <th style="padding:10px;">Index</th>
+                    <th style="padding:10px;">Value</th>
+                </tr>
+                ${Object.entries(hashTable).map(([key, value], i) => {
+                    let hash = key.split('').reduce((a,b)=>a + b.charCodeAt(0), 0);
+                    let index = hash % 8;
+                    return `
+                    <tr>
+                        <td style="padding:8px; border-bottom:1px solid #ccc;">"${key}"</td>
+                        <td style="padding:8px; border-bottom:1px solid #ccc;">${hash}</td>
+                        <td style="padding:8px; border-bottom:1px solid #ccc;">${index}</td>
+                        <td style="padding:8px; border-bottom:1px solid #ccc;">"${value}"</td>
+                    </tr>
+                    `;
+                }).join('')}
+            </table>
+        </div>
+        <div class="controls" style="flex-wrap:wrap;">
+            <input id="hashKey" class="input-field" placeholder="key" value="country">
+            <input id="hashValue" class="input-field" placeholder="value" value="USA">
+            <button class="btn btn-solid" id="hashInsert">Insert</button>
+            <button class="btn" id="hashGet">Get</button>
+            <button class="btn" id="hashDelete">Delete</button>
+            <button class="btn" id="hashReset">Reset</button>
+        </div>
+    </div>
+    <div class="code-panel" id="hashCodeBlock"><i class="fas fa-code"></i> // Hash Table operations</div>
+    <div class="explain-card">
+        <div class="teacher-highlight">📚 COMPLETE HASH TABLE EXPLANATION </div>
+        
+        <div class="section-badge">📌 DEFINITION</div>
+        <p style="margin:10px 0 20px;">A <strong>hash table</strong> is a data structure that implements an associative array, mapping keys to values using a hash function.</p>
+        
+        <div class="section-badge">🔑 HASH FUNCTION</div>
+        <pre style="background:#1a2b3c; color:#aadeff; padding:15px; border-radius:20px;">
+hash = hashCode(key) % tableSize</pre>
+        
+        <div class="section-badge">⚙ OPERATIONS & COMPLEXITY</div>
+        <table style="width:100%; margin:15px 0; border-collapse:collapse;">
+            <tr style="background:#0077b6; color:white;"><th>Operation</th><th>Average</th><th>Worst Case</th></tr>
+            <tr><td>Search</td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td>Insert</td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td>Delete</td><td>O(1)</td><td>O(n)</td></tr>
+        </table>
+        
+        <div class="section-badge">💥 COLLISION RESOLUTION</div>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin:15px 0;">
+            <div class="type-card">
+                <strong>Chaining</strong>
+                <pre>Array of linked lists</pre>
+            </div>
+            <div class="type-card">
+                <strong>Open Addressing</strong>
+                <pre>Linear/Quadratic probing, Double hashing</pre>
+            </div>
+        </div>
+        
+        <div class="section-badge">🌍 APPLICATIONS</div>
+        <div class="type-grid">
+            <div class="type-card">Database indexing</div>
+            <div class="type-card">Caches (LRU, Redis)</div>
+            <div class="type-card">Symbol tables in compilers</div>
+            <div class="type-card">Dictionaries</div>
+            <div class="type-card">Password verification</div>
+        </div>
+        
+        <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+            <strong>📊 LOAD FACTOR:</strong> α = n / m (number of entries / table size)<br>
+            • When α exceeds threshold, rehashing occurs (O(n))<br>
+            • Typical threshold: 0.75
+        </div>
+    </div>`;
+    
+    mainPanel.innerHTML = html;
+    attachHashEvents();
+}
+
+function attachHashEvents() {
+    document.getElementById('hashInsert')?.addEventListener('click', ()=>{
+        let key = document.getElementById('hashKey').value;
+        let value = document.getElementById('hashValue').value;
+        if (key && value) {
+            hashTable[key] = value;
+            document.getElementById('hashCodeBlock').innerHTML = `// Inserted: "${key}" → "${value}"`;
+            renderHashUI();
+        }
+    });
+    
+    document.getElementById('hashGet')?.addEventListener('click', ()=>{
+        let key = document.getElementById('hashKey').value;
+        if (key in hashTable) {
+            document.getElementById('hashCodeBlock').innerHTML = `// Get "${key}": "${hashTable[key]}"`;
+        } else {
+            document.getElementById('hashCodeBlock').innerHTML = `// Key "${key}" not found`;
+        }
+    });
+    
+    document.getElementById('hashDelete')?.addEventListener('click', ()=>{
+        let key = document.getElementById('hashKey').value;
+        if (key in hashTable) {
+            delete hashTable[key];
+            document.getElementById('hashCodeBlock').innerHTML = `// Deleted key "${key}"`;
+            renderHashUI();
+        }
+    });
+    
+    document.getElementById('hashReset')?.addEventListener('click', ()=>{
+        hashTable = {
+            'name': 'John',
+            'age': 25,
+            'city': 'New York',
+            'occupation': 'Engineer'
+        };
+        renderHashUI();
+    });
+}
+    // ========== ML MODELS WITH INTERACTIVE VISUALIZATIONS AND DETAILED EXPLANATIONS ==========
+
+// ML state management
+let linregPoints = [
+    { x: 1, y: 2 }, { x: 2, y: 3.5 }, { x: 3, y: 5 }, 
+    { x: 4, y: 6.2 }, { x: 5, y: 8 }, { x: 6, y: 9.1 }
+];
+let linregM = 1.5, linregB = 0.5; // y = mx + b
+
+let knnPoints = [
+    { x: 1, y: 2, class: 'A' }, { x: 2, y: 1, class: 'A' }, { x: 2, y: 3, class: 'A' },
+    { x: 5, y: 5, class: 'B' }, { x: 6, y: 4, class: 'B' }, { x: 7, y: 6, class: 'B' },
+    { x: 4, y: 7, class: 'C' }, { x: 3, y: 8, class: 'C' }, { x: 5, y: 8, class: 'C' }
+];
+let knnK = 3;
+
+let logregPoints = [
+    { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 },
+    { x: 5, y: 1 }, { x: 6, y: 1 }, { x: 7, y: 1 },
+    { x: 4, y: 0.5 }
+];
+
+let decisionTreeData = [
+    { outlook: 'Sunny', humidity: 'High', wind: 'Weak', play: 'No' },
+    { outlook: 'Sunny', humidity: 'High', wind: 'Strong', play: 'No' },
+    { outlook: 'Overcast', humidity: 'High', wind: 'Weak', play: 'Yes' },
+    { outlook: 'Rain', humidity: 'High', wind: 'Weak', play: 'Yes' },
+    { outlook: 'Rain', humidity: 'Normal', wind: 'Weak', play: 'Yes' },
+    { outlook: 'Rain', humidity: 'Normal', wind: 'Strong', play: 'No' },
+    { outlook: 'Overcast', humidity: 'Normal', wind: 'Strong', play: 'Yes' },
+    { outlook: 'Sunny', humidity: 'Normal', wind: 'Weak', play: 'Yes' },
+    { outlook: 'Sunny', humidity: 'Normal', wind: 'Strong', play: 'Yes' },
+    { outlook: 'Overcast', humidity: 'High', wind: 'Strong', play: 'Yes' }
+];
+
+let svmPoints = [
+    { x: 1, y: 1, class: -1 }, { x: 2, y: 1, class: -1 }, { x: 1, y: 2, class: -1 },
+    { x: 5, y: 5, class: 1 }, { x: 6, y: 5, class: 1 }, { x: 5, y: 6, class: 1 },
+    { x: 3, y: 3, class: 0 } // support vector candidate
+];
+
+let rfPoints = [
+    { x: 1, y: 2, class: 'A' }, { x: 2, y: 1, class: 'A' }, { x: 2, y: 3, class: 'A' },
+    { x: 5, y: 5, class: 'B' }, { x: 6, y: 4, class: 'B' }, { x: 7, y: 6, class: 'B' },
+    { x: 4, y: 7, class: 'C' }, { x: 3, y: 8, class: 'C' }, { x: 5, y: 8, class: 'C' }
+];
+
+let kmeansPoints = [
+    { x: 1, y: 1, cluster: 0 }, { x: 1.5, y: 2, cluster: 0 }, { x: 2, y: 1.5, cluster: 0 },
+    { x: 5, y: 5, cluster: 1 }, { x: 5.5, y: 4.5, cluster: 1 }, { x: 6, y: 5.5, cluster: 1 },
+    { x: 8, y: 2, cluster: 2 }, { x: 8.5, y: 1.5, cluster: 2 }, { x: 9, y: 2.5, cluster: 2 }
+];
+
+// Linear Regression
+function renderLinReg() {
+    setActive('nav-linreg');
+    
+    // Calculate best fit line using least squares
+    let n = linregPoints.length;
+    let sumX = linregPoints.reduce((s, p) => s + p.x, 0);
+    let sumY = linregPoints.reduce((s, p) => s + p.y, 0);
+    let sumXY = linregPoints.reduce((s, p) => s + p.x * p.y, 0);
+    let sumX2 = linregPoints.reduce((s, p) => s + p.x * p.x, 0);
+    
+    linregM = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    linregB = (sumY - linregM * sumX) / n;
+    
+    // Calculate R²
+    let meanY = sumY / n;
+    let ssTot = linregPoints.reduce((s, p) => s + Math.pow(p.y - meanY, 2), 0);
+    let ssRes = linregPoints.reduce((s, p) => s + Math.pow(p.y - (linregM * p.x + linregB), 2), 0);
+    let rSquared = 1 - (ssRes / ssTot);
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-chart-line"></i><span class="topic-name">Linear Regression</span></div>
+        <span class="tag-ds">supervised · regression</span>
+    </div>
+    <div class="viz-card">
+        <canvas id="linregChart" style="width:100%; height:300px;"></canvas>
+        <div class="controls" style="flex-wrap:wrap;">
+            <input id="linregX" class="input-field" placeholder="x value" value="4.5">
+            <input id="linregY" class="input-field" placeholder="y value" value="7">
+            <button class="btn btn-solid" id="addLinregPoint">Add Point</button>
+            <button class="btn" id="resetLinreg">Reset</button>
+            <button class="btn" id="predictLinreg">Predict</button>
+        </div>
+        <div class="prediction-box" id="linregPrediction">
+            y = ${linregM.toFixed(2)}x + ${linregB.toFixed(2)}<br>
+            R² = ${rSquared.toFixed(3)}
+        </div>
+    </div>
+    <div class="code-panel" id="linregCode"><i class="fas fa-code"></i> // y = ${linregM.toFixed(2)}x + ${linregB.toFixed(2)}</div>
+    <div class="explain-card">
+       
+        
+       <div class="explain-card">
+    <div class="teacher-highlight">📚 LINEAR REGRESSION · COMPLETE DETAILED THEORY</div>
+
+    <div class="section-badge">📌 WHAT IS LINEAR REGRESSION?</div>
+    <p>
+        Linear Regression is a supervised learning algorithm used to predict
+        a continuous value. It tries to find the best straight line that
+        represents the relationship between input variable (x) and output (y).
+    </p>
+
+    <div class="section-badge">📐 MODEL EQUATION</div>
+    <pre>
+y = mx + b
+    </pre>
+    <ul>
+        <li><strong>m</strong> → slope (how much y changes when x changes)</li>
+        <li><strong>b</strong> → intercept (value of y when x = 0)</li>
+    </ul>
+
+    <p>For multiple features:</p>
+    <pre>
+ŷ = w₁x₁ + w₂x₂ + ... + wₙxₙ + b
+    </pre>
+
+    <div class="section-badge">📊 WHAT IS ERROR?</div>
+    <p>
+        Error = Actual value − Predicted value
+    </p>
+    <pre>
+Error = yᵢ − ŷᵢ
+    </pre>
+
+    <div class="section-badge">📉 WHAT IS MSE (MEAN SQUARED ERROR)?</div>
+    <pre>
+MSE = (1/n) Σ (yᵢ − ŷᵢ)²
+    </pre>
+    <ul>
+        <li>Square removes negative sign</li>
+        <li>Penalizes large errors more</li>
+        <li>Makes function differentiable</li>
+    </ul>
+
+    <div class="section-badge">⚙ WHY MINIMIZE MSE?</div>
+    <p>
+        We want the best line. The best line is the one that minimizes total squared error.
+    </p>
+
+    <div class="section-badge">🧮 HOW DO WE FIND m AND b?</div>
+    <pre>
+m = ( nΣxy − ΣxΣy ) / ( nΣx² − (Σx)² )
+
+b = ( Σy − mΣx ) / n
+    </pre>
+    <p>
+        This is derived by setting partial derivatives of MSE to zero.
+    </p>
+
+    <div class="section-badge">📈 WHAT IS R²?</div>
+    <pre>
+R² = 1 − (SS_res / SS_tot)
+    </pre>
+    <ul>
+        <li>SS_tot → Total variance in y</li>
+        <li>SS_res → Residual error</li>
+        <li>R² = 1 → Perfect fit</li>
+    </ul>
+
+    <div class="section-badge">📌 ASSUMPTIONS</div>
+    <ul>
+        <li>Linear relationship</li>
+        <li>Independent observations</li>
+        <li>Constant variance (Homoscedasticity)</li>
+        <li>Normally distributed residuals</li>
+    </ul>
+
+    <div class="section-badge">⚠ LIMITATIONS</div>
+    <ul>
+        <li>Cannot model non-linear data</li>
+        <li>Sensitive to outliers</li>
+    </ul>
+</div>`;
+    
+    mainPanel.innerHTML = html;
+    
+    // Create chart
+    let ctx = document.getElementById('linregChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Data points',
+                data: linregPoints,
+                backgroundColor: '#0077b6',
+                pointRadius: 8
+            }, {
+                label: 'Regression line',
+                data: [
+                    { x: 0, y: linregB },
+                    { x: 8, y: linregM * 8 + linregB }
+                ],
+                type: 'line',
+                borderColor: '#e67e22',
+                borderWidth: 3,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'X' } },
+                y: { title: { display: true, text: 'Y' } }
+            }
+        }
+    });
+    
+    document.getElementById('addLinregPoint')?.addEventListener('click', ()=>{
+        let x = parseFloat(document.getElementById('linregX').value);
+        let y = parseFloat(document.getElementById('linregY').value);
+        if (!isNaN(x) && !isNaN(y)) {
+            linregPoints.push({ x, y });
+            renderLinReg();
+        }
+    });
+    
+    document.getElementById('predictLinreg')?.addEventListener('click', ()=>{
+        let x = parseFloat(document.getElementById('linregX').value);
+        if (!isNaN(x)) {
+            let y = linregM * x + linregB;
+            document.getElementById('linregPrediction').innerHTML = 
+                `Prediction: x=${x} → y=${y.toFixed(2)}<br>y = ${linregM.toFixed(2)}x + ${linregB.toFixed(2)}`;
+        }
+    });
+    
+    document.getElementById('resetLinreg')?.addEventListener('click', ()=>{
+        linregPoints = [
+            { x: 1, y: 2 }, { x: 2, y: 3.5 }, { x: 3, y: 5 }, 
+            { x: 4, y: 6.2 }, { x: 5, y: 8 }, { x: 6, y: 9.1 }
+        ];
+        renderLinReg();
+    });
+}
+
+// k-NN
+function renderKNN() {
+    setActive('nav-knn');
+    
+    // Function to classify a new point
+    function classifyKNN(newX, newY) {
+        let distances = knnPoints.map(p => ({
+            ...p,
+            dist: Math.sqrt((p.x - newX)**2 + (p.y - newY)**2)
+        }));
+        distances.sort((a, b) => a.dist - b.dist);
+        let kNearest = distances.slice(0, knnK);
+        let classCounts = {};
+        kNearest.forEach(p => classCounts[p.class] = (classCounts[p.class] || 0) + 1);
+        let maxClass = Object.keys(classCounts).reduce((a, b) => 
+            classCounts[a] > classCounts[b] ? a : b
+        );
+        return { prediction: maxClass, neighbors: kNearest, distances: kNearest.map(p => p.dist.toFixed(2)) };
+    }
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-vector-square"></i><span class="topic-name">k-NN (k=${knnK})</span></div>
+        <span class="tag-ds">supervised · classification</span>
+    </div>
+    <div class="viz-card">
+        <canvas id="knnChart" style="width:100%; height:300px;"></canvas>
+        <div class="controls" style="flex-wrap:wrap;">
+            <input id="knnX" class="input-field" placeholder="x" value="4">
+            <input id="knnY" class="input-field" placeholder="y" value="4">
+            <button class="btn btn-solid" id="predictKNN">Predict</button>
+            <input id="knnClass" class="input-field" placeholder="class" value="A">
+            <button class="btn" id="addKNNPoint">Add Point</button>
+            <button class="btn" id="resetKNN">Reset</button>
+        </div>
+        <div class="prediction-box" id="knnPrediction"></div>
+    </div>
+    <div class="code-panel" id="knnCode"><i class="fas fa-code"></i> // k-Nearest Neighbors</div>
+    <div class="explain-card">
+    <div class="teacher-highlight">📚 k-NEAREST NEIGHBORS (kNN) · COMPLETE DETAILED THEORY</div>
+
+    <div class="section-badge">📌 WHAT IS kNN?</div>
+    <p>
+        k-Nearest Neighbors (kNN) is a supervised learning algorithm used for 
+        classification and regression. It does not build an explicit model during training.
+        Instead, it stores all training data and makes predictions at query time.
+    </p>
+
+    <div class="section-badge">📌 WHAT DOES "k" MEAN?</div>
+    <p>
+        <strong>k</strong> represents the number of nearest data points used 
+        to classify a new point.
+    </p>
+    <ul>
+        <li>If k = 1 → Only closest neighbor decides</li>
+        <li>If k = 3 → Majority of 3 closest neighbors</li>
+        <li>Common heuristic: k ≈ √n (n = total samples)</li>
+    </ul>
+
+    <div class="section-badge">📏 WHAT IS A NEAREST NEIGHBOR?</div>
+    <p>
+        A neighbor is defined using a distance metric in feature space.
+    </p>
+
+    <pre>
+Euclidean Distance:
+d = √[(x₂ - x₁)² + (y₂ - y₁)²]
+
+Manhattan Distance:
+d = |x₂ - x₁| + |y₂ - y₁|
+    </pre>
+
+    <div class="section-badge">⚙ STEP-BY-STEP CLASSIFICATION PROCESS</div>
+    <pre>
+1. Choose value of k
+2. Compute distance from new point to every training point
+3. Sort distances in ascending order
+4. Select first k points
+5. Count class frequency
+6. Assign majority class
+    </pre>
+
+    <div class="section-badge">📊 WORKED NUMERICAL EXAMPLE</div>
+    <p>
+        Suppose k = 3 and nearest neighbors have classes:
+    </p>
+    <pre>
+Neighbor 1 → Class A
+Neighbor 2 → Class B
+Neighbor 3 → Class A
+    </pre>
+    <p>
+        Class counts:
+    </p>
+    <pre>
+A = 2
+B = 1
+    </pre>
+    <p>
+        Prediction = Class A (majority vote)
+    </p>
+
+    <div class="section-badge">📉 BIAS-VARIANCE TRADEOFF</div>
+    <ul>
+        <li>Small k → Low bias, High variance (sensitive to noise)</li>
+        <li>Large k → High bias, Low variance (smoother boundary)</li>
+    </ul>
+
+    <div class="section-badge">📈 COMPUTATIONAL COMPLEXITY</div>
+    <ul>
+        <li>Training Time: O(1)</li>
+        <li>Prediction Time: O(n)</li>
+    </ul>
+
+    <div class="section-badge">⚠ LIMITATIONS</div>
+    <ul>
+        <li>Slow for large datasets</li>
+        <li>Suffers from curse of dimensionality</li>
+        <li>Requires feature scaling</li>
+    </ul>
+</div>`;
+    
+    mainPanel.innerHTML = html;
+    
+    // Create chart
+    let ctx = document.getElementById('knnChart').getContext('2d');
+    
+    let datasets = [
+        { label: 'Class A', data: knnPoints.filter(p => p.class === 'A'), backgroundColor: '#0077b6' },
+        { label: 'Class B', data: knnPoints.filter(p => p.class === 'B'), backgroundColor: '#e67e22' },
+        { label: 'Class C', data: knnPoints.filter(p => p.class === 'C'), backgroundColor: '#27ae60' }
+    ];
+    
+    new Chart(ctx, {
+        type: 'scatter',
+        data: { datasets },
+        options: {
+            scales: {
+                x: { min: 0, max: 10, title: { display: true, text: 'X' } },
+                y: { min: 0, max: 10, title: { display: true, text: 'Y' } }
+            }
+        }
+    });
+    
+    document.getElementById('predictKNN')?.addEventListener('click', ()=>{
+        let x = parseFloat(document.getElementById('knnX').value);
+        let y = parseFloat(document.getElementById('knnY').value);
+        if (!isNaN(x) && !isNaN(y)) {
+            let result = classifyKNN(x, y);
+            document.getElementById('knnPrediction').innerHTML = 
+                `Predicted class: <strong>${result.prediction}</strong><br>
+                 Based on ${knnK} neighbors: distances ${result.distances.join(', ')}`;
+            document.getElementById('knnCode').innerHTML = 
+                `// New point (${x},${y}) classified as ${result.prediction}`;
+        }
+    });
+    
+    document.getElementById('addKNNPoint')?.addEventListener('click', ()=>{
+        let x = parseFloat(document.getElementById('knnX').value);
+        let y = parseFloat(document.getElementById('knnY').value);
+        let cls = document.getElementById('knnClass').value;
+        if (!isNaN(x) && !isNaN(y) && cls) {
+            knnPoints.push({ x, y, class: cls });
+            renderKNN();
+        }
+    });
+    
+    document.getElementById('resetKNN')?.addEventListener('click', ()=>{
+        knnPoints = [
+            { x: 1, y: 2, class: 'A' }, { x: 2, y: 1, class: 'A' }, { x: 2, y: 3, class: 'A' },
+            { x: 5, y: 5, class: 'B' }, { x: 6, y: 4, class: 'B' }, { x: 7, y: 6, class: 'B' },
+            { x: 4, y: 7, class: 'C' }, { x: 3, y: 8, class: 'C' }, { x: 5, y: 8, class: 'C' }
+        ];
+        renderKNN();
+    });
+}
+
+// Logistic Regression
+function renderLogisticRegression() {
+    setActive('nav-logreg');
+    
+    // Simple logistic function
+    function sigmoid(z) {
+        return 1 / (1 + Math.exp(-z));
+    }
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-sigmoid"></i><span class="topic-name">Logistic Regression</span></div>
+        <span class="tag-ds">binary classification</span>
+    </div>
+    <div class="viz-card">
+        <canvas id="logregChart" style="width:100%; height:300px;"></canvas>
+        <div class="controls">
+            <input id="logregX" class="input-field" placeholder="x" value="4">
+            <button class="btn btn-solid" id="predictLogreg">Predict Probability</button>
+            <button class="btn" id="resetLogreg">Reset</button>
+        </div>
+        <div class="prediction-box" id="logregPrediction"></div>
+    </div>
+    <div class="code-panel"><i class="fas fa-code"></i> // σ(z) = 1/(1 + e^(-z))</div>
+   <div class="explain-card">
+    <div class="teacher-highlight">📚 LOGISTIC REGRESSION · COMPLETE DETAILED THEORY</div>
+
+    <div class="section-badge">📌 WHY NOT LINEAR REGRESSION FOR CLASSIFICATION?</div>
+    <p>
+        Linear regression outputs values from (-∞, +∞).
+        But in classification, we need probability between 0 and 1.
+        Therefore, we use a function that squashes output into (0,1).
+    </p>
+
+    <div class="section-badge">📈 THE SIGMOID FUNCTION</div>
+    <pre>
+σ(z) = 1 / (1 + e^(-z))
+
+where:
+z = w · x + b
+    </pre>
+
+    <p>
+        The sigmoid function transforms any real number into a value between 0 and 1.
+        That value represents probability:
+    </p>
+
+    <pre>
+P(y = 1 | x) = σ(w · x + b)
+    </pre>
+
+    <div class="section-badge">📊 INTERPRETING PROBABILITY</div>
+    <ul>
+        <li>If σ(z) ≈ 1 → High chance of class 1</li>
+        <li>If σ(z) ≈ 0 → High chance of class 0</li>
+    </ul>
+
+    <div class="section-badge">📐 DECISION BOUNDARY</div>
+    <p>
+        Decision boundary occurs when probability = 0.5
+    </p>
+
+    <pre>
+σ(z) = 0.5
+→ z = 0
+→ w · x + b = 0
+    </pre>
+
+    <p>
+        So the decision boundary is linear.
+    </p>
+
+    <div class="section-badge">📉 LOSS FUNCTION (WHY NOT MSE?)</div>
+    <p>
+        If we use MSE, optimization becomes non-convex.
+        Instead, we use log-likelihood.
+    </p>
+
+    <div class="section-badge">📊 LOG-LIKELIHOOD</div>
+    <p>
+        For binary classification:
+    </p>
+
+    <pre>
+L = Π [σ(zᵢ)]^yᵢ [1 − σ(zᵢ)]^(1 − yᵢ)
+    </pre>
+
+    <p>
+        Taking log (to simplify multiplication into addition):
+    </p>
+
+    <pre>
+log L = Σ [ yᵢ log(σ(zᵢ)) + (1 − yᵢ) log(1 − σ(zᵢ)) ]
+    </pre>
+
+    <div class="section-badge">📉 CROSS-ENTROPY LOSS</div>
+    <pre>
+Loss = − [ y log(ŷ) + (1 − y) log(1 − ŷ) ]
+    </pre>
+
+    <p>
+        This loss is convex → guarantees global minimum.
+    </p>
+
+    <div class="section-badge">⚙ OPTIMIZATION</div>
+    <p>
+        We use Gradient Descent to update weights:
+    </p>
+
+    <pre>
+w := w − α ∂Loss/∂w
+b := b − α ∂Loss/∂b
+    </pre>
+
+    <div class="section-badge">📈 WHY LOGISTIC REGRESSION IS POWERFUL</div>
+    <ul>
+        <li>Outputs probabilities</li>
+        <li>Convex optimization → unique solution</li>
+        <li>Works well for linearly separable problems</li>
+    </ul>
+
+    <div class="section-badge">⚠ LIMITATIONS</div>
+    <ul>
+        <li>Cannot model complex non-linear boundaries</li>
+        <li>Requires feature scaling for best performance</li>
+    </ul>
+</div>`;
+    
+    mainPanel.innerHTML = html;
+    
+    let ctx = document.getElementById('logregChart').getContext('2d');
+    let logregData = logregPoints.filter(p => p.y === 0 || p.y === 1);
+    
+    // Generate sigmoid curve
+    let sigmoidCurve = [];
+    for (let x = 0; x <= 8; x += 0.2) {
+        let z = 0.8 * x - 3; // parameters chosen for demo
+        sigmoidCurve.push({ x, y: sigmoid(z) });
+    }
+    
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Class 0',
+                data: logregData.filter(p => p.y === 0),
+                backgroundColor: '#0077b6',
+                pointRadius: 8
+            }, {
+                label: 'Class 1',
+                data: logregData.filter(p => p.y === 1),
+                backgroundColor: '#e67e22',
+                pointRadius: 8
+            }, {
+                label: 'Sigmoid curve',
+                data: sigmoidCurve,
+                type: 'line',
+                borderColor: '#27ae60',
+                borderWidth: 3,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'X' } },
+                y: { min: -0.1, max: 1.1, title: { display: true, text: 'Probability' } }
+            }
+        }
+    });
+    
+    document.getElementById('predictLogreg')?.addEventListener('click', ()=>{
+        let x = parseFloat(document.getElementById('logregX').value);
+        if (!isNaN(x)) {
+            // Simple logistic function
+            let z = 0.8 * x - 3;
+            let prob = sigmoid(z);
+            document.getElementById('logregPrediction').innerHTML = 
+                `P(y=1|x=${x}) = ${prob.toFixed(3)}<br>
+                 Decision: <strong>${prob > 0.5 ? 'Class 1' : 'Class 0'}</strong>`;
+        }
+    });
+    
+    document.getElementById('resetLogreg')?.addEventListener('click', ()=>{
+        logregPoints = [
+            { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 },
+            { x: 5, y: 1 }, { x: 6, y: 1 }, { x: 7, y: 1 },
+            { x: 4, y: 0.5 }
+        ];
+        renderLogisticRegression();
+    });
+}
+
+// Decision Tree
+function renderDecisionTree() {
+    setActive('nav-decisiontree');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-tree"></i><span class="topic-name">Decision Tree</span></div>
+        <span class="tag-ds">classification · regression</span>
+    </div>
+    <div class="viz-card">
+        <div class="ds-visual" style="flex-direction:column; overflow-x:auto;">
+            <div style="background:#45a56e; padding:15px; border-radius:20px; margin:5px; color:white; font-weight:bold;">Root: Outlook?</div>
+            <div style="display:flex; gap:20px; margin-top:20px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:150px; text-align:center;">
+                    <div style="background:#3498db; padding:10px; border-radius:15px; color:white;">Sunny</div>
+                    <div style="background:#f39c12; padding:8px; border-radius:12px; margin-top:10px; color:white;">Humidity?</div>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <div style="background:#e74c3c; padding:8px; border-radius:10px; color:white;">High: No</div>
+                        <div style="background:#27ae60; padding:8px; border-radius:10px; color:white;">Normal: Yes</div>
+                    </div>
+                </div>
+                <div style="flex:1; min-width:150px; text-align:center;">
+                    <div style="background:#3498db; padding:10px; border-radius:15px; color:white;">Overcast</div>
+                    <div style="background:#27ae60; padding:8px; border-radius:12px; margin-top:10px; color:white;">Yes</div>
+                </div>
+                <div style="flex:1; min-width:150px; text-align:center;">
+                    <div style="background:#3498db; padding:10px; border-radius:15px; color:white;">Rain</div>
+                    <div style="background:#f39c12; padding:8px; border-radius:12px; margin-top:10px; color:white;">Wind?</div>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <div style="background:#27ae60; padding:8px; border-radius:10px; color:white;">Weak: Yes</div>
+                        <div style="background:#e74c3c; padding:8px; border-radius:10px; color:white;">Strong: No</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <input id="dtOutlook" class="input-field" placeholder="Outlook" value="Sunny" style="width:100px;">
+            <input id="dtHumidity" class="input-field" placeholder="Humidity" value="High" style="width:100px;">
+            <input id="dtWind" class="input-field" placeholder="Wind" value="Weak" style="width:100px;">
+            <button class="btn btn-solid" id="predictDT">Predict</button>
+        </div>
+        <div class="prediction-box" id="dtPrediction"></div>
+    </div>
+    <div class="code-panel"><i class="fas fa-code"></i> // Decision Tree based on ID3 algorithm</div>
+    <div class="explain-card">
+    <div class="teacher-highlight">📚 DECISION TREE · COMPLETE DETAILED THEORY</div>
+
+    <div class="section-badge">📌 WHAT IS A DECISION TREE?</div>
+    <p>
+        A Decision Tree is a supervised learning algorithm that splits data 
+        based on feature values to make predictions.
+    </p>
+    <p>
+        Internal nodes → Feature tests<br>
+        Branches → Outcomes<br>
+        Leaf nodes → Final prediction
+    </p>
+
+    <div class="section-badge">📊 WHAT IS IMPURITY?</div>
+    <p>
+        Impurity measures how mixed the classes are in a dataset.
+        If all samples belong to one class → impurity is zero.
+    </p>
+
+    <div class="section-badge">📐 ENTROPY</div>
+    <pre>
+Entropy:
+H(S) = − Σ pᵢ log₂(pᵢ)
+    </pre>
+
+    <p>
+        pᵢ = probability of class i
+    </p>
+
+    <p>
+        If dataset has:
+        6 Yes and 4 No
+    </p>
+
+    <pre>
+p(Yes) = 6/10 = 0.6
+p(No)  = 4/10 = 0.4
+
+H(S) = −[0.6 log₂(0.6) + 0.4 log₂(0.4)]
+     ≈ 0.97
+    </pre>
+
+    <p>
+        Entropy ranges from:
+    </p>
+    <ul>
+        <li>0 → Pure node</li>
+        <li>1 → Maximum impurity (for binary)</li>
+    </ul>
+
+    <div class="section-badge">📊 INFORMATION GAIN</div>
+    <p>
+        Information Gain measures reduction in entropy after splitting.
+    </p>
+
+    <pre>
+IG = H(parent) − Σ (|child| / |parent|) × H(child)
+    </pre>
+
+    <p>
+        The feature with highest Information Gain is selected for split.
+    </p>
+
+    <div class="section-badge">📐 GINI IMPURITY (USED IN CART)</div>
+    <pre>
+Gini = 1 − Σ pᵢ²
+    </pre>
+
+    <p>
+        Example:
+    </p>
+
+    <pre>
+p(Yes)=0.6, p(No)=0.4
+
+Gini = 1 − (0.6² + 0.4²)
+     = 1 − (0.36 + 0.16)
+     = 0.48
+    </pre>
+
+    <div class="section-badge">📊 HOW SPLITTING WORKS</div>
+    <pre>
+1. Calculate entropy of parent node
+2. For each feature:
+      - Split dataset
+      - Calculate entropy of each child
+      - Compute Information Gain
+3. Choose feature with highest IG
+4. Repeat recursively
+    </pre>
+
+    <div class="section-badge">⚠ OVERFITTING</div>
+    <p>
+        If tree grows too deep, it memorizes training data.
+    </p>
+
+    <div class="section-badge">✂ PRUNING</div>
+    <ul>
+        <li>Pre-pruning → Stop early (max depth, min samples)</li>
+        <li>Post-pruning → Remove weak branches after training</li>
+    </ul>
+
+    <div class="section-badge">📈 ADVANTAGES</div>
+    <ul>
+        <li>Easy to interpret</li>
+        <li>No need for feature scaling</li>
+        <li>Handles categorical + numerical data</li>
+    </ul>
+
+    <div class="section-badge">⚠ LIMITATIONS</div>
+    <ul>
+        <li>Prone to overfitting</li>
+        <li>High variance</li>
+    </ul>
+</div>`;
+    
+    mainPanel.innerHTML = html;
+    
+    document.getElementById('predictDT')?.addEventListener('click', ()=>{
+        let outlook = document.getElementById('dtOutlook').value;
+        let humidity = document.getElementById('dtHumidity').value;
+        let wind = document.getElementById('dtWind').value;
+        
+        let prediction = 'No';
+        let path = '';
+        
+        if (outlook === 'Overcast') {
+            prediction = 'Yes';
+            path = 'Outlook=Overcast → Yes';
+        } else if (outlook === 'Sunny') {
+            path = 'Outlook=Sunny → ';
+            if (humidity === 'Normal') {
+                prediction = 'Yes';
+                path += 'Humidity=Normal → Yes';
+            } else {
+                prediction = 'No';
+                path += 'Humidity=High → No';
+            }
+        } else if (outlook === 'Rain') {
+            path = 'Outlook=Rain → ';
+            if (wind === 'Weak') {
+                prediction = 'Yes';
+                path += 'Wind=Weak → Yes';
+            } else {
+                prediction = 'No';
+                path += 'Wind=Strong → No';
+            }
+        }
+        
+        document.getElementById('dtPrediction').innerHTML = `Prediction: <strong>${prediction}</strong><br>Path: ${path}`;
+    });
+}
+
+// SVM
+function renderSVM() {
+    setActive('nav-svm');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-vector-square"></i><span class="topic-name">Support Vector Machine</span></div>
+        <span class="tag-ds">max margin classification</span>
+    </div>
+    <div class="viz-card">
+        <canvas id="svmChart" style="width:100%; height:300px;"></canvas>
+        <div class="controls">
+            <input id="svmX" class="input-field" placeholder="x" value="4">
+            <input id="svmY" class="input-field" placeholder="y" value="4">
+            <button class="btn btn-solid" id="predictSVM">Classify</button>
+            <button class="btn" id="resetSVM">Reset</button>
+        </div>
+        <div class="prediction-box" id="svmPrediction"></div>
+    </div>
+    <div class="code-panel"><i class="fas fa-code"></i> // Maximize margin = 2/||w||</div>
+    <div class="explain-card">
+    <div class="teacher-highlight">📚 SUPPORT VECTOR MACHINE (SVM) · COMPLETE DETAILED THEORY</div>
+
+    <div class="section-badge">📌 WHAT IS SVM?</div>
+    <p>
+        Support Vector Machine is a supervised learning algorithm used for classification 
+        and regression. Its goal is to find the optimal boundary that separates classes 
+        while maximizing the margin between them.
+    </p>
+
+    <div class="section-badge">📐 WHAT IS A HYPERPLANE?</div>
+    <p>
+        A hyperplane is a decision boundary that separates data.
+    </p>
+    <ul>
+        <li>In 2D → A line</li>
+        <li>In 3D → A plane</li>
+        <li>In n-dimensions → A hyperplane</li>
+    </ul>
+
+    <pre>
+Equation of hyperplane:
+w · x + b = 0
+    </pre>
+
+    <p>
+        w = weight vector (normal to hyperplane)<br>
+        x = feature vector<br>
+        b = bias (shifts boundary)
+    </p>
+
+    <div class="section-badge">📏 WHAT IS MARGIN?</div>
+    <p>
+        Margin is the perpendicular distance between the hyperplane 
+        and the closest data points from each class.
+    </p>
+
+    <pre>
+Margin = 2 / ||w||
+    </pre>
+
+    <p>
+        Smaller ||w|| → Larger margin → Better generalization.
+    </p>
+
+    <div class="section-badge">📍 WHAT ARE SUPPORT VECTORS?</div>
+    <p>
+        Support vectors are the data points closest to the hyperplane.
+        These points define the boundary.
+        If we remove non-support vectors, the boundary does not change.
+    </p>
+
+    <div class="section-badge">📊 HARD MARGIN SVM</div>
+    <p>
+        Used when data is perfectly linearly separable.
+    </p>
+
+    <pre>
+Minimize:
+½ ||w||²
+
+Subject to:
+yᵢ (w · xᵢ + b) ≥ 1
+    </pre>
+
+    <p>
+        yᵢ = class label (+1 or -1)
+    </p>
+
+    <div class="section-badge">📊 SOFT MARGIN SVM</div>
+    <p>
+        Used when data is not perfectly separable.
+        Introduces slack variables ξᵢ.
+    </p>
+
+    <pre>
+Minimize:
+½ ||w||² + C Σ ξᵢ
+
+Subject to:
+yᵢ (w · xᵢ + b) ≥ 1 − ξᵢ
+    </pre>
+
+    <p>
+        C = regularization parameter<br>
+        Large C → strict classification<br>
+        Small C → allows more misclassification
+    </p>
+
+    <div class="section-badge">🔬 KERNEL TRICK</div>
+    <p>
+        When data is not linearly separable in original space,
+        we map it to higher-dimensional space.
+    </p>
+
+    <pre>
+Linear:     K(x,y) = x · y
+Polynomial: K(x,y) = (x · y + r)^d
+RBF:        K(x,y) = exp(-γ||x-y||²)
+Sigmoid:    K(x,y) = tanh(αx · y + c)
+    </pre>
+
+    <p>
+        Kernel allows computation in high dimension without explicitly transforming data.
+    </p>
+
+    <div class="section-badge">📈 WHY SVM WORKS WELL</div>
+    <ul>
+        <li>Maximizes margin → better generalization</li>
+        <li>Convex optimization → unique global solution</li>
+        <li>Works well in high-dimensional space</li>
+    </ul>
+
+    <div class="section-badge">⚠ LIMITATIONS</div>
+    <ul>
+        <li>Choosing kernel is difficult</li>
+        <li>Computationally heavy for large datasets</li>
+    </ul>
+</div>`;
+    
+    mainPanel.innerHTML = html;
+    
+    let ctx = document.getElementById('svmChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [
+                { 
+                    label: 'Class -1', 
+                    data: svmPoints.filter(p => p.class === -1), 
+                    backgroundColor: '#0077b6',
+                    pointRadius: 8
+                },
+                { 
+                    label: 'Class +1', 
+                    data: svmPoints.filter(p => p.class === 1), 
+                    backgroundColor: '#e67e22',
+                    pointRadius: 8
+                },
+                { 
+                    label: 'Support Vectors', 
+                    data: svmPoints.filter(p => p.class === 0), 
+                    backgroundColor: '#e74c3c', 
+                    pointRadius: 12,
+                    pointStyle: 'triangle'
+                },
+                {
+                    label: 'Decision Boundary',
+                    data: [
+                        { x: 0, y: 6 },
+                        { x: 6, y: 0 }
+                    ],
+                    type: 'line',
+                    borderColor: '#27ae60',
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: { min: 0, max: 8, title: { display: true, text: 'X' } },
+                y: { min: 0, max: 8, title: { display: true, text: 'Y' } }
+            }
+        }
+    });
+    
+    document.getElementById('predictSVM')?.addEventListener('click', ()=>{
+        let x = parseFloat(document.getElementById('svmX').value);
+        let y = parseFloat(document.getElementById('svmY').value);
+        if (!isNaN(x) && !isNaN(y)) {
+            // Linear decision boundary: x + y = 6
+            let decision = x + y - 6;
+            let pred = decision > 0 ? '+1' : '-1';
+            let margin = Math.abs(decision) / Math.sqrt(2);
+            document.getElementById('svmPrediction').innerHTML = 
+                `Classification: <strong>${pred}</strong><br>
+                 Distance from boundary: ${margin.toFixed(2)}`;
+        }
+    });
+    
+    document.getElementById('resetSVM')?.addEventListener('click', ()=>{
+        svmPoints = [
+            { x: 1, y: 1, class: -1 }, { x: 2, y: 1, class: -1 }, { x: 1, y: 2, class: -1 },
+            { x: 5, y: 5, class: 1 }, { x: 6, y: 5, class: 1 }, { x: 5, y: 6, class: 1 },
+            { x: 3, y: 3, class: 0 }
+        ];
+        renderSVM();
+    });
+}
+
+// Random Forest
+function renderRandomForest() {
+    setActive('nav-randomforest');
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-forest"></i><span class="topic-name">Random Forest</span></div>
+        <span class="tag-ds">ensemble · bagging</span>
+    </div>
+    <div class="viz-card">
+        <canvas id="rfChart" style="width:100%; height:300px;"></canvas>
+        <div class="controls">
+            <input id="rfX" class="input-field" placeholder="x" value="4">
+            <input id="rfY" class="input-field" placeholder="y" value="4">
+            <button class="btn btn-solid" id="predictRF">Predict (ensemble)</button>
+            <button class="btn" id="resetRF">Reset</button>
+        </div>
+        <div class="prediction-box" id="rfPrediction"></div>
+    </div>
+    <div class="code-panel"><i class="fas fa-code"></i> // Ensemble of decision trees with bootstrap aggregation</div>
+    <div class="explain-card">
+    <div class="teacher-highlight">📚 RANDOM FOREST · COMPLETE DETAILED THEORY</div>
+
+    <div class="section-badge">📌 WHY RANDOM FOREST?</div>
+    <p>
+        A single Decision Tree has high variance and can overfit.
+        Random Forest reduces variance by combining many trees.
+    </p>
+
+    <div class="section-badge">🌲 WHAT IS RANDOM FOREST?</div>
+    <p>
+        Random Forest is an ensemble learning method that builds 
+        multiple Decision Trees and combines their predictions.
+    </p>
+
+    <div class="section-badge">🎲 BOOTSTRAP SAMPLING (BAGGING)</div>
+    <p>
+        Each tree is trained on a random sample (with replacement)
+        of the original dataset.
+    </p>
+
+    <p>
+        If dataset has N samples:
+    </p>
+
+    <pre>
+Probability a sample is NOT selected in one draw = (1 − 1/N)
+
+Probability not selected in N draws ≈ e^(−1) ≈ 0.37
+
+So about 63% of data is used in each tree.
+    </pre>
+
+    <p>
+        Remaining ~37% samples are called Out-of-Bag (OOB).
+    </p>
+
+    <div class="section-badge">📊 HOW PREDICTION WORKS</div>
+    <ul>
+        <li>Classification → Majority vote of all trees</li>
+        <li>Regression → Average prediction of all trees</li>
+    </ul>
+
+    <div class="section-badge">📉 WHY VARIANCE REDUCES?</div>
+    <p>
+        Suppose we average multiple independent trees:
+    </p>
+
+    <pre>
+Var(average) = Var(tree) / T
+    </pre>
+
+    <p>
+        T = number of trees
+    </p>
+
+    <p>
+        More trees → Lower variance → Better generalization.
+    </p>
+
+    <div class="section-badge">🌿 FEATURE RANDOMNESS</div>
+    <p>
+        At each split, only a random subset of features is considered.
+    </p>
+
+    <ul>
+        <li>For classification: √d features</li>
+        <li>For regression: d/3 features</li>
+    </ul>
+
+    <p>
+        This makes trees less correlated, improving ensemble performance.
+    </p>
+
+    <div class="section-badge">📊 OUT-OF-BAG (OOB) ERROR</div>
+    <p>
+        OOB samples are not used to train a specific tree.
+        They are used as validation data.
+    </p>
+
+    <pre>
+OOB Error = average error across all trees 
+            using their respective OOB samples
+    </pre>
+
+    <p>
+        This removes need for separate validation set.
+    </p>
+
+    <div class="section-badge">📈 ADVANTAGES</div>
+    <ul>
+        <li>Reduces overfitting</li>
+        <li>Handles high-dimensional data</li>
+        <li>Provides feature importance</li>
+        <li>Works well with missing data</li>
+    </ul>
+
+    <div class="section-badge">⚠ LIMITATIONS</div>
+    <ul>
+        <li>Less interpretable than single tree</li>
+        <li>Computationally heavy</li>
+    </ul>
+</div>`;
+    
+    mainPanel.innerHTML = html;
+    
+    let ctx = document.getElementById('rfChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [
+                { label: 'Class A', data: rfPoints.filter(p => p.class === 'A'), backgroundColor: '#0077b6', pointRadius: 8 },
+                { label: 'Class B', data: rfPoints.filter(p => p.class === 'B'), backgroundColor: '#e67e22', pointRadius: 8 },
+                { label: 'Class C', data: rfPoints.filter(p => p.class === 'C'), backgroundColor: '#27ae60', pointRadius: 8 }
+            ]
+        },
+        options: {
+            scales: {
+                x: { min: 0, max: 10, title: { display: true, text: 'X' } },
+                y: { min: 0, max: 10, title: { display: true, text: 'Y' } }
+            }
+        }
+    });
+    
+    document.getElementById('predictRF')?.addEventListener('click', ()=>{
+        let x = parseFloat(document.getElementById('rfX').value);
+        let y = parseFloat(document.getElementById('rfY').value);
+        if (!isNaN(x) && !isNaN(y)) {
+            // Simulate ensemble of 5 trees with different decision boundaries
+            let trees = [
+                { boundary: x < 3 ? 'A' : (x + y < 10 ? 'B' : 'C') },
+                { boundary: y < 4 ? 'A' : (x > 5 ? 'B' : 'C') },
+                { boundary: x + y < 8 ? 'A' : (x < y ? 'B' : 'C') },
+                { boundary: x - y < 2 ? 'A' : (x * y < 30 ? 'B' : 'C') },
+                { boundary: Math.sqrt(x*x + y*y) < 5 ? 'A' : (x * 2 > y ? 'B' : 'C') }
+            ];
+            
+            let votes = trees.map(t => t.boundary);
+            let counts = {};
+            votes.forEach(v => counts[v] = (counts[v] || 0) + 1);
+            let prediction = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+            
+            document.getElementById('rfPrediction').innerHTML = 
+                `Ensemble prediction: <strong>${prediction}</strong><br>
+                 Tree votes: ${votes.join(', ')}<br>
+                 Confidence: ${(counts[prediction]/trees.length*100).toFixed(0)}%`;
+        }
+    });
+    
+    document.getElementById('resetRF')?.addEventListener('click', ()=>{
+        rfPoints = [
+            { x: 1, y: 2, class: 'A' }, { x: 2, y: 1, class: 'A' }, { x: 2, y: 3, class: 'A' },
+            { x: 5, y: 5, class: 'B' }, { x: 6, y: 4, class: 'B' }, { x: 7, y: 6, class: 'B' },
+            { x: 4, y: 7, class: 'C' }, { x: 3, y: 8, class: 'C' }, { x: 5, y: 8, class: 'C' }
+        ];
+        renderRandomForest();
+    });
+}
+
+// K-Means Clustering
+function renderKMeans() {
+    setActive('nav-kmeans');
+    
+    function calculateCentroids() {
+        let centroids = {};
+        kmeansPoints.forEach(p => {
+            if (!centroids[p.cluster]) {
+                centroids[p.cluster] = { x: 0, y: 0, count: 0 };
+            }
+            centroids[p.cluster].x += p.x;
+            centroids[p.cluster].y += p.y;
+            centroids[p.cluster].count++;
+        });
+        
+        return Object.keys(centroids).map(c => ({
+            cluster: parseInt(c),
+            x: centroids[c].x / centroids[c].count,
+            y: centroids[c].y / centroids[c].count
+        }));
+    }
+    
+    let html = `
+    <div class="topic-header">
+        <div class="topic-title"><i class="fas fa-circle-nodes"></i><span class="topic-name">K-Means Clustering</span></div>
+        <span class="tag-ds">unsupervised learning</span>
+    </div>
+    <div class="viz-card">
+        <canvas id="kmeansChart" style="width:100%; height:300px;"></canvas>
+        <div class="controls">
+            <button class="btn btn-solid" id="kmeansIterate">One Iteration</button>
+            <button class="btn" id="kmeansReset">Reset</button>
+        </div>
+        <div class="prediction-box" id="kmeansInfo"></div>
+    </div>
+    <div class="code-panel"><i class="fas fa-code"></i> // K-Means clustering algorithm</div>
+    <div class="explain-card">
+        <div class="teacher-highlight">📚 K-MEANS · Complete Explanation</div>
+        
+        <div class="section-badge">📌 DEFINITION</div>
+        <p>K-Means partitions n observations into k clusters where each observation belongs to the cluster with the nearest centroid.</p>
+        
+        <div class="section-badge">⚙ ALGORITHM</div>
+        <pre>1. Initialize k centroids randomly
+2. Assign each point to nearest centroid
+3. Update centroids (mean of points)
+4. Repeat steps 2-3 until convergence</pre>
+        
+        <div class="section-badge">📐 DISTANCE METRIC</div>
+        <p>Euclidean distance: d = √[(x₂-x₁)² + (y₂-y₁)²]</p>
+        
+        <div class="section-badge">📊 WCSS (Within-Cluster Sum of Squares)</div>
+        <pre>WCSS = ∑∑||x - centroid||²</pre>
+        
+        <div class="section-badge">🌍 APPLICATIONS</div>
+        <div class="type-grid">
+            <div class="type-card">Customer segmentation</div>
+            <div class="type-card">Image compression</div>
+            <div class="type-card">Anomaly detection</div>
+            <div class="type-card">Document clustering</div>
+        </div>
+        
+        <div style="background:#ffebcc; padding:15px; border-radius:20px; margin-top:20px;">
+            <strong>📊 ELBOW METHOD:</strong> Choose k where WCSS starts to decrease slowly.
+        </div>
+    </div>`;
+    
+    mainPanel.innerHTML = html;
+    
+    function renderKMeansChart() {
+        let ctx = document.getElementById('kmeansChart').getContext('2d');
+        let datasets = [
+            { label: 'Cluster 0', data: kmeansPoints.filter(p => p.cluster === 0), backgroundColor: '#0077b6', pointRadius: 8 },
+            { label: 'Cluster 1', data: kmeansPoints.filter(p => p.cluster === 1), backgroundColor: '#e67e22', pointRadius: 8 },
+            { label: 'Cluster 2', data: kmeansPoints.filter(p => p.cluster === 2), backgroundColor: '#27ae60', pointRadius: 8 }
+        ];
+        
+        // Add centroids
+        let centroids = calculateCentroids();
+        datasets.push({
+            label: 'Centroids',
+            data: centroids,
+            backgroundColor: '#e74c3c',
+            pointRadius: 15,
+            pointStyle: 'cross',
+            borderWidth: 3
+        });
+        
+        new Chart(ctx, {
+            type: 'scatter',
+            data: { datasets },
+            options: {
+                scales: {
+                    x: { min: 0, max: 10, title: { display: true, text: 'X' } },
+                    y: { min: 0, max: 10, title: { display: true, text: 'Y' } }
+                }
+            }
+        });
+        
+        // Calculate WCSS
+        let wcss = 0;
+        centroids.forEach(c => {
+            let clusterPoints = kmeansPoints.filter(p => p.cluster === c.cluster);
+            clusterPoints.forEach(p => {
+                wcss += Math.pow(p.x - c.x, 2) + Math.pow(p.y - c.y, 2);
+            });
+        });
+        
+        document.getElementById('kmeansInfo').innerHTML = `WCSS: ${wcss.toFixed(2)} | Points per cluster: ${
+            centroids.map(c => `${c.cluster}:${c.count}`).join(', ')
+        }`;
+    }
+    
+    renderKMeansChart();
+    
+    document.getElementById('kmeansIterate')?.addEventListener('click', ()=>{
+        let centroids = calculateCentroids();
+        
+        // Reassign points to nearest centroid
+        kmeansPoints = kmeansPoints.map(p => {
+            let distances = centroids.map(c => ({
+                cluster: c.cluster,
+                dist: Math.sqrt(Math.pow(p.x - c.x, 2) + Math.pow(p.y - c.y, 2))
+            }));
+            let nearest = distances.reduce((min, d) => d.dist < min.dist ? d : min, distances[0]);
+            return { ...p, cluster: nearest.cluster };
+        });
+        
+        renderKMeans();
+    });
+    
+    document.getElementById('kmeansReset')?.addEventListener('click', ()=>{
+        kmeansPoints = [
+            { x: 1, y: 1, cluster: 0 }, { x: 1.5, y: 2, cluster: 0 }, { x: 2, y: 1.5, cluster: 0 },
+            { x: 5, y: 5, cluster: 1 }, { x: 5.5, y: 4.5, cluster: 1 }, { x: 6, y: 5.5, cluster: 1 },
+            { x: 8, y: 2, cluster: 2 }, { x: 8.5, y: 1.5, cluster: 2 }, { x: 9, y: 2.5, cluster: 2 }
+        ];
+        renderKMeans();
+    });
+}
+
+    // attach events for all nav items
+    window.onload = renderStackUI;
+    document.getElementById('nav-int').addEventListener('click', renderInt);
+    document.getElementById('nav-float').addEventListener('click', renderFloat);
+    document.getElementById('nav-char').addEventListener('click', renderChar);
+    document.getElementById('nav-bool').addEventListener('click', renderBool);
+    document.getElementById('nav-pointer').addEventListener('click', renderPointer);
+    document.getElementById('nav-stack').addEventListener('click', renderStackUI);
+    document.getElementById('nav-queue').addEventListener('click', renderSimpleQueue);
+    document.getElementById('nav-simplequeue').addEventListener('click', renderSimpleQueue);
+    document.getElementById('nav-circularqueue').addEventListener('click', renderCircularQueue);
+    document.getElementById('nav-priorityqueue').addEventListener('click', renderPriorityQueue);
+    document.getElementById('nav-deque').addEventListener('click', renderDeque);
+    document.getElementById('nav-linkedlist').addEventListener('click', renderSinglyLL);
+    document.getElementById('nav-singlyll').addEventListener('click', renderSinglyLL);
+    document.getElementById('nav-doublyll').addEventListener('click', renderDoublyLL);
+    document.getElementById('nav-circularll').addEventListener('click', renderCircularLL);
+    document.getElementById('nav-array').addEventListener('click', renderArrayUI);
+    document.getElementById('nav-tree').addEventListener('click', renderBinaryTree);
+    document.getElementById('nav-binarytree').addEventListener('click', renderBinaryTree);
+    document.getElementById('nav-bst').addEventListener('click', renderBST);
+    document.getElementById('nav-avl').addEventListener('click', renderAVL);
+    document.getElementById('nav-heap').addEventListener('click', renderHeap);
+    document.getElementById('nav-graph').addEventListener('click', renderDirectedGraph);
+    document.getElementById('nav-directed').addEventListener('click', renderDirectedGraph);
+    document.getElementById('nav-undirected').addEventListener('click', renderUndirectedGraph);
+    document.getElementById('nav-weighted').addEventListener('click', renderWeightedGraph);
+    document.getElementById('nav-unweighted').addEventListener('click', renderUnweightedGraph);
+    document.getElementById('nav-hash').addEventListener('click', renderHashUI);
+    document.getElementById('nav-linreg').addEventListener('click', renderLinReg);
+    document.getElementById('nav-knn').addEventListener('click', renderKNN);
+    // Add these to your nav event listeners
+document.getElementById('nav-logreg').addEventListener('click', renderLogisticRegression);
+document.getElementById('nav-svm').addEventListener('click', renderSVM);
+document.getElementById('nav-decisiontree').addEventListener('click', renderDecisionTree);
+document.getElementById('nav-randomforest').addEventListener('click', renderRandomForest);
+document.getElementById('nav-kmeans').addEventListener('click', renderKMeans);
+</script>
+</body>
+</html>

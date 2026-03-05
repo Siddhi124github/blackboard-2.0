@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI FlashMaster · Smart Flashcards with Visuals</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #4338ca;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #64748b;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --border-color: #e2e8f0;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --card-radius: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: linear-gradient(165deg, #f6f9fc 0%, #edf2f7 100%);
+            font-family: 'Inter', sans-serif;
+            color: var(--darker);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* NAVBAR - Same as other pages */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-image {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-image {
+            transform: rotate(-5deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--gray-dark);
+            font-size: 15px;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .hero-subtitle {
+            color: var(--gray-dark);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .feature-desc {
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header i {
+            font-size: 2rem;
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+            padding: 1rem;
+            border-radius: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            transition: var(--transition);
+            margin-bottom: 2rem;
+            background: var(--light-gray);
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            background: white;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-item {
+            background: var(--light-gray);
+            padding: 1.2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-label {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .generate-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+
+        .loading-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtext {
+            color: var(--gray-dark);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.total { background: rgba(79, 70, 229, 0.1); color: var(--primary); }
+        .stat-icon.easy { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .stat-icon.medium { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .stat-icon.hard { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            line-height: 1;
+        }
+
+        .stat-info p {
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.8rem;
+            cursor: pointer;
+            border-radius: 40px;
+            font-weight: 600;
+            color: var(--gray-dark);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .tab.active {
+            color: white;
+            background: var(--gradient-1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Flashcard Grid */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .flashcard {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            height: 280px;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flashcard-front {
+            background: white;
+        }
+
+        .flashcard-back {
+            background: var(--gradient-1);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .badge-easy { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .badge-medium { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .badge-hard { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+        .card-question {
+            flex: 1;
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--dark);
+            overflow-y: auto;
+        }
+
+        .card-answer {
+            flex: 1;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            overflow-y: auto;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+        }
+
+        .back-footer {
+            border-top-color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Visualization Section */
+        .visualization-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-top: 2rem;
+        }
+
+        .viz-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .viz-header i {
+            font-size: 2rem;
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 1rem;
+            border-radius: 16px;
+        }
+
+        .viz-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .viz-card {
+            background: var(--light-gray);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .viz-card h4 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+
+        .topic-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            padding: 1rem;
+        }
+
+        .topic-tag {
+            padding: 0.5rem 1.2rem;
+            background: var(--gradient-3);
+            color: white;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Study Mode */
+        .study-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .study-mode.active {
+            display: flex;
+        }
+
+        .study-container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 40px;
+            padding: 3rem;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .study-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--light-gray);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .study-close:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .study-progress {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--gray-dark);
+            font-weight: 500;
+        }
+
+        .study-card {
+            background: var(--gradient-1);
+            border-radius: 30px;
+            padding: 3rem;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .study-card:hover {
+            transform: scale(1.02);
+        }
+
+        .study-question {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .study-answer {
+            font-size: 1.4rem;
+            text-align: center;
+            display: none;
+        }
+
+        .study-answer.show {
+            display: block;
+        }
+
+        .study-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .study-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .study-btn-prev {
+            background: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .study-btn-flip {
+            background: var(--gradient-2);
+            color: white;
+        }
+
+        .study-btn-next {
+            background: var(--gradient-3);
+            color: white;
+        }
+
+        .study-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Export Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            filter: brightness(110%);
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            background: white;
+            border-radius: 30px;
+            border: 2px dashed var(--border-color);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--gray-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 12px 20px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .flashcard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .study-container {
+                padding: 2rem;
+            }
+            
+            .study-question {
+                font-size: 1.4rem;
+            }
+            
+            .study-answer {
+                font-size: 1.2rem;
+            }
+            
+            .study-controls {
+                flex-wrap: wrap;
+            }
+            
+            .study-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+   
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+       
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">AI is analyzing your notes...</div>
+            <div class="loading-subtext">Creating smart flashcards with visualizations</div>
+        </div>
+    </div>
+
+    <!-- Study Mode -->
+    <div class="study-mode" id="studyMode">
+        <div class="study-container">
+            <button class="study-close" onclick="closeStudyMode()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="study-progress" id="studyProgress">Card 1 of 5</div>
+            <div class="study-card" id="studyCard" onclick="flipStudyCard()">
+                <div class="study-question" id="studyQuestion"></div>
+                <div class="study-answer" id="studyAnswer"></div>
+            </div>
+            <div class="study-controls">
+                <button class="study-btn study-btn-prev" id="prevStudyBtn">
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="study-btn study-btn-flip" id="flipStudyBtn" onclick="flipStudyCard()">
+                    <i class="fas fa-sync-alt"></i> Flip
+                </button>
+                <button class="study-btn study-btn-next" id="nextStudyBtn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1 class="hero-title">FlashMaster AI</h1>
+            <p class="hero-subtitle">Transform your notes into intelligent flashcards with AI-powered visualizations and smart analytics</p>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="feature-title">AI-Powered Generation</h3>
+                <p class="feature-desc">Advanced AI analyzes your notes to create meaningful question-answer pairs</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3 class="feature-title">Smart Visualizations</h3>
+                <p class="feature-desc">Interactive charts and diagrams to understand your learning patterns</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="feature-title">Spaced Repetition</h3>
+                <p class="feature-desc">Optimized study sessions based on card difficulty and your progress</p>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="section-header">
+                <i class="fas fa-pen-fancy"></i>
+                <h2>Paste Your Notes</h2>
+            </div>
+            
+            <textarea class="notes-textarea" id="notesInput" placeholder="Paste your study notes here...&#10;&#10;Example:&#10;Photosynthesis is the process plants use to convert sunlight into energy. It occurs in chloroplasts and involves chlorophyll. The light-dependent reactions produce ATP and NADPH. The Calvin cycle fixes carbon dioxide into glucose. Factors affecting photosynthesis include light intensity, carbon dioxide concentration, and temperature."></textarea>
+            
+            <div class="controls-grid">
+                <div class="control-item">
+                    <label class="control-label">Number of Cards</label>
+                    <input type="number" class="control-input" id="cardCount" min="5" max="30" value="10">
+                </div>
+                <div class="control-item">
+                    <label class="control-label">Complexity</label>
+                    <select class="control-input" id="complexitySelect">
+                        <option value="mixed">Mixed (AI Optimized)</option>
+                        <option value="basic">Basic Concepts</option>
+                        <option value="detailed">Detailed Explanations</option>
+                        <option value="advanced">Advanced Topics</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">Focus Area</label>
+                    <select class="control-input" id="focusSelect">
+                        <option value="auto">Auto Detect</option>
+                        <option value="definitions">Definitions</option>
+                        <option value="processes">Processes</option>
+                        <option value="comparisons">Comparisons</option>
+                        <option value="examples">Examples</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="generate-btn" id="generateBtn">
+                <i class="fas fa-magic"></i>
+                Generate Smart Flashcards
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <!-- Stats -->
+            <div class="stats-grid" id="statsGrid"></div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="grid">
+                    <i class="fas fa-th-large"></i> Flashcard Grid
+                </div>
+                <div class="tab" data-tab="visualize">
+                    <i class="fas fa-chart-line"></i> Visualizations
+                </div>
+                <div class="tab" data-tab="study">
+                    <i class="fas fa-graduation-cap"></i> Study Mode
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-outline" id="exportJSONBtn">
+                    <i class="fas fa-code"></i> Export JSON
+                </button>
+                <button class="btn btn-outline" id="exportPDFBtn">
+                    <i class="fas fa-file-pdf"></i> Export PDF
+                </button>
+                <button class="btn btn-success" id="startStudyBtn">
+                    <i class="fas fa-play"></i> Start Studying
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="tab-content active" id="gridTab">
+                <div class="flashcard-grid" id="flashcardGrid"></div>
+            </div>
+
+            <div class="tab-content" id="visualizeTab">
+                <div class="visualization-section">
+                    <div class="viz-header">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Learning Analytics Dashboard</h3>
+                    </div>
+                    
+                    <div class="viz-grid">
+                        <div class="viz-card">
+                            <h4>Difficulty Distribution</h4>
+                            <div class="chart-container">
+                                <canvas id="difficultyChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="viz-card">
+                            <h4>Topic Coverage</h4>
+                            <div class="topic-cloud" id="topicCloud"></div>
+                        </div>
+                        
+                        <div class="viz-card">
+                            <h4>Learning Progress</h4>
+                            <div class="chart-container">
+                                <canvas id="progressChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="viz-card">
+                            <h4>Card Complexity</h4>
+                            <div class="chart-container">
+                                <canvas id="complexityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="studyTab">
+                <div class="visualization-section">
+                    <h3 style="margin-bottom: 1.5rem;">Recommended Study Session</h3>
+                    <div id="studyRecommendations"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let flashcards = [];
+        let studyIndex = 0;
+        let charts = {};
+
+        // OpenRouter API Configuration
+        const OPENROUTER_API_KEY = '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'; // Replace with your API key
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab + 'Tab').classList.add('active');
+            });
+        });
+
+        // Generate flashcards
+        document.getElementById('generateBtn').addEventListener('click', async function() {
+            const notes = document.getElementById('notesInput').value.trim();
+            const count = parseInt(document.getElementById('cardCount').value);
+            const complexity = document.getElementById('complexitySelect').value;
+            const focus = document.getElementById('focusSelect').value;
+
+            if (!notes) {
+                alert('Please enter your notes first!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            this.disabled = true;
+
+            try {
+                // Try AI generation first
+                if (OPENROUTER_API_KEY !== 'YOUR_API_KEY_HERE') {
+                    await generateWithAI(notes, count, complexity, focus);
+                } else {
+                    // Fallback to smart generation
+                    generateSmartFlashcards(notes, count, complexity, focus);
+                }
+
+                // Update UI
+                updateStats();
+                renderFlashcards();
+                renderVisualizations();
+                updateStudyRecommendations();
+                
+                document.getElementById('resultsSection').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error generating flashcards. Using smart generation instead.');
+                generateSmartFlashcards(notes, count, complexity, focus);
+                updateStats();
+                renderFlashcards();
+                renderVisualizations();
+                document.getElementById('resultsSection').style.display = 'block';
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                this.disabled = false;
+            }
+        });
+
+        // AI Generation function
+        async function generateWithAI(notes, count, complexity, focus) {
+            const prompt = `Generate ${count} educational flashcards from these notes. Focus on ${focus} with ${complexity} complexity.
+
+Notes: ${notes}
+
+Return a JSON array with objects containing: question (string), answer (string), difficulty (easy/medium/hard), topic (string), and keyPoints (array of strings). Make questions challenging but fair.`;
+
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                        'HTTP-Referer': window.location.origin,
+                    },
+                    body: JSON.stringify({
+                        model: 'openai/gpt-3.5-turbo',
+                        messages: [{
+                            role: 'system',
+                            content: 'You are an expert educator creating high-quality flashcards.'
+                        }, {
+                            role: 'user',
+                            content: prompt
+                        }],
+                        temperature: 0.7,
+                        max_tokens: 3000
+                    })
+                });
+
+                const data = await response.json();
+                const content = data.choices[0].message.content;
+                const jsonMatch = content.match(/\[[\s\S]*\]/);
+                
+                if (jsonMatch) {
+                    flashcards = JSON.parse(jsonMatch[0]);
+                } else {
+                    throw new Error('Invalid AI response');
+                }
+            } catch (error) {
+                console.error('AI generation failed:', error);
+                generateSmartFlashcards(notes, count, complexity, focus);
+            }
+        }
+
+        // Smart generation (fallback)
+        function generateSmartFlashcards(notes, count, complexity, focus) {
+            flashcards = [];
+            
+            // Extract sentences and key concepts
+            const sentences = notes.split(/[.!?]+/).filter(s => s.trim().length > 15);
+            const words = notes.split(/\s+/);
+            const keyTerms = [...new Set(words.filter(w => w.length > 5 && w[0] === w[0].toUpperCase()))];
+            
+            // Generate cards
+            for (let i = 0; i < count; i++) {
+                const sentence = sentences[i % sentences.length].trim();
+                const term = keyTerms[i % keyTerms.length] || 'Concept';
+                
+                let difficulty = 'medium';
+                if (sentence.length > 100) difficulty = 'hard';
+                else if (sentence.length < 40) difficulty = 'easy';
+                
+                if (complexity === 'basic') difficulty = 'easy';
+                else if (complexity === 'detailed') difficulty = 'medium';
+                else if (complexity === 'advanced') difficulty = 'hard';
+                
+                let question = '';
+                let answer = '';
+                
+                switch(focus) {
+                    case 'definitions':
+                        question = `Define: ${term}`;
+                        answer = sentence;
+                        break;
+                    case 'processes':
+                        question = `Explain the process of ${term}`;
+                        answer = sentence;
+                        break;
+                    case 'comparisons':
+                        question = `Compare and contrast ${term} with related concepts`;
+                        answer = sentence;
+                        break;
+                    default:
+                        question = `What is ${term}?`;
+                        answer = sentence;
+                }
+                
+                flashcards.push({
+                    id: i + 1,
+                    question: question,
+                    answer: answer,
+                    difficulty: difficulty,
+                    topic: term,
+                    keyPoints: sentence.split(',').map(p => p.trim()).slice(0, 3)
+                });
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const easy = flashcards.filter(c => c.difficulty === 'easy').length;
+            const medium = flashcards.filter(c => c.difficulty === 'medium').length;
+            const hard = flashcards.filter(c => c.difficulty === 'hard').length;
+            
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${flashcards.length}</h3>
+                        <p>Total Cards</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon easy">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${easy}</h3>
+                        <p>Easy</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon medium">
+                        <i class="fas fa-meh"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${medium}</h3>
+                        <p>Medium</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon hard">
+                        <i class="fas fa-frown"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${hard}</h3>
+                        <p>Hard</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render flashcards
+        function renderFlashcards() {
+            const grid = document.getElementById('flashcardGrid');
+            
+            grid.innerHTML = flashcards.map(card => `
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <span class="card-badge badge-${card.difficulty}">
+                                <i class="fas fa-tag"></i> ${card.difficulty}
+                            </span>
+                            <div class="card-question">
+                                ${card.question}
+                            </div>
+                            <div class="card-footer">
+                                <span><i class="fas fa-bookmark"></i> ${card.topic}</span>
+                                <span><i class="fas fa-redo-alt"></i> Flip</span>
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <span class="card-badge" style="background: rgba(255,255,255,0.2); color: white;">
+                                <i class="fas fa-lightbulb"></i> Answer
+                            </span>
+                            <div class="card-answer">
+                                ${card.answer}
+                            </div>
+                            <div class="card-footer back-footer">
+                                <span>Card #${card.id}</span>
+                                <span><i class="fas fa-redo-alt"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render visualizations
+        function renderVisualizations() {
+            // Destroy existing charts
+            Object.values(charts).forEach(chart => chart.destroy());
+            
+            // Difficulty distribution
+            const ctx1 = document.getElementById('difficultyChart').getContext('2d');
+            charts.difficulty = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Easy', 'Medium', 'Hard'],
+                    datasets: [{
+                        data: [
+                            flashcards.filter(c => c.difficulty === 'easy').length,
+                            flashcards.filter(c => c.difficulty === 'medium').length,
+                            flashcards.filter(c => c.difficulty === 'hard').length
+                        ],
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Topic cloud
+            const topics = [...new Set(flashcards.map(c => c.topic))];
+            document.getElementById('topicCloud').innerHTML = topics.map(topic => 
+                `<span class="topic-tag">${topic}</span>`
+            ).join('');
+
+            // Progress chart
+            const ctx3 = document.getElementById('progressChart').getContext('2d');
+            charts.progress = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Cards Mastered',
+                        data: [5, 12, 8, flashcards.length],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Complexity chart
+            const ctx4 = document.getElementById('complexityChart').getContext('2d');
+            charts.complexity = new Chart(ctx4, {
+                type: 'radar',
+                data: {
+                    labels: ['Definitions', 'Processes', 'Comparisons', 'Examples', 'Applications'],
+                    datasets: [{
+                        label: 'Complexity Score',
+                        data: [4, 3, 5, 2, 4],
+                        backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                        borderColor: '#f59e0b',
+                        pointBackgroundColor: '#f59e0b'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Study recommendations
+        function updateStudyRecommendations() {
+            const recs = document.getElementById('studyRecommendations');
+            const hardCards = flashcards.filter(c => c.difficulty === 'hard').slice(0, 3);
+            
+            recs.innerHTML = `
+                <div style="background: var(--gradient-3); padding: 2rem; border-radius: 20px; color: white; margin-bottom: 1rem;">
+                    <h4 style="margin-bottom: 1rem;">Focus on Difficult Cards</h4>
+                    <p>You have ${flashcards.filter(c => c.difficulty === 'hard').length} hard cards to review</p>
+                </div>
+                <div class="flashcard-grid" style="margin-top: 1rem;">
+                    ${hardCards.map(card => `
+                        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                            <div class="flashcard-inner">
+                                <div class="flashcard-front">
+                                    <span class="card-badge badge-hard">Hard</span>
+                                    <div class="card-question">${card.question}</div>
+                                </div>
+                                <div class="flashcard-back">
+                                    <div class="card-answer">${card.answer}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Study Mode Functions
+        window.startStudyMode = function() {
+            if (flashcards.length === 0) return;
+            studyIndex = 0;
+            document.getElementById('studyMode').classList.add('active');
+            updateStudyCard();
+        };
+
+        window.closeStudyMode = function() {
+            document.getElementById('studyMode').classList.remove('active');
+        };
+
+        window.flipStudyCard = function() {
+            const question = document.getElementById('studyQuestion');
+            const answer = document.getElementById('studyAnswer');
+            
+            if (question.style.display !== 'none') {
+                question.style.display = 'none';
+                answer.style.display = 'block';
+                answer.classList.add('show');
+            } else {
+                question.style.display = 'block';
+                answer.style.display = 'none';
+                answer.classList.remove('show');
+            }
+        };
+
+        function updateStudyCard() {
+            const card = flashcards[studyIndex];
+            document.getElementById('studyProgress').textContent = `Card ${studyIndex + 1} of ${flashcards.length}`;
+            document.getElementById('studyQuestion').textContent = card.question;
+            document.getElementById('studyAnswer').textContent = card.answer;
+            
+            // Reset flip state
+            document.getElementById('studyQuestion').style.display = 'block';
+            document.getElementById('studyAnswer').style.display = 'none';
+            document.getElementById('studyAnswer').classList.remove('show');
+        }
+
+        // Study navigation
+        document.getElementById('prevStudyBtn').addEventListener('click', function() {
+            if (studyIndex > 0) {
+                studyIndex--;
+                updateStudyCard();
+            }
+        });
+
+        document.getElementById('nextStudyBtn').addEventListener('click', function() {
+            if (studyIndex < flashcards.length - 1) {
+                studyIndex++;
+                updateStudyCard();
+            }
+        });
+
+        // Export functions
+        document.getElementById('exportJSONBtn').addEventListener('click', function() {
+            const dataStr = JSON.stringify(flashcards, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            
+            const link = document.createElement('a');
+            link.href = dataUri;
+            link.download = `flashcards_${Date.now()}.json`;
+            link.click();
+        });
+
+        document.getElementById('exportPDFBtn').addEventListener('click', function() {
+            // Simple text export (PDF would require additional library)
+            let text = 'FLASHMASTER - Flashcard Export\n\n';
+            flashcards.forEach((card, i) => {
+                text += `Card ${i + 1} (${card.difficulty})\n`;
+                text += `Q: ${card.question}\n`;
+                text += `A: ${card.answer}\n`;
+                text += `Topic: ${card.topic}\n`;
+                text += '-'.repeat(40) + '\n\n';
+            });
+            
+            const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+            const link = document.createElement('a');
+            link.href = dataUri;
+            link.download = `flashcards_${Date.now()}.txt`;
+            link.click();
+        });
+
+        // Study mode buttons
+        document.getElementById('startStudyBtn').addEventListener('click', startStudyMode);
+
+        // Sample notes on load
+        window.onload = function() {
+            const sampleNotes = `Photosynthesis is the process by which plants convert light energy into chemical energy. 
+            It occurs in the chloroplasts, which contain chlorophyll. The light-dependent reactions produce ATP and NADPH. 
+            The Calvin cycle fixes carbon dioxide into glucose. Factors affecting photosynthesis include light intensity, 
+            carbon dioxide concentration, and temperature. C3 plants use the Calvin cycle directly, while C4 plants have 
+            an additional step to concentrate CO2. CAM plants open stomata at night to reduce water loss.`;
+            
+            document.getElementById('notesInput').value = sampleNotes;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum | Blackboard 2.0</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #4338ca;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #64748b;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+            --shadow-hover: 0 20px 40px rgba(79, 70, 229, 0.15);
+            --card-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--dark);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* NAVBAR */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: translateX(-3px);
+        }
+
+        .logo-image {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            transition: var(--transition);
+        }
+
+        .logo:hover .logo-image {
+            transform: rotate(-5deg) scale(1.1);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .ask-btn {
+            padding: 0.75rem 1.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ask-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .ask-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        .ask-btn:hover::before {
+            left: 100%;
+        }
+
+        /* MAIN CONTENT */
+        .main-container {
+            max-width: 1200px;
+            margin: 6rem auto 3rem;
+            padding: 0 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .page-subtitle {
+            color: var(--gray-dark);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+
+        /* STATS */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: var(--card-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+
+        .stat-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--gray-dark);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* SEARCH AND FILTER */
+        .search-filter {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            animation: slideIn 0.6s ease-out 0.2s both;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--light-gray);
+            transition: var(--transition);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus + .search-icon {
+            color: var(--primary-dark);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .category-select {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            min-width: 200px;
+            background: var(--light-gray);
+            cursor: pointer;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.5rem center;
+            background-size: 1rem;
+            padding-right: 3rem;
+        }
+
+        .category-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* QUESTIONS */
+        .questions-container {
+            background: white;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.6s ease-out 0.3s both;
+        }
+
+        .question-card {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, rgba(79, 70, 229, 0.05), transparent);
+            transition: width 0.3s ease;
+        }
+
+        .question-card:hover {
+            background: var(--light-gray);
+            transform: translateX(8px);
+        }
+
+        .question-card:hover::before {
+            width: 6px;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+            gap: 1.5rem;
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            transition: var(--transition);
+            flex: 1;
+        }
+
+        .question-card:hover .question-title {
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .answers-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
+            transition: var(--transition);
+        }
+
+        .question-card:hover .answers-badge {
+            transform: scale(1.05);
+        }
+
+        .question-preview {
+            color: var(--gray-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .question-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(139, 92, 246, 0.1));
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+
+        .tag:hover {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        .question-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .meta-item:hover {
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--light-gray);
+            border-radius: 50px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .user-info:hover {
+            background: rgba(79, 70, 229, 0.1);
+            transform: translateX(-4px);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
+            transition: var(--transition);
+        }
+
+        .user-info:hover .user-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--card-radius);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-origin: center;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: var(--card-radius) var(--card-radius) 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        /* FORM STYLES */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--light-gray);
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* QUESTION DETAIL VIEW */
+        .question-detail-view {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .question-content {
+            line-height: 1.8;
+            margin: 2rem 0;
+            color: var(--dark);
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .answers-section {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.5s ease-out 0.1s both;
+        }
+
+        .answer-item {
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            background: var(--light-gray);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-light);
+        }
+
+        .answer-content {
+            line-height: 1.8;
+            margin: 1.5rem 0;
+            color: var(--dark);
+            white-space: pre-wrap;
+            font-size: 1.05rem;
+        }
+
+        .answer-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* VOTING BUTTONS - ONLY FOR ANSWERS */
+        .vote-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .vote-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+        }
+
+        .upvote-btn {
+            color: var(--gray);
+        }
+
+        .upvote-btn:hover, .upvote-btn.active {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+            transform: scale(1.1);
+        }
+
+        .downvote-btn {
+            color: var(--gray);
+        }
+
+        .downvote-btn:hover, .downvote-btn.active {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            transform: scale(1.1);
+        }
+
+        .vote-count {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark);
+            min-width: 40px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* NO QUESTIONS MESSAGE */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .empty-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(8, 145, 178, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);
+        }
+
+        .empty-icon i {
+            font-size: 3.5rem;
+            color: var(--primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+                margin-top: 8rem;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .category-select {
+                width: 100%;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .question-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .modal-content {
+                margin: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .stat-item {
+                padding: 1.5rem;
+            }
+            
+            .question-card, .answer-item {
+                padding: 1.5rem;
+            }
+            
+            .modal-header, .modal-body {
+                padding: 1.5rem;
+            }
+        }
+   
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+       
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        <!-- HERO SECTION -->
+        <div class="hero-section">
+            <h1 class="page-title">Discussion Forum</h1>
+            <p class="page-subtitle">Ask questions, share knowledge, and get help from the community</p>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalQuestions">0</div>
+                    <div class="stat-label">Questions Asked</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalAnswers">0</div>
+                    <div class="stat-label">Answers Given</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="solvedQuestions">0</div>
+                    <div class="stat-label">Solved Questions</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH AND FILTER -->
+        <div class="search-filter">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search questions...">
+            </div>
+            
+            <select class="category-select" id="categoryFilter">
+                <option value="all">All Subjects</option>
+                <option value="programming">Programming</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="science">Science</option>
+                <option value="history">History</option>
+                <option value="literature">Literature</option>
+                <option value="business">Business</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <!-- QUESTIONS LIST -->
+        <div class="questions-container" id="questionsList">
+            <!-- Questions will be loaded here -->
+        </div>
+
+        <!-- NO QUESTIONS MESSAGE -->
+        <div id="noQuestions" class="empty-state" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <h3 style="color: var(--dark); margin-bottom: 1rem; font-size: 1.8rem;">No questions yet</h3>
+            <p style="color: var(--gray-dark); margin-bottom: 2rem; font-size: 1.1rem;">Be the first to ask a question and start the discussion!</p>
+            <button class="ask-btn" onclick="openAskModal()" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-plus"></i> Ask First Question
+            </button>
+        </div>
+    </div>
+
+    <!-- ASK QUESTION MODAL -->
+    <div class="modal" id="askModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Ask a Question</h2>
+                <button class="close-btn" id="closeAskModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="askForm">
+                    <div class="form-group">
+                        <label class="form-label">Question Title *</label>
+                        <input type="text" class="form-input" id="questionTitle" 
+                               placeholder="What do you want to ask?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Subject *</label>
+                        <select class="form-select" id="questionCategory" required>
+                            <option value="">Select subject</option>
+                            <option value="programming">Programming</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="science">Science</option>
+                            <option value="history">History</option>
+                            <option value="literature">Literature</option>
+                            <option value="business">Business</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tags (optional)</label>
+                        <input type="text" class="form-input" id="questionTags" 
+                               placeholder="math, algebra, help (comma separated)">
+                        <small style="color: var(--gray); font-size: 0.9rem; display: block; margin-top: 0.5rem;">
+                            Add relevant tags to help others find your question
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Your Question *</label>
+                        <textarea class="form-textarea" id="questionContent" 
+                                  placeholder="Describe your question in detail. Be specific and include any relevant information..." 
+                                  rows="8" required></textarea>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="btn-secondary" id="cancelAsk">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Post Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION DETAIL MODAL -->
+    <div class="modal" id="questionDetailModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="detailTitle"></h2>
+                <button class="close-btn" id="closeDetailModal">&times;</button>
+            </div>
+            <div class="modal-body" id="questionDetailContent">
+                <!-- Question and answers will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- USER PROFILE MODAL -->
+    <div class="modal" id="userProfileModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 class="modal-title">User Profile</h2>
+                <button class="close-btn" id="closeProfileModal">&times;</button>
+            </div>
+            <div class="modal-body" id="userProfileContent">
+                <!-- User profile will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* ================= SUPABASE INITIALIZATION ================= */
+
+const SUPABASE_URL = "https://wbdurdtfwhmrhahexexw.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndiZHVyZHRmd2htcmhhaGV4ZXh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3NDA4NTQsImV4cCI6MjA4NzMxNjg1NH0.WUVzMOG6gsi0Zh8cszp-K5XaK7R6E7BKFau3lFPP_e4";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+/* ================= USER ================= */
+
+let currentUser = {
+    uid: "user_" + Date.now(),
+    displayName: "Student"
+};
+
+// Store current question ID for reference
+let currentQuestionId = null;
+
+/* ================= INIT ================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadForumStats();
+    loadQuestions();
+    setupEventListeners();
+});
+
+/* ================= EVENT LISTENERS ================= */
+
+function setupEventListeners() {
+    document.getElementById("askQuestionBtn").addEventListener("click", openAskModal);
+    document.getElementById("closeAskModal").addEventListener("click", closeAskModal);
+    document.getElementById("cancelAsk").addEventListener("click", closeAskModal);
+    document.getElementById("closeDetailModal").addEventListener("click", closeDetailModal);
+    document.getElementById("closeProfileModal").addEventListener("click", closeProfileModal);
+
+    document.getElementById("searchInput").addEventListener("input", loadQuestions);
+    document.getElementById("categoryFilter").addEventListener("change", loadQuestions);
+    document.getElementById("askForm").addEventListener("submit", submitQuestion);
+
+    document.querySelectorAll(".modal").forEach(modal => {
+        modal.addEventListener("click", e => {
+            if (e.target === modal) modal.style.display = "none";
+        });
+    });
+}
+
+/* ================= MODAL FUNCTIONS ================= */
+
+function openAskModal() {
+    document.getElementById("askModal").style.display = "flex";
+}
+
+function closeAskModal() {
+    document.getElementById("askModal").style.display = "none";
+    document.getElementById("askForm").reset();
+}
+
+function openDetailModal(id) {
+    currentQuestionId = id;
+    document.getElementById("questionDetailModal").style.display = "flex";
+    loadQuestionDetail(id);
+}
+
+function closeDetailModal() {
+    document.getElementById("questionDetailModal").style.display = "none";
+    currentQuestionId = null;
+}
+
+function openProfileModal(userId, userName) {
+    document.getElementById("userProfileModal").style.display = "flex";
+    loadUserProfile(userId, userName);
+}
+
+function closeProfileModal() {
+    document.getElementById("userProfileModal").style.display = "none";
+}
+
+/* ================= LOAD STATS ================= */
+
+async function loadForumStats() {
+    try {
+        const { count: qCount } = await supabaseClient
+            .from("forum_questions")
+            .select("*", { count: "exact", head: true });
+
+        const { count: aCount } = await supabaseClient
+            .from("forum_answers")
+            .select("*", { count: "exact", head: true });
+
+        // For solved questions, you might need to add this field to your table
+        // For now, just show total answers
+        document.getElementById("totalQuestions").textContent = qCount || 0;
+        document.getElementById("totalAnswers").textContent = aCount || 0;
+        document.getElementById("solvedQuestions").textContent = aCount || 0; // Temporarily show answers count
+    } catch (error) {
+        console.error("Error loading stats:", error);
+    }
+}
+
+/* ================= LOAD QUESTIONS WITH ANSWER COUNTS ================= */
+
+async function loadQuestions() {
+    try {
+        const search = document.getElementById("searchInput").value.toLowerCase();
+        const category = document.getElementById("categoryFilter").value;
+
+        // First, get all questions
+        let query = supabaseClient
+            .from("forum_questions")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if (category !== "all") {
+            query = query.eq("category", category);
+        }
+
+        const { data: questions, error: qError } = await query;
+        if (qError) throw qError;
+
+        if (!questions || questions.length === 0) {
+            renderQuestions([]);
+            return;
+        }
+
+        // For each question, get the answer count
+        const questionsWithCounts = await Promise.all(
+            questions.map(async (question) => {
+                const { count, error: countError } = await supabaseClient
+                    .from("forum_answers")
+                    .select("*", { count: "exact", head: true })
+                    .eq("question_id", question.id);
+
+                if (countError) {
+                    console.error("Error counting answers:", countError);
+                    return { ...question, answer_count: 0 };
+                }
+
+                return { ...question, answer_count: count || 0 };
+            })
+        );
+
+        // Filter by search if needed
+        let filteredQuestions = questionsWithCounts;
+        if (search) {
+            filteredQuestions = questionsWithCounts.filter(q =>
+                q.title.toLowerCase().includes(search) ||
+                (q.content && q.content.toLowerCase().includes(search))
+            );
+        }
+
+        renderQuestions(filteredQuestions);
+    } catch (error) {
+        console.error("Error loading questions:", error);
+    }
+}
+
+function renderQuestions(questions) {
+    const container = document.getElementById("questionsList");
+    const noQuestions = document.getElementById("noQuestions");
+
+    if (!questions || questions.length === 0) {
+        container.style.display = "none";
+        noQuestions.style.display = "block";
+        return;
+    }
+
+    container.style.display = "block";
+    noQuestions.style.display = "none";
+
+    container.innerHTML = questions.map(question => `
+        <div class="question-card" onclick="openDetailModal('${question.id}')">
+            <div class="question-header">
+                <h3 class="question-title">${escapeHtml(question.title)}</h3>
+                <div class="answers-badge">
+                    ${question.answer_count || 0} answer${(question.answer_count || 0) !== 1 ? 's' : ''}
+                </div>
+            </div>
+
+            <p class="question-preview">
+                ${escapeHtml(question.content?.substring(0, 150) || "")}${question.content?.length > 150 ? '...' : ''}
+            </p>
+
+            <div class="question-footer">
+                <div class="question-meta">
+                    <div class="meta-item">
+                        <i class="far fa-calendar"></i>
+                        ${new Date(question.created_at).toLocaleDateString()}
+                    </div>
+                </div>
+
+                <div class="user-info" onclick="event.stopPropagation(); openProfileModal('${question.author_id}', '${escapeHtml(question.author_name || "Student")}')">
+                    <div class="user-avatar">
+                        ${(question.author_name || "S").charAt(0).toUpperCase()}
+                    </div>
+                    <span>${escapeHtml(question.author_name || "Student")}</span>
+                </div>
+            </div>
+        </div>
+    `).join("");
+}
+
+/* ================= SUBMIT QUESTION ================= */
+
+async function submitQuestion(e) {
+    e.preventDefault();
+
+    const title = document.getElementById("questionTitle").value.trim();
+    const category = document.getElementById("questionCategory").value;
+    const content = document.getElementById("questionContent").value.trim();
+    const tagsInput = document.getElementById("questionTags").value;
+    const tags = tagsInput
+        .split(",")
+        .map(t => t.trim())
+        .filter(t => t);
+
+    if (!title || !category || !content) {
+        alert("Please fill all required fields");
+        return;
+    }
+
+    try {
+        const { error } = await supabaseClient.from("forum_questions").insert([{
+            title,
+            content,
+            category,
+            tags,
+            author_name: currentUser.displayName,
+            author_id: currentUser.uid,
+            created_at: new Date().toISOString()
+        }]);
+
+        if (error) throw error;
+
+        closeAskModal();
+        loadQuestions(); // Refresh the questions list
+        loadForumStats(); // Refresh stats
+    } catch (error) {
+        console.error("Error submitting question:", error);
+        alert("Error submitting question: " + error.message);
+    }
+}
+
+/* ================= SUBMIT ANSWER ================= */
+
+async function submitAnswer(questionId) {
+    const content = document.getElementById("answerContent").value.trim();
+    if (!content) {
+        alert("Please write an answer");
+        return;
+    }
+
+    try {
+        // Insert answer
+        const { error: answerError } = await supabaseClient
+            .from("forum_answers")
+            .insert([{
+                question_id: questionId,
+                content,
+                author_name: currentUser.displayName,
+                author_id: currentUser.uid,
+                votes: 0,
+                created_at: new Date().toISOString()
+            }]);
+
+        if (answerError) throw answerError;
+
+        // Clear the input
+        document.getElementById("answerContent").value = "";
+        
+        // Refresh the question detail view
+        await loadQuestionDetail(questionId);
+        
+        // Refresh the questions list to update answer counts
+        await loadQuestions();
+        
+        // Refresh stats
+        await loadForumStats();
+        
+    } catch (error) {
+        console.error("Error submitting answer:", error);
+        alert("Error submitting answer: " + error.message);
+    }
+}
+
+/* ================= LOAD DETAIL ================= */
+
+async function loadQuestionDetail(questionId) {
+    try {
+        // Get question details
+        const { data: question, error: qError } = await supabaseClient
+            .from("forum_questions")
+            .select("*")
+            .eq("id", questionId)
+            .single();
+
+        if (qError) throw qError;
+
+        // Get answers for this question
+        const { data: answers, error: aError } = await supabaseClient
+            .from("forum_answers")
+            .select("*")
+            .eq("question_id", questionId)
+            .order("votes", { ascending: false })
+            .order("created_at", { ascending: true });
+
+        if (aError) throw aError;
+
+        renderQuestionDetail(question, answers || []);
+    } catch (error) {
+        console.error("Error loading question detail:", error);
+    }
+}
+
+function renderQuestionDetail(question, answers) {
+    document.getElementById("detailTitle").textContent = question.title;
+
+    const container = document.getElementById("questionDetailContent");
+
+    container.innerHTML = `
+        <div class="question-detail-view">
+            <div class="question-content">
+                ${escapeHtml(question.content).replace(/\n/g, '<br>')}
+            </div>
+
+            <div class="question-footer">
+                <div class="user-info" onclick="openProfileModal('${question.author_id}', '${escapeHtml(question.author_name || "Student")}')">
+                    <div class="user-avatar">
+                        ${(question.author_name || "S").charAt(0).toUpperCase()}
+                    </div>
+                    <span>${escapeHtml(question.author_name || "Student")}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="far fa-calendar"></i>
+                    ${new Date(question.created_at).toLocaleDateString()}
+                </div>
+            </div>
+        </div>
+
+        <div class="answers-section">
+            <h3 style="margin-bottom:20px; font-size:1.5rem;">
+                ${answers.length} Answer${answers.length !== 1 ? "s" : ""}
+            </h3>
+
+            ${answers.length > 0 ? answers.map(answer => `
+                <div class="answer-item">
+                    <div class="answer-content">
+                        ${escapeHtml(answer.content).replace(/\n/g, '<br>')}
+                    </div>
+
+                    <div class="answer-footer">
+                        <div class="vote-buttons">
+                            <button class="vote-btn upvote-btn" onclick="voteAnswer('${answer.id}', '${question.id}', 'up')" title="Upvote">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+
+                            <span class="vote-count">
+                                ${answer.votes || 0}
+                            </span>
+
+                            <button class="vote-btn downvote-btn" onclick="voteAnswer('${answer.id}', '${question.id}', 'down')" title="Downvote">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                        </div>
+
+                        <div class="user-info" onclick="openProfileModal('${answer.author_id}', '${escapeHtml(answer.author_name || "Student")}')">
+                            <div class="user-avatar">
+                                ${(answer.author_name || "S").charAt(0).toUpperCase()}
+                            </div>
+                            <span>${escapeHtml(answer.author_name || "Student")}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join("") : `
+                <p style="text-align:center; padding:2rem; color:var(--gray-dark);">
+                    No answers yet. Be the first to answer!
+                </p>
+            `}
+
+            <div style="margin-top:30px;">
+                <h4 style="margin-bottom:15px;">Your Answer</h4>
+                <textarea id="answerContent" class="form-textarea" placeholder="Write your answer..."></textarea>
+
+                <div style="margin-top:15px; text-align:right;">
+                    <button class="btn-primary" onclick="submitAnswer('${question.id}')">
+                        <i class="fas fa-paper-plane"></i> Post Answer
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/* ================= VOTING ================= */
+
+async function voteAnswer(answerId, questionId, type) {
+    try {
+        const change = type === "up" ? 1 : -1;
+
+        const { data: current, error: fetchError } = await supabaseClient
+            .from("forum_answers")
+            .select("votes")
+            .eq("id", answerId)
+            .single();
+
+        if (fetchError) throw fetchError;
+
+        const { error: updateError } = await supabaseClient
+            .from("forum_answers")
+            .update({ votes: (current?.votes || 0) + change })
+            .eq("id", answerId);
+
+        if (updateError) throw updateError;
+
+        // Refresh the question detail view
+        loadQuestionDetail(questionId);
+        
+    } catch (error) {
+        console.error("Error voting:", error);
+    }
+}
+
+/* ================= USER PROFILE ================= */
+
+async function loadUserProfile(userId, userName) {
+    try {
+        // Get user's questions
+        const { data: questions, error: qError } = await supabaseClient
+            .from("forum_questions")
+            .select("*")
+            .eq("author_id", userId)
+            .order("created_at", { ascending: false });
+
+        if (qError) throw qError;
+
+        // Get user's answers with question titles
+        const { data: answers, error: aError } = await supabaseClient
+            .from("forum_answers")
+            .select(`
+                *,
+                forum_questions!inner(title)
+            `)
+            .eq("author_id", userId)
+            .order("created_at", { ascending: false });
+
+        if (aError) throw aError;
+
+        renderUserProfile(userName, questions || [], answers || []);
+    } catch (error) {
+        console.error("Error loading user profile:", error);
+    }
+}
+
+function renderUserProfile(userName, questions, answers) {
+    const container = document.getElementById("userProfileContent");
+    
+    container.innerHTML = `
+        <div style="text-align:center; margin-bottom:2rem;">
+            <div class="user-avatar" style="width:80px; height:80px; font-size:2rem; margin:0 auto 1rem;">
+                ${userName.charAt(0).toUpperCase()}
+            </div>
+            <h3 style="font-size:1.5rem;">${escapeHtml(userName)}</h3>
+        </div>
+
+        <div style="margin-bottom:2rem;">
+            <h4 style="margin-bottom:1rem;">Statistics</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div style="background:var(--light-gray); padding:1rem; border-radius:12px; text-align:center;">
+                    <div style="font-size:2rem; font-weight:700; color:var(--primary);">${questions.length}</div>
+                    <div style="color:var(--gray-dark);">Questions</div>
+                </div>
+                <div style="background:var(--light-gray); padding:1rem; border-radius:12px; text-align:center;">
+                    <div style="font-size:2rem; font-weight:700; color:var(--primary);">${answers.length}</div>
+                    <div style="color:var(--gray-dark);">Answers</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom:2rem;">
+            <h4 style="margin-bottom:1rem;">Recent Questions</h4>
+            ${questions.length > 0 ? questions.slice(0, 5).map(q => `
+                <div style="background:var(--light-gray); padding:1rem; border-radius:12px; margin-bottom:0.5rem; cursor:pointer;" onclick="openDetailModal('${q.id}'); closeProfileModal();">
+                    <div style="font-weight:600;">${escapeHtml(q.title)}</div>
+                    <div style="font-size:0.9rem; color:var(--gray-dark);">${new Date(q.created_at).toLocaleDateString()}</div>
+                </div>
+            `).join("") : "<p>No questions yet.</p>"}
+        </div>
+
+        <div>
+            <h4 style="margin-bottom:1rem;">Recent Answers</h4>
+            ${answers.length > 0 ? answers.slice(0, 5).map(a => `
+                <div style="background:var(--light-gray); padding:1rem; border-radius:12px; margin-bottom:0.5rem; cursor:pointer;" onclick="openDetailModal('${a.question_id}'); closeProfileModal();">
+                    <div style="font-weight:600;">${escapeHtml(a.forum_questions?.title || "Question")}</div>
+                    <div style="font-size:0.9rem; color:var(--gray-dark);">${new Date(a.created_at).toLocaleDateString()}</div>
+                </div>
+            `).join("") : "<p>No answers yet.</p>"}
+        </div>
+    `;
+}
+
+/* ================= HELPER FUNCTIONS ================= */
+
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// Make functions globally available
+window.openAskModal = openAskModal;
+window.openDetailModal = openDetailModal;
+window.submitAnswer = submitAnswer;
+window.voteAnswer = voteAnswer;
+window.openProfileModal = openProfileModal;
+window.closeProfileModal = closeProfileModal;
+</script>
+</body>
+</html>

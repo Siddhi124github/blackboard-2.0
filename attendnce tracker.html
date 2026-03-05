@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackboard 2.0 - Complete Attendance System</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- SheetJS for Excel import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-light: #c7d2fe;
+  --secondary: #0891b2;
+  --accent: #f59e0b;
+  --light: #ffffff;
+  --light-gray: #f8fafc;
+  --gray: #94a3b8;
+  --gray-dark: #64748b;
+  --dark: #1e293b;
+  --darker: #0f172a;
+  --card-bg: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  --border-color: #e2e8f0;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+       body {
+    background: #f0f7ff;
+    min-height: 100vh;
+    padding-top: 90px; /* ADD THIS - pushes content below fixed header */
+}
+
+/* NAVBAR */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.logo:hover .logo-image {
+  transform: rotate(-5deg) scale(1.1);
+}
+
+.logo-text {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--gray-dark);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 8px 0;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.nav-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--darker);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+        /* Auth Container */
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eef2f6;
+            padding-bottom: 1rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .auth-tab.active {
+            color: #0a2a44;
+            border-bottom: 3px solid #4a9eff;
+            background: #e8f0fe;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #eef2f6;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #4a9eff;
+            outline: none;
+        }
+
+        .btn {
+            background: #0a2a44;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #1e3a5a;
+        }
+
+        .btn-secondary {
+            background: #4a9eff;
+        }
+
+        .btn-secondary:hover {
+            background: #6db5ff;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard-header {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .institute-info {
+            background: linear-gradient(135deg, #0a2a44, #1e3a5a);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .card h3 {
+            color: #0a2a44;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3 i {
+            color: #4a9eff;
+        }
+
+        .student-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .attendance-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .attendance-actions button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-present {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .btn-present.active {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-absent {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+               .btn-absent.active {
+            background: #dc3545;
+            color: white;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select, .filter-bar input {
+            padding: 0.5rem 1rem;
+            border: 2px solid #eef2f6;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0a2a44;
+        }
+
+        .code-display {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            margin: 1rem 0;
+            border: 2px dashed #4a9eff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .prof-credentials {
+            background: #e8f0fe;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #4a9eff;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .excel-template {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #4a9eff;
+        }
+
+        .file-input {
+            border: 2px dashed #4a9eff;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .file-input:hover {
+            background: #e8f0fe;
+        }
+
+        .preview-table {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 1rem 0;
+            border: 1px solid #eef2f6;
+            border-radius: 10px;
+        }
+
+        .preview-table table {
+            width: 100%;
+        }
+
+        .preview-table th {
+            position: sticky;
+            top: 0;
+            background: #4a9eff;
+            color: white;
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: #4a9eff;
+            color: white;
+        }
+
+        .class-chip {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: #e8f0fe;
+            border-radius: 20px;
+            margin: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        .action-icon {
+            cursor: pointer;
+            margin: 0 0.5rem;
+            color: #4a9eff;
+        }
+
+        .action-icon:hover {
+            color: #0a2a44;
+        }
+
+        .delete-icon {
+            color: #dc3545;
+        }
+
+        .delete-icon:hover {
+            color: #bd2130;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eef2f6;
+            padding-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .tab.active {
+            background: #0a2a44;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+       
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+    <div class="main-container">
+        <!-- Auth Section -->
+        <div id="authSection">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" onclick="switchAuthTab('institute')">Register Institute</div>
+                    <div class="auth-tab" onclick="switchAuthTab('login')">Login</div>
+                </div>
+
+                <!-- Institute Registration Form -->
+                <div id="instituteForm" class="auth-form active">
+                    <h2 style="margin-bottom: 1.5rem;">Register Your Institute</h2>
+                    <div class="form-group">
+                        <label>Institute Name</label>
+                        <input type="text" id="instName" placeholder="e.g., Mumbai Public School" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Institute Email</label>
+                        <input type="email" id="instEmail" placeholder="admin@institute.edu" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Admin Password</label>
+                        <input type="password" id="instPassword" placeholder="Create admin password" required>
+                    </div>
+                    <button class="btn" onclick="registerInstitute()">Register Institute</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form">
+                    <h2 style="margin-bottom: 1.5rem;">Login to System</h2>
+                    
+                    <!-- Role Selection -->
+                    <div class="form-group">
+                        <label>Login As</label>
+                        <select id="loginRole" onchange="toggleLoginFields()">
+                            <option value="institute">Institute Admin</option>
+                            <option value="professor">Professor</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+
+                    <!-- Institute Admin Login Fields -->
+                    <div id="instituteLoginFields">
+                        <div class="form-group">
+                            <label>Institute Name</label>
+                            <input type="text" id="loginInstName" placeholder="Enter institute name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginInstPassword" placeholder="Enter admin password" required>
+                        </div>
+                    </div>
+
+                    <!-- Professor Login Fields -->
+                    <div id="professorLoginFields" style="display: none;">
+                        <div class="form-group">
+                            <label>Institute Name</label>
+                            <input type="text" id="loginProfInstitute" placeholder="Enter institute name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Professor ID</label>
+                            <input type="text" id="loginProfId" placeholder="Enter professor ID" required>
+                        </div>
+                    </div>
+
+                    <!-- Student Login Fields -->
+                    <div id="studentLoginFields" style="display: none;">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="loginStudentName" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Institute Name</label>
+                            <input type="text" id="loginStudentInstitute" placeholder="Enter institute name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginStudentEmail" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Institute Admin Dashboard -->
+        <div id="instituteDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-building"></i> Institute Admin Dashboard</h2>
+                <button class="btn-secondary btn-small" onclick="logout()">Logout</button>
+            </div>
+
+            <div id="adminInstituteInfo" class="institute-info"></div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="switchAdminTab('professors')">Professors</div>
+                <div class="tab" onclick="switchAdminTab('students')">Students</div>
+                <div class="tab" onclick="switchAdminTab('subjects')">Subjects</div>
+                <div class="tab" onclick="switchAdminTab('attendance')">Attendance Reports</div>
+            </div>
+
+            <!-- Professors Tab -->
+            <div id="professorsTab" class="tab-content active">
+                <div class="grid-2">
+                    <!-- Add Professor -->
+                    <div class="card">
+                        <h3><i class="fas fa-user-plus"></i> Add New Professor</h3>
+                        <div class="form-group">
+                            <label>Professor Name</label>
+                            <input type="text" id="adminProfName" placeholder="Enter professor name">
+                        </div>
+                        <div class="form-group">
+                            <label>Professor Email</label>
+                            <input type="email" id="adminProfEmail" placeholder="professor@institute.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" id="adminProfSubject" placeholder="e.g., Mathematics">
+                        </div>
+                        <button class="btn" onclick="addProfessor()">Add Professor</button>
+                        
+                        <!-- Professor Credentials Display -->
+                        <div id="profCredentials" class="prof-credentials" style="display: none; margin-top: 1rem;">
+                            <h4><i class="fas fa-key"></i> Professor Credentials</h4>
+                            <p><strong>Professor ID:</strong> <span id="newProfId"></span></p>
+                            <p><strong>Name:</strong> <span id="newProfName"></span></p>
+                            <p class="warning">Save this ID! It won't be shown again.</p>
+                        </div>
+                    </div>
+
+                    <!-- Professors List -->
+                    <div class="card">
+                        <h3><i class="fas fa-list"></i> All Professors</h3>
+                        <div id="adminProfessorsList" class="student-list">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Tab -->
+            <div id="studentsTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-file-excel"></i> Bulk Import Students</h3>
+                    
+                    <div class="excel-template">
+                        <h4><i class="fas fa-info-circle"></i> Excel Format Instructions:</h4>
+                        <p>Create an Excel file with these columns (headers in first row):</p>
+                        <table>
+                            <tr><th>name</th><th>email</th><th>address</th></tr>
+                            <tr><td>John Doe</td><td>john@example.com</td><td>123 Main St</td></tr>
+                            <tr><td>Jane Smith</td><td>jane@example.com</td><td>456 Oak Ave</td></tr>
+                        </table>
+                        <button class="btn-small btn-secondary" onclick="downloadTemplate()" style="margin-top: 1rem;">
+                            <i class="fas fa-download"></i> Download Template
+                        </button>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Program/Class for these students</label>
+                            <input type="text" id="bulkProgram" placeholder="e.g., 10th A, BSC CS 1st Year" required>
+                        </div>
+                    </div>
+
+                    <div class="file-input" onclick="document.getElementById('excelFile').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #4a9eff;"></i>
+                        <p>Click to upload Excel file</p>
+                        <p style="font-size: 0.9rem; color: #666;">Supports .xlsx, .xls files</p>
+                        <input type="file" id="excelFile" accept=".xlsx,.xls" style="display: none;" onchange="handleExcelUpload(event)">
+                    </div>
+
+                    <div id="excelPreview" style="display: none;">
+                        <h4>Preview <span id="previewCount" class="badge badge-primary"></span></h4>
+                        <div class="preview-table" id="previewData"></div>
+                        <button class="btn btn-success" onclick="uploadBulkStudents()" id="uploadBtn">
+                            <i class="fas fa-upload"></i> Upload Students
+                        </button>
+                    </div>
+                    <div id="uploadProgress" style="margin-top: 1rem;"></div>
+                </div>
+
+                <!-- Add Single Student -->
+                <div class="card">
+                    <h3><i class="fas fa-user-graduate"></i> Add Single Student</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Student Name</label>
+                            <input type="text" id="singleStudentName" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="singleStudentEmail" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea id="singleStudentAddress" rows="2" placeholder="Enter address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Program/Class</label>
+                            <input type="text" id="singleStudentProgram" placeholder="e.g., 10th A">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="addSingleStudent()">Add Student</button>
+                </div>
+
+                <!-- Students List -->
+                <div class="card">
+                    <h3><i class="fas fa-list"></i> All Students</h3>
+                    <div class="filter-bar">
+                        <select id="filterProgram" onchange="filterStudents()">
+                            <option value="">All Programs</option>
+                        </select>
+                        <input type="text" id="searchStudent" placeholder="Search by name..." onkeyup="filterStudents()">
+                    </div>
+                    <div id="adminStudentsList" class="student-list">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Subjects Tab -->
+            <div id="subjectsTab" class="tab-content">
+                <div class="grid-2">
+                    <!-- Add Subject -->
+                    <div class="card">
+                        <h3><i class="fas fa-book"></i> Add Subject</h3>
+                        <div class="form-group">
+                            <label>Subject Name</label>
+                            <input type="text" id="adminSubjectName" placeholder="e.g., Mathematics">
+                        </div>
+                        <div class="form-group">
+                            <label>Program/Class</label>
+                            <input type="text" id="adminSubjectProgram" placeholder="e.g., 10th A">
+                        </div>
+                        <div class="form-group">
+                            <label>Assign to Professor</label>
+                            <select id="adminProfessorSelect">
+                                <option value="">Select Professor</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="addSubject()">Add Subject</button>
+                    </div>
+
+                    <!-- Subjects List -->
+                    <div class="card">
+                        <h3><i class="fas fa-list"></i> All Subjects</h3>
+                        <div id="adminSubjectsList" class="student-list">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Reports Tab -->
+            <div id="attendanceTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-chart-line"></i> Attendance Reports</h3>
+                    <div class="filter-bar">
+                        <select id="reportProgram" onchange="loadAttendanceReport()">
+                            <option value="">All Programs</option>
+                        </select>
+                        <select id="reportSubject" onchange="loadAttendanceReport()">
+                            <option value="">All Subjects</option>
+                        </select>
+                        <input type="date" id="reportDate" onchange="loadAttendanceReport()">
+                        <button class="btn-secondary btn-small" onclick="exportReport()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                    <div id="attendanceReport" class="student-list">Select filters to load report</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professor Dashboard -->
+        <div id="professorDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-chalkboard-teacher"></i> Professor Dashboard</h2>
+                <button class="btn-secondary btn-small" onclick="logout()">Logout</button>
+            </div>
+
+            <div id="profInstituteInfo" class="institute-info"></div>
+
+            <!-- Mark Attendance -->
+            <div class="card">
+                <h3><i class="fas fa-check-circle"></i> Mark Attendance</h3>
+                <div class="filter-bar">
+                    <select id="attendanceSubject" onchange="updateProgramFromSubject()">
+                        <option value="">Select Subject</option>
+                    </select>
+                    <select id="attendanceProgram">
+                        <option value="">Select Program</option>
+                    </select>
+                    <input type="date" id="attendanceDate">
+                    <button class="btn-secondary btn-small" onclick="loadStudentsForAttendance()">Load Students</button>
+                </div>
+                <div id="studentAttendanceList" class="student-list"></div>
+                <button class="btn" style="margin-top: 1rem;" onclick="saveAttendance()">Save Attendance</button>
+            </div>
+
+            <!-- My Subjects -->
+            <div class="card">
+                <h3><i class="fas fa-book"></i> My Subjects</h3>
+                <div id="profSubjectsList" class="student-list">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Student Dashboard -->
+        <div id="studentDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-user-graduate"></i> Student Dashboard</h2>
+                <button class="btn-secondary btn-small" onclick="logout()">Logout</button>
+            </div>
+
+            <div id="studentInstituteInfo" class="institute-info"></div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <h3><i class="fas fa-chart-pie"></i> Attendance Overview</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalPercent">0%</div>
+                            <div class="stat-label">Overall</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="presentCount">0</div>
+                            <div class="stat-label">Present</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="absentCount">0</div>
+                            <div class="stat-label">Absent</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-book"></i> Subject-wise</h3>
+                    <div id="subjectWise"></div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-calendar"></i> Monthly</h3>
+                    <div id="monthlyStats"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-history"></i> Attendance History</h3>
+                <div class="filter-bar">
+                    <input type="month" id="historyMonth">
+                    <button class="btn-secondary btn-small" onclick="loadHistory()">Filter</button>
+                </div>
+                <div id="attendanceHistory" class="student-list"></div>
+            </div>
+
+            <div id="attendanceWarning" class="warning hidden">
+                <i class="fas fa-exclamation-triangle"></i> Warning: Your attendance is below 75%!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase with your credentials
+        const SUPABASE_URL = 'https://wbdurdtfwhmrhahexexw.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndiZHVyZHRmd2htcmhhaGV4ZXh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3NDA4NTQsImV4cCI6MjA4NzMxNjg1NH0.WUVzMOG6gsi0Zh8cszp-K5XaK7R6E7BKFau3lFPP_e4';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Global variables
+        let currentInstitute = null;
+        let currentProfessor = null;
+        let currentStudent = null;
+        let currentAttendanceStatus = {};
+        let excelData = [];
+
+        // UI Functions
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'institute') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('instituteForm').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            }
+        }
+
+        function toggleLoginFields() {
+            const role = document.getElementById('loginRole').value;
+            document.getElementById('instituteLoginFields').style.display = 'none';
+            document.getElementById('professorLoginFields').style.display = 'none';
+            document.getElementById('studentLoginFields').style.display = 'none';
+            
+            if (role === 'institute') {
+                document.getElementById('instituteLoginFields').style.display = 'block';
+            } else if (role === 'professor') {
+                document.getElementById('professorLoginFields').style.display = 'block';
+            } else {
+                document.getElementById('studentLoginFields').style.display = 'block';
+            }
+        }
+
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'professors') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('professorsTab').classList.add('active');
+                loadAdminProfessors();
+            } else if (tab === 'students') {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('studentsTab').classList.add('active');
+                loadAdminStudents();
+                loadProgramFilters();
+            } else if (tab === 'subjects') {
+                document.querySelectorAll('.tab')[2].classList.add('active');
+                document.getElementById('subjectsTab').classList.add('active');
+                loadAdminSubjects();
+                loadProfessorDropdown();
+            } else {
+                document.querySelectorAll('.tab')[3].classList.add('active');
+                document.getElementById('attendanceTab').classList.add('active');
+                loadReportFilters();
+            }
+        }
+
+        // Register Institute
+        async function registerInstitute() {
+            const name = document.getElementById('instName').value;
+            const email = document.getElementById('instEmail').value;
+            const password = document.getElementById('instPassword').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const instituteCode = 'INST' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+            try {
+                // Check if institute already exists
+                const { data: existing, error: checkError } = await supabaseClient
+                    .from('institutes')
+                    .select('*')
+                    .eq('name', name)
+                    .maybeSingle();
+
+                if (existing) {
+                    alert('Institute already exists! Please login.');
+                    return;
+                }
+
+                const { data, error } = await supabaseClient
+                    .from('institutes')
+                    .insert([
+                        { 
+                            name, 
+                            email, 
+                            institute_code: instituteCode,
+                            password: password // In production, hash this!
+                        }
+                    ])
+                    .select()
+                    .single();
+
+                if (error) throw error;
+                
+                alert('Institute registered successfully!\n\nInstitute Code: ' + instituteCode + '\n\nYou can now login as admin with your password.');
+                switchAuthTab('login');
+                
+                // Clear form
+                document.getElementById('instName').value = '';
+                document.getElementById('instEmail').value = '';
+                document.getElementById('instPassword').value = '';
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+                console.error(error);
+            }
+        }
+
+        // Login
+        async function login() {
+            const role = document.getElementById('loginRole').value;
+
+            try {
+                if (role === 'institute') {
+                    const name = document.getElementById('loginInstName').value;
+                    const password = document.getElementById('loginInstPassword').value;
+
+                    if (!name || !password) {
+                        alert('Please fill all fields');
+                        return;
+                    }
+
+                    const { data: institute, error } = await supabaseClient
+                        .from('institutes')
+                        .select('*')
+                        .eq('name', name)
+                        .eq('password', password)
+                        .maybeSingle();
+
+                    if (error) throw error;
+                    
+                    if (!institute) {
+                        alert('Invalid institute name or password');
+                        return;
+                    }
+
+                    currentInstitute = institute;
+                    showInstituteDashboard();
+                    
+                } else if (role === 'professor') {
+                    const instituteName = document.getElementById('loginProfInstitute').value;
+                    const professorId = document.getElementById('loginProfId').value;
+
+                    if (!instituteName || !professorId) {
+                        alert('Please fill all fields');
+                        return;
+                    }
+
+                    const { data: institute, error: instError } = await supabaseClient
+                        .from('institutes')
+                        .select('*')
+                        .eq('name', instituteName)
+                        .maybeSingle();
+
+                    if (!institute) {
+                        alert('Institute not found');
+                        return;
+                    }
+
+                    const { data: professor, error: profError } = await supabaseClient
+                        .from('professors')
+                        .select('*')
+                        .eq('professor_id', professorId)
+                        .eq('institute_id', institute.id)
+                        .maybeSingle();
+
+                    if (!professor) {
+                        alert('Invalid professor ID');
+                        return;
+                    }
+
+                    currentInstitute = institute;
+                    currentProfessor = professor;
+                    showProfessorDashboard();
+                    
+                } else {
+                    const name = document.getElementById('loginStudentName').value;
+                    const instituteName = document.getElementById('loginStudentInstitute').value;
+                    const email = document.getElementById('loginStudentEmail').value;
+
+                    if (!name || !instituteName || !email) {
+                        alert('Please fill all fields');
+                        return;
+                    }
+
+                    const { data: institute, error: instError } = await supabaseClient
+                        .from('institutes')
+                        .select('*')
+                        .eq('name', instituteName)
+                        .maybeSingle();
+
+                    if (!institute) {
+                        alert('Institute not found');
+                        return;
+                    }
+
+                    const { data: student, error: stuError } = await supabaseClient
+                        .from('students')
+                        .select('*')
+                        .eq('name', name)
+                        .eq('email', email)
+                        .eq('institute_id', institute.id)
+                        .maybeSingle();
+
+                    if (!student) {
+                        alert('Invalid student credentials');
+                        return;
+                    }
+
+                    currentInstitute = institute;
+                    currentStudent = student;
+                    showStudentDashboard();
+                }
+            } catch (error) {
+                alert('Login error: ' + error.message);
+                console.error(error);
+            }
+        }
+
+        // Show Institute Dashboard
+        function showInstituteDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('instituteDashboard').style.display = 'block';
+            
+            document.getElementById('adminInstituteInfo').innerHTML = `
+                <h3>${currentInstitute.name}</h3>
+                <p><i class="fas fa-building"></i> Institute Code: ${currentInstitute.institute_code}</p>
+                <p><i class="fas fa-envelope"></i> ${currentInstitute.email}</p>
+            `;
+            
+            loadAdminProfessors();
+        }
+
+        // Show Professor Dashboard
+        async function showProfessorDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('professorDashboard').style.display = 'block';
+            
+            document.getElementById('profInstituteInfo').innerHTML = `
+                <h3>${currentInstitute.name}</h3>
+                <p><i class="fas fa-user-tie"></i> Professor: ${currentProfessor.name}</p>
+                <p><i class="fas fa-id-card"></i> Professor ID: ${currentProfessor.professor_id}</p>
+                <p><i class="fas fa-book"></i> Subject: ${currentProfessor.subject}</p>
+            `;
+
+            loadProfessorSubjects();
+            loadProfessorPrograms();
+        }
+
+        // Show Student Dashboard
+        async function showStudentDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('studentDashboard').style.display = 'block';
+            
+            document.getElementById('studentInstituteInfo').innerHTML = `
+                <h3>${currentInstitute.name}</h3>
+                <p><i class="fas fa-user-graduate"></i> Student: ${currentStudent.name}</p>
+                <p><i class="fas fa-envelope"></i> ${currentStudent.email}</p>
+                <p><i class="fas fa-users"></i> Program: ${currentStudent.class}</p>
+            `;
+
+            loadStudentData();
+        }
+
+        // Download Excel Template
+        function downloadTemplate() {
+            const data = [
+                ['name', 'email', 'address'],
+                ['John Doe', 'john@example.com', '123 Main St, City'],
+                ['Jane Smith', 'jane@example.com', '456 Oak Ave, Town']
+            ];
+            
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Students');
+            XLSX.writeFile(wb, 'student_template.xlsx');
+        }
+
+        // Handle Excel Upload
+        function handleExcelUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    excelData = jsonData;
+                    
+                    document.getElementById('excelPreview').style.display = 'block';
+                    document.getElementById('previewCount').textContent = `${jsonData.length} students found`;
+                    
+                    let previewHtml = '<table><tr><th>Name</th><th>Email</th><th>Address</th></tr>';
+                    jsonData.slice(0, 5).forEach(row => {
+                        previewHtml += `<tr>
+                            <td>${row.name || ''}</td>
+                            <td>${row.email || ''}</td>
+                            <td>${row.address || ''}</td>
+                        </tr>`;
+                    });
+                    if (jsonData.length > 5) {
+                        previewHtml += `<tr><td colspan="3">... and ${jsonData.length - 5} more</td></tr>`;
+                    }
+                    previewHtml += '</table>';
+                    document.getElementById('previewData').innerHTML = previewHtml;
+                    
+                } catch (error) {
+                    alert('Error reading Excel file: ' + error.message);
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Upload Bulk Students
+        async function uploadBulkStudents() {
+            const program = document.getElementById('bulkProgram').value;
+            
+            if (!program) {
+                alert('Please enter the program/class');
+                return;
+            }
+            
+            if (excelData.length === 0) {
+                alert('No data to upload');
+                return;
+            }
+            
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('uploadProgress').innerHTML = '<p>Uploading students...</p>';
+            
+            let success = 0;
+            let failed = 0;
+            
+            for (let row of excelData) {
+                if (!row.name || !row.email) {
+                    failed++;
+                    continue;
+                }
+                
+                const studentCode = 'STU' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                
+                try {
+                    const { error } = await supabaseClient
+                        .from('students')
+                        .insert([{
+                            institute_id: currentInstitute.id,
+                            name: row.name,
+                            email: row.email,
+                            address: row.address || '',
+                            class: program,
+                            student_code: studentCode
+                        }]);
+                    
+                    if (!error) success++;
+                    else failed++;
+                    
+                } catch (error) {
+                    failed++;
+                }
+            }
+            
+            document.getElementById('uploadProgress').innerHTML = `
+                <div class="alert alert-success">
+                    Upload complete! ${success} students added successfully. ${failed} failed.
+                </div>
+            `;
+            
+            loadAdminStudents();
+            loadProgramFilters();
+            
+            // Reset
+            excelData = [];
+            document.getElementById('excelFile').value = '';
+            document.getElementById('excelPreview').style.display = 'none';
+            document.getElementById('bulkProgram').value = '';
+            document.getElementById('uploadBtn').disabled = false;
+        }
+
+        // Add Single Student
+        async function addSingleStudent() {
+            const name = document.getElementById('singleStudentName').value;
+            const email = document.getElementById('singleStudentEmail').value;
+            const address = document.getElementById('singleStudentAddress').value;
+            const program = document.getElementById('singleStudentProgram').value;
+
+            if (!name || !email || !address || !program) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const studentCode = 'STU' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+            try {
+                const { error } = await supabaseClient
+                    .from('students')
+                    .insert([{
+                        institute_id: currentInstitute.id,
+                        name, 
+                        email, 
+                        address,
+                        class: program,
+                        student_code: studentCode
+                    }]);
+
+                if (error) throw error;
+                
+                alert('Student added successfully!\nStudent Code: ' + studentCode);
+                
+                // Clear form
+                document.getElementById('singleStudentName').value = '';
+                document.getElementById('singleStudentEmail').value = '';
+                document.getElementById('singleStudentAddress').value = '';
+                document.getElementById('singleStudentProgram').value = '';
+                
+                loadAdminStudents();
+                loadProgramFilters();
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Add Professor (Admin)
+        async function addProfessor() {
+            const name = document.getElementById('adminProfName').value;
+            const email = document.getElementById('adminProfEmail').value;
+            const subject = document.getElementById('adminProfSubject').value;
+
+            if (!name || !email || !subject) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const professorId = 'PROF' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('professors')
+                    .insert([{
+                        institute_id: currentInstitute.id,
+                        name, 
+                        email, 
+                        professor_id: professorId, 
+                        subject
+                    }])
+                    .select()
+                    .single();
+
+                if (error) throw error;
+                
+                // Show professor credentials
+                document.getElementById('newProfId').textContent = professorId;
+                document.getElementById('newProfName').textContent = name;
+                document.getElementById('profCredentials').style.display = 'block';
+                
+                // Clear form
+                document.getElementById('adminProfName').value = '';
+                document.getElementById('adminProfEmail').value = '';
+                document.getElementById('adminProfSubject').value = '';
+                
+                loadAdminProfessors();
+                loadProfessorDropdown();
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Add Subject
+        async function addSubject() {
+            const name = document.getElementById('adminSubjectName').value;
+            const program = document.getElementById('adminSubjectProgram').value;
+            const professorId = document.getElementById('adminProfessorSelect').value;
+
+            if (!name || !program || !professorId) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('subjects')
+                    .insert([{
+                        institute_id: currentInstitute.id,
+                        name, 
+                        professor_id: parseInt(professorId), 
+                        class: program
+                    }]);
+
+                if (error) throw error;
+                
+                alert('Subject added successfully!');
+                
+                // Clear form
+                document.getElementById('adminSubjectName').value = '';
+                document.getElementById('adminSubjectProgram').value = '';
+                
+                loadAdminSubjects();
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Load Admin Professors
+        async function loadAdminProfessors() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('professors')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    document.getElementById('adminProfessorsList').innerHTML = '<p>No professors added yet</p>';
+                    return;
+                }
+
+                let html = '<table><tr><th>Name</th><th>Email</th><th>Subject</th><th>Professor ID</th></tr>';
+                data.forEach(prof => {
+                    html += `<tr>
+                        <td>${prof.name}</td>
+                        <td>${prof.email}</td>
+                        <td>${prof.subject}</td>
+                        <td><strong>${prof.professor_id}</strong></td>
+                    </tr>`;
+                });
+                html += '</table>';
+                
+                document.getElementById('adminProfessorsList').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading professors:', error);
+                document.getElementById('adminProfessorsList').innerHTML = '<p>Error loading professors</p>';
+            }
+        }
+
+        // Load Admin Students
+        async function loadAdminStudents() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('students')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    document.getElementById('adminStudentsList').innerHTML = '<p>No students added yet</p>';
+                    return;
+                }
+
+                const filterProgram = document.getElementById('filterProgram')?.value;
+                const searchText = document.getElementById('searchStudent')?.value.toLowerCase() || '';
+                
+                let filtered = data;
+                if (filterProgram) {
+                    filtered = filtered.filter(s => s.class === filterProgram);
+                }
+                if (searchText) {
+                    filtered = filtered.filter(s => s.name.toLowerCase().includes(searchText));
+                }
+
+                let html = '<table><tr><th>Name</th><th>Email</th><th>Program</th><th>Student Code</th><th>Actions</th></tr>';
+                filtered.forEach(student => {
+                    html += `<tr>
+                        <td>${student.name}</td>
+                        <td>${student.email}</td>
+                        <td>${student.class}</td>
+                        <td>${student.student_code}</td>
+                        <td>
+                            <i class="fas fa-trash delete-icon action-icon" onclick="deleteStudent(${student.id})" title="Delete"></i>
+                        </td>
+                    </tr>`;
+                });
+                html += '</table>';
+                
+                document.getElementById('adminStudentsList').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading students:', error);
+                document.getElementById('adminStudentsList').innerHTML = '<p>Error loading students</p>';
+            }
+        }
+
+        // Delete Student
+        async function deleteStudent(id) {
+            if (!confirm('Are you sure you want to delete this student? This will also delete all attendance records.')) return;
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('students')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+                
+                alert('Student deleted successfully');
+                loadAdminStudents();
+                loadProgramFilters();
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Load Program Filters
+        async function loadProgramFilters() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('students')
+                    .select('class')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (error) throw error;
+
+                const programs = [...new Set(data.map(s => s.class))];
+                let html = '<option value="">All Programs</option>';
+                programs.forEach(p => {
+                    html += `<option value="${p}">${p}</option>`;
+                });
+                
+                const filter = document.getElementById('filterProgram');
+                if (filter) filter.innerHTML = html;
+                
+                // Also update report filter
+                const reportFilter = document.getElementById('reportProgram');
+                if (reportFilter) {
+                    let reportHtml = '<option value="">All Programs</option>';
+                    programs.forEach(p => {
+                        reportHtml += `<option value="${p}">${p}</option>`;
+                    });
+                    reportFilter.innerHTML = reportHtml;
+                }
+                
+            } catch (error) {
+                console.error('Error loading programs:', error);
+            }
+        }
+
+        // Filter Students
+        function filterStudents() {
+            loadAdminStudents();
+        }
+
+        // Load Professor Dropdown
+        async function loadProfessorDropdown() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('professors')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (error) throw error;
+
+                let html = '<option value="">Select Professor</option>';
+                data.forEach(prof => {
+                    html += `<option value="${prof.id}">${prof.name} (${prof.subject})</option>`;
+                });
+                
+                document.getElementById('adminProfessorSelect').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading professors:', error);
+            }
+        }
+
+        // Load Admin Subjects
+        async function loadAdminSubjects() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('subjects')
+                    .select('*, professors(name)')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    document.getElementById('adminSubjectsList').innerHTML = '<p>No subjects added yet</p>';
+                    return;
+                }
+
+                let html = '<table><tr><th>Subject</th><th>Program</th><th>Professor</th></tr>';
+                data.forEach(sub => {
+                    html += `<tr>
+                        <td>${sub.name}</td>
+                        <td>${sub.class}</td>
+                        <td>${sub.professors?.name || 'Not assigned'}</td>
+                    </tr>`;
+                });
+                html += '</table>';
+                
+                document.getElementById('adminSubjectsList').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading subjects:', error);
+                document.getElementById('adminSubjectsList').innerHTML = '<p>Error loading subjects</p>';
+            }
+        }
+
+        // Load Professor Subjects
+        async function loadProfessorSubjects() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('subjects')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('professor_id', currentProfessor.id);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    document.getElementById('profSubjectsList').innerHTML = '<p>No subjects assigned</p>';
+                    return;
+                }
+
+                let listHtml = '<ul>';
+                data.forEach(sub => {
+                    listHtml += `<li><strong>${sub.name}</strong> - ${sub.class}</li>`;
+                });
+                listHtml += '</ul>';
+                document.getElementById('profSubjectsList').innerHTML = listHtml;
+
+                // Update attendance subject dropdown
+                const select = document.getElementById('attendanceSubject');
+                select.innerHTML = '<option value="">Select Subject</option>';
+                data.forEach(subject => {
+                    select.innerHTML += `<option value="${subject.name}" data-program="${subject.class}">${subject.name} (${subject.class})</option>`;
+                });
+                
+            } catch (error) {
+                console.error('Error loading subjects:', error);
+                document.getElementById('profSubjectsList').innerHTML = '<p>Error loading subjects</p>';
+            }
+        }
+
+        // Load Professor Programs
+        async function loadProfessorPrograms() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('subjects')
+                    .select('class')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('professor_id', currentProfessor.id);
+
+                if (error) throw error;
+
+                const programs = [...new Set(data.map(s => s.class))];
+                const select = document.getElementById('attendanceProgram');
+                select.innerHTML = '<option value="">Select Program</option>';
+                programs.forEach(p => {
+                    select.innerHTML += `<option value="${p}">${p}</option>`;
+                });
+                
+            } catch (error) {
+                console.error('Error loading programs:', error);
+            }
+        }
+
+        // Update Program from Subject Selection
+        function updateProgramFromSubject() {
+            const select = document.getElementById('attendanceSubject');
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption) {
+                const program = selectedOption.getAttribute('data-program');
+                if (program) {
+                    const programSelect = document.getElementById('attendanceProgram');
+                    programSelect.innerHTML = `<option value="${program}">${program}</option>`;
+                }
+            }
+        }
+
+        // Load Students for Attendance
+        async function loadStudentsForAttendance() {
+            const subject = document.getElementById('attendanceSubject').value;
+            const program = document.getElementById('attendanceProgram').value;
+            const date = document.getElementById('attendanceDate').value;
+
+            if (!subject || !program || !date) {
+                alert('Please select subject, program and date');
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            if (date > today) {
+                alert('Cannot mark attendance for future dates');
+                return;
+            }
+
+            try {
+                // Check if already marked
+                const { data: existing, error: checkError } = await supabaseClient
+                    .from('attendance')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('subject', subject)
+                    .eq('date', date)
+                    .limit(1);
+
+                if (existing && existing.length > 0) {
+                    alert('Attendance already marked for this date!');
+                    return;
+                }
+
+                // Get students
+                const { data: students, error: stuError } = await supabaseClient
+                    .from('students')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('class', program);
+
+                if (stuError) throw stuError;
+
+                if (!students || students.length === 0) {
+                    alert('No students found in this program');
+                    return;
+                }
+
+                let html = '';
+                currentAttendanceStatus = {};
+
+                students.forEach(student => {
+                    html += `
+                        <div class="student-item">
+                            <span><strong>${student.name}</strong><br><small>${student.student_code}</small></span>
+                            <div class="attendance-actions">
+                                <button class="btn-present" onclick="markAttendance(${student.id}, 'present', this)">Present</button>
+                                <button class="btn-absent" onclick="markAttendance(${student.id}, 'absent', this)">Absent</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('studentAttendanceList').innerHTML = html;
+                
+            } catch (error) {
+                alert('Error loading students: ' + error.message);
+            }
+        }
+
+        function markAttendance(studentId, status, element) {
+            currentAttendanceStatus[studentId] = status;
+            
+            const parent = element.parentElement;
+            const presentBtn = parent.querySelector('.btn-present');
+            const absentBtn = parent.querySelector('.btn-absent');
+            
+            presentBtn.classList.remove('active');
+            absentBtn.classList.remove('active');
+            element.classList.add('active');
+        }
+
+        async function saveAttendance() {
+            const subject = document.getElementById('attendanceSubject').value;
+            const date = document.getElementById('attendanceDate').value;
+
+            if (Object.keys(currentAttendanceStatus).length === 0) {
+                alert('Please mark attendance first');
+                return;
+            }
+
+            const records = [];
+            for (let studentId in currentAttendanceStatus) {
+                records.push({
+                    institute_id: currentInstitute.id,
+                    student_id: parseInt(studentId),
+                    subject: subject,
+                    date: date,
+                    status: currentAttendanceStatus[studentId],
+                    marked_by: currentProfessor.id
+                });
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('attendance')
+                    .insert(records);
+
+                if (error) throw error;
+                
+                alert('Attendance saved successfully!');
+                currentAttendanceStatus = {};
+                document.getElementById('studentAttendanceList').innerHTML = '';
+                
+            } catch (error) {
+                alert('Error saving attendance: ' + error.message);
+            }
+        }
+
+        // Load Student Data
+        async function loadStudentData() {
+            try {
+                const { data: attendance, error } = await supabaseClient
+                    .from('attendance')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('student_id', currentStudent.id);
+
+                if (error) throw error;
+
+                const total = attendance.length;
+                const present = attendance.filter(a => a.status === 'present').length;
+                const absent = total - present;
+                const percentage = total > 0 ? ((present / total) * 100).toFixed(1) : 0;
+
+                document.getElementById('totalPercent').textContent = percentage + '%';
+                document.getElementById('presentCount').textContent = present;
+                document.getElementById('absentCount').textContent = absent;
+
+                if (percentage < 75 && percentage > 0) {
+                    document.getElementById('attendanceWarning').classList.remove('hidden');
+                } else {
+                    document.getElementById('attendanceWarning').classList.add('hidden');
+                }
+
+                // Subject-wise
+                const subjects = {};
+                attendance.forEach(a => {
+                    if (!subjects[a.subject]) {
+                        subjects[a.subject] = { present: 0, total: 0 };
+                    }
+                    subjects[a.subject].total++;
+                    if (a.status === 'present') subjects[a.subject].present++;
+                });
+
+                let subjectHtml = '';
+                for (let sub in subjects) {
+                    const perc = ((subjects[sub].present / subjects[sub].total) * 100).toFixed(1);
+                    subjectHtml += `
+                        <div style="margin-bottom: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 5px;">
+                            <strong>${sub}:</strong> ${perc}% (${subjects[sub].present}/${subjects[sub].total})
+                        </div>
+                    `;
+                }
+                document.getElementById('subjectWise').innerHTML = subjectHtml || '<p>No attendance records</p>';
+
+                // Monthly
+                const monthly = {};
+                attendance.forEach(a => {
+                    const month = a.date.substring(0, 7);
+                    if (!monthly[month]) {
+                        monthly[month] = { present: 0, total: 0 };
+                    }
+                    monthly[month].total++;
+                    if (a.status === 'present') monthly[month].present++;
+                });
+
+                let monthlyHtml = '';
+                for (let month in monthly) {
+                    const perc = ((monthly[month].present / monthly[month].total) * 100).toFixed(1);
+                    monthlyHtml += `<div><strong>${month}:</strong> ${perc}%</div>`;
+                }
+                document.getElementById('monthlyStats').innerHTML = monthlyHtml || '<p>No data</p>';
+
+                loadHistory();
+                
+            } catch (error) {
+                console.error('Error loading student data:', error);
+            }
+        }
+
+        async function loadHistory() {
+            const month = document.getElementById('historyMonth').value;
+            
+            try {
+                let query = supabaseClient
+                    .from('attendance')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('student_id', currentStudent.id)
+                    .order('date', { ascending: false });
+
+                if (month) {
+                    const startDate = month + '-01';
+                    const endDate = month + '-31';
+                    query = query.gte('date', startDate).lte('date', endDate);
+                }
+
+                const { data: history, error } = await query;
+
+                if (error) throw error;
+
+                if (!history || history.length === 0) {
+                    document.getElementById('attendanceHistory').innerHTML = '<p>No attendance records found</p>';
+                    return;
+                }
+
+                let html = '<table><tr><th>Date</th><th>Subject</th><th>Status</th></tr>';
+                history.forEach(record => {
+                    html += `
+                        <tr>
+                            <td>${record.date}</td>
+                            <td>${record.subject}</td>
+                            <td><span style="padding: 0.2rem 1rem; border-radius: 20px; background: ${record.status === 'present' ? '#d4edda' : '#f8d7da'}">${record.status}</span></td>
+                        </tr>
+                    `;
+                });
+                html += '</table>';
+
+                document.getElementById('attendanceHistory').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading history:', error);
+                document.getElementById('attendanceHistory').innerHTML = '<p>Error loading history</p>';
+            }
+        }
+
+        // Load Report Filters
+        async function loadReportFilters() {
+            try {
+                const { data: programs } = await supabaseClient
+                    .from('students')
+                    .select('class')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (programs) {
+                    const uniquePrograms = [...new Set(programs.map(p => p.class))];
+                    let html = '<option value="">All Programs</option>';
+                    uniquePrograms.forEach(p => {
+                        html += `<option value="${p}">${p}</option>`;
+                    });
+                    document.getElementById('reportProgram').innerHTML = html;
+                }
+
+                const { data: subjects } = await supabaseClient
+                    .from('subjects')
+                    .select('name')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (subjects) {
+                    const uniqueSubjects = [...new Set(subjects.map(s => s.name))];
+                    let html = '<option value="">All Subjects</option>';
+                    uniqueSubjects.forEach(s => {
+                        html += `<option value="${s}">${s}</option>`;
+                    });
+                    document.getElementById('reportSubject').innerHTML = html;
+                }
+                
+            } catch (error) {
+                console.error('Error loading report filters:', error);
+            }
+        }
+
+        // Load Attendance Report
+        async function loadAttendanceReport() {
+            const program = document.getElementById('reportProgram').value;
+            const subject = document.getElementById('reportSubject').value;
+            const date = document.getElementById('reportDate').value;
+
+            try {
+                let query = supabaseClient
+                    .from('attendance')
+                    .select('*, students(name, student_code, class)')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (program) {
+                    const { data: students } = await supabaseClient
+                        .from('students')
+                        .select('id')
+                        .eq('class', program);
+                    if (students && students.length > 0) {
+                        const studentIds = students.map(s => s.id);
+                        query = query.in('student_id', studentIds);
+                    }
+                }
+
+                if (subject) query = query.eq('subject', subject);
+                if (date) query = query.eq('date', date);
+
+                const { data: report, error } = await query;
+
+                if (error) throw error;
+
+                if (!report || report.length === 0) {
+                    document.getElementById('attendanceReport').innerHTML = '<p>No attendance records found</p>';
+                    return;
+                }
+
+                let html = '<table><tr><th>Date</th><th>Student</th><th>Program</th><th>Subject</th><th>Status</th></tr>';
+                report.forEach(r => {
+                    html += `<tr>
+                        <td>${r.date}</td>
+                        <td>${r.students?.name || 'Unknown'}</td>
+                        <td>${r.students?.class || 'Unknown'}</td>
+                        <td>${r.subject}</td>
+                        <td><span class="badge" style="background: ${r.status === 'present' ? '#d4edda' : '#f8d7da'}">${r.status}</span></td>
+                    </tr>`;
+                });
+                html += '</table>';
+
+                document.getElementById('attendanceReport').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading report:', error);
+                document.getElementById('attendanceReport').innerHTML = '<p>Error loading report</p>';
+            }
+        }
+
+        // Export Report to CSV
+        function exportReport() {
+            const table = document.querySelector('#attendanceReport table');
+            if (!table) {
+                alert('No data to export');
+                return;
+            }
+            
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            for (let row of rows) {
+                const cols = row.querySelectorAll('td, th');
+                const rowData = [];
+                for (let col of cols) {
+                    rowData.push('"' + col.innerText.replace(/"/g, '""') + '"');
+                }
+                csv.push(rowData.join(','));
+            }
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'attendance_report.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Logout
+        function logout() {
+            currentInstitute = null;
+            currentProfessor = null;
+            currentStudent = null;
+            currentAttendanceStatus = {};
+            excelData = [];
+            
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('instituteDashboard').style.display = 'none';
+            document.getElementById('professorDashboard').style.display = 'none';
+            document.getElementById('studentDashboard').style.display = 'none';
+            
+            // Reset forms
+            document.getElementById('loginInstName').value = '';
+            document.getElementById('loginInstPassword').value = '';
+            document.getElementById('loginProfInstitute').value = '';
+            document.getElementById('loginProfId').value = '';
+            document.getElementById('loginStudentName').value = '';
+            document.getElementById('loginStudentInstitute').value = '';
+            document.getElementById('loginStudentEmail').value = '';
+        }
+
+        // Initialize
+        toggleLoginFields();
+    </script>
+</body>
+</html>
+        

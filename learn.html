@@ -1,0 +1,5127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Code | Blackboard 2.0 - Computer Science Education</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #c7d2fe;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #64748b;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--darker);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 60px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .logo:hover .logo-image {
+            transform: rotate(-5deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--gray-dark);
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--darker);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        @media (max-width: 1024px) {
+            .nav-container {
+                padding: 15px 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 40px 20px;
+                gap: 25px;
+                transition: left 0.3s ease;
+                z-index: 999;
+                border-top: 1px solid var(--border-color);
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-container {
+                padding: 15px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 12px 20px;
+            }
+            
+            .logo-text {
+                font-size: 22px;
+            }
+            
+            .logo-image {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 10px 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-left {
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-right {
+            border-left: 1px solid var(--border-color);
+        }
+
+        .sidebar h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px 40px;
+            background: white;
+            margin: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow-y: auto;
+        }
+
+        .item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item:hover {
+            background: var(--light-gray);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .item.active {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
+        }
+
+        .item-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .item.active .item-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #lessonTitle {
+            color: #4f46e5;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .lesson-section {
+            margin-bottom: 40px;
+        }
+
+        .lesson-section h2 {
+            color: #1e293b;
+            margin: 30px 0 15px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .lesson-section h3 {
+            color: #3f3d56;
+            margin: 25px 0 15px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .lesson-section h4 {
+            color: #4b5563;
+            margin: 20px 0 10px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .lesson-section p {
+            margin-bottom: 15px;
+            color: #4a5568;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .lesson-section ul, .lesson-section ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        .lesson-section li {
+            margin-bottom: 10px;
+            color: #4a5568;
+            font-size: 16px;
+        }
+
+        .definition-box {
+            background: #f0f4ff;
+            border-left: 4px solid #4f46e5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .definition-box p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .definition-box strong {
+            color: #4f46e5;
+        }
+
+        .note-box {
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .code-container {
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 25px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .code-header {
+            background: #334155;
+            color: #cbd5e1;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .code-header span {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .copy-btn {
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        pre {
+            padding: 25px;
+            color: #e2e8f0;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            line-height: 1.6;
+            font-size: 15px;
+            margin: 0;
+            background: #1e293b;
+        }
+
+        .code-example {
+            background: #f1f5f9;
+            border-left: 4px solid #4f46e5;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .output-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .output-container h4 {
+            color: #1e293b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .output-content {
+            min-height: 150px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .run-btn {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .run-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .reset-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .reset-btn:hover {
+            background: #dc2626;
+        }
+
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: #f1f5f9;
+        }
+
+        .tab.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 300px;
+            }
+            
+            .sidebar-left, .sidebar-right {
+                border: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .main-content {
+                margin: 10px;
+                padding: 20px;
+            }
+        }
+
+        .editable-code {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            border: none;
+            width: 100%;
+            min-height: 200px;
+            resize: vertical;
+            white-space: pre-wrap;
+        }
+        
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+       
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+
+
+    <div class="container">
+        <div class="sidebar sidebar-left" id="languageSidebar">
+            <h3><i class="fas fa-code"></i> Programming Languages</h3>
+        </div>
+
+        <div class="main-content">
+            <h2 id="lessonTitle">Computer Science Education Platform</h2>
+            <div id="lessonContent">
+                <div class="lesson-section">
+                    <div class="definition-box">
+                        <p><strong>Welcome to Blackboard 2.0</strong> - A comprehensive computer science learning platform designed by professors for students. Here you'll find detailed explanations, practical examples, and interactive coding exercises for multiple programming languages.</p>
+                    </div>
+                    
+                    <h2>Available Languages</h2>
+                    <p>Select a language from the left sidebar to begin your learning journey:</p>
+                    
+                    <ul>
+                        <li><strong>HTML (HyperText Markup Language)</strong> - The foundation of web pages. Learn to structure content for the web.</li>
+                        <li><strong>CSS (Cascading Style Sheets)</strong> - Master the art of styling and layout to create beautiful, responsive websites.</li>
+                        <li><strong>JavaScript</strong> - The programming language of the web. Add interactivity and dynamic behavior to your pages.</li>
+                        <li><strong>Python</strong> - A versatile, high-level language perfect for beginners and powerful enough for experts.</li>
+                    </ul>
+                    
+                    <div class="note-box">
+                        <p><strong>Learning Path:</strong> Each language is broken down into comprehensive topics. Track your progress as you complete each section and practice with live code examples.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="outputContainer" class="output-container" style="display: none;">
+                <h4><i class="fas fa-play-circle"></i> Output</h4>
+                <div id="outputContent" class="output-content"></div>
+            </div>
+            
+            <div class="progress-indicator">
+                <span>Overall Progress:</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="progressText">0%</span>
+                <button class="reset-btn" id="resetBtn"><i class="fas fa-undo"></i> Reset Progress</button>
+            </div>
+        </div>
+
+        <div class="sidebar sidebar-right" id="topicSidebar">
+            <h3><i class="fas fa-book-open"></i> Topics</h3>
+            <p id="topicPlaceholder">Select a language to view detailed topics</p>
+        </div>
+    </div>
+
+    <script>
+        const languages = [
+            { 
+                id: 'html', 
+                name: 'HTML', 
+                icon: '🌐', 
+                color: '#4f46e5',
+                description: 'HyperText Markup Language - The foundation of all web pages'
+            },
+            { 
+                id: 'css', 
+                name: 'CSS', 
+                icon: '🎨', 
+                color: '#0891b2',
+                description: 'Cascading Style Sheets - Design and layout for the web'
+            },
+            { 
+                id: 'javascript', 
+                name: 'JavaScript', 
+                icon: '⚡', 
+                color: '#f59e0b',
+                description: 'The programming language of the web - Add interactivity to websites'
+            },
+            { 
+                id: 'python', 
+                name: 'Python', 
+                icon: '🐍', 
+                color: '#10b981',
+                description: 'A versatile, high-level language great for beginners and experts'
+            }
+        ];
+
+        let userProgress = {
+            html: { completed: [], currentTopic: '' },
+            css: { completed: [], currentTopic: '' },
+            javascript: { completed: [], currentTopic: '' },
+            python: { completed: [], currentTopic: '' }
+        };
+
+        const topics = {
+            html: [
+                { id: 'introduction', name: '1. Introduction to HTML', content: 'getHTMLIntroduction' },
+                { id: 'document-structure', name: '2. Document Structure', content: 'getHTMLDocumentStructure' },
+                { id: 'headings', name: '3. Headings and Semantic Structure', content: 'getHTMLHeadings' },
+                { id: 'paragraphs', name: '4. Paragraphs and Text Formatting', content: 'getHTMLParagraphs' },
+                { id: 'lists', name: '5. Lists (Ordered, Unordered, Description)', content: 'getHTMLLists' },
+                { id: 'links', name: '6. Hyperlinks and Navigation', content: 'getHTMLLinks' }
+            ],
+            css: [
+                { id: 'introduction', name: '1. Introduction to CSS', content: 'getCSSIntroduction' },
+                { id: 'selectors', name: '2. Selectors and Specificity', content: 'getCSSSelectors' },
+                { id: 'box-model', name: '3. Box Model', content: 'getCSSBoxModel' },
+                { id: 'colors-backgrounds', name: '4. Colors and Backgrounds', content: 'getCSSColors' },
+                { id: 'typography', name: '5. Typography and Fonts', content: 'getCSSTypography' },
+                { id: 'flexbox', name: '6. Flexbox Layout', content: 'getCSSFlexbox' },
+                { id: 'grid', name: '7. CSS Grid Layout', content: 'getCSSGrid' },
+                { id: 'positioning', name: '8. Positioning and Layout', content: 'getCSSPositioning' }
+            ],
+            javascript: [
+                { id: 'introduction', name: '1. Introduction to JavaScript', content: 'getJSIntroduction' },
+                { id: 'variables', name: '2. Variables and Data Types', content: 'getJSVariables' },
+                { id: 'operators', name: '3. Operators and Expressions', content: 'getJSOperators' },
+                { id: 'control-flow', name: '4. Control Flow (Conditionals)', content: 'getJSControlFlow' },
+                { id: 'loops', name: '5. Loops and Iteration', content: 'getJSLoops' },
+                { id: 'functions', name: '6. Functions and Scope', content: 'getJSFunctions' },
+                { id: 'arrays', name: '7. Arrays and Array Methods', content: 'getJSArrays' },
+                { id: 'objects', name: '8. Objects and OOP', content: 'getJSObjects' }
+            ],
+            python: [
+                { id: 'introduction', name: '1. Introduction to Python', content: 'getPythonIntroduction' },
+                { id: 'basics', name: '2. Basic Syntax and Data Types', content: 'getPythonBasics' },
+                { id: 'control-flow', name: '3. Control Flow', content: 'getPythonControlFlow' },
+                { id: 'functions', name: '4. Functions and Modules', content: 'getPythonFunctions' },
+                { id: 'data-structures', name: '5. Data Structures', content: 'getPythonDataStructures' },
+                { id: 'oop', name: '6. Object-Oriented Programming', content: 'getPythonOOP' },
+                { id: 'file-handling', name: '7. File Handling', content: 'getPythonFileHandling' },
+                { id: 'exceptions', name: '8. Exception Handling', content: 'getPythonExceptions' }
+            ]
+        };
+
+        function init() {
+            loadLanguages();
+            updateProgress();
+            
+            document.getElementById('resetBtn').addEventListener('click', resetProgress);
+            
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('copy-btn')) {
+                    copyCode(e.target);
+                }
+            });
+
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                document.getElementById('navMenu').classList.toggle('active');
+            });
+        }
+
+        function loadLanguages() {
+            const sidebar = document.getElementById('languageSidebar');
+            languages.forEach(lang => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = `
+                    <div class="item-icon">${lang.icon}</div>
+                    <div>
+                        <strong>${lang.name}</strong>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 5px;">${lang.description}</div>
+                    </div>
+                `;
+                
+                item.onclick = (e) => selectLanguage(lang.id, e);
+                
+                sidebar.appendChild(item);
+            });
+        }
+
+        function selectLanguage(langId, event) {
+            document.querySelectorAll('#languageSidebar .item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            loadTopics(langId);
+            
+            if (topics[langId] && topics[langId].length > 0) {
+                const firstTopic = topics[langId][0];
+                selectTopic(firstTopic.id, langId);
+            }
+        }
+
+        function loadTopics(langId) {
+            const sidebar = document.getElementById('topicSidebar');
+            const placeholder = document.getElementById('topicPlaceholder');
+            
+            if (placeholder) placeholder.style.display = 'none';
+            
+            sidebar.innerHTML = '<h3><i class="fas fa-book-open"></i> Topics</h3>';
+            
+            if (!topics[langId] || topics[langId].length === 0) {
+                sidebar.innerHTML += '<p>No topics available for this language.</p>';
+                return;
+            }
+            
+            topics[langId].forEach(topic => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                
+                const isCompleted = userProgress[langId]?.completed?.includes(topic.id);
+                const isCurrent = userProgress[langId]?.currentTopic === topic.id;
+                
+                item.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <strong>${topic.name}</strong>
+                        ${isCompleted ? '<i class="fas fa-check-circle" style="color: #10b981;"></i>' : ''}
+                    </div>
+                `;
+                
+                if (isCompleted) {
+                    item.style.borderLeft = '4px solid #10b981';
+                }
+                if (isCurrent) {
+                    item.classList.add('active');
+                }
+                
+                item.onclick = (e) => selectTopic(topic.id, langId, e);
+                
+                sidebar.appendChild(item);
+            });
+            
+            updateProgress();
+        }
+
+        function selectTopic(topicId, langId, event) {
+            if (event) {
+                document.querySelectorAll('#topicSidebar .item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.currentTarget.classList.add('active');
+            }
+            
+            if (userProgress[langId]) {
+                userProgress[langId].currentTopic = topicId;
+                if (!userProgress[langId].completed.includes(topicId)) {
+                    userProgress[langId].completed.push(topicId);
+                }
+            }
+            
+            loadLesson(topicId, langId);
+            updateProgress();
+        }
+
+        function loadLesson(topicId, langId) {
+            const content = document.getElementById('lessonContent');
+            const outputContainer = document.getElementById('outputContainer');
+            const lessonTitle = document.getElementById('lessonTitle');
+            
+            outputContainer.style.display = 'none';
+            
+            const topic = topics[langId]?.find(t => t.id === topicId);
+            const language = languages.find(l => l.id === langId);
+            
+            if (topic && language) {
+                lessonTitle.textContent = `${language.name}: ${topic.name}`;
+                
+                const contentFunctionName = topic.content;
+                if (typeof window[contentFunctionName] === 'function') {
+                    content.innerHTML = window[contentFunctionName]();
+                } else {
+                    content.innerHTML = '<p>Content not available yet.</p>';
+                }
+                
+                const runBtn = content.querySelector('.run-btn');
+                if (runBtn) {
+                    runBtn.onclick = () => {
+                        if (langId === 'html') runHTMLCode();
+                        else if (langId === 'css') runCSSCode();
+                        else if (langId === 'javascript') runJSCode();
+                        else if (langId === 'python') runPythonCode();
+                    };
+                }
+            } else {
+                lessonTitle.textContent = 'Lesson Not Found';
+                content.innerHTML = '<p>This lesson is not available yet.</p>';
+            }
+            
+            content.scrollTop = 0;
+        }
+
+        function copyCode(button) {
+            const codeContainer = button.closest('.code-container');
+            const codeElement = codeContainer.querySelector('pre code, pre');
+            const codeText = codeElement.textContent;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        function runHTMLCode() {
+            const editableCode = document.querySelector('#editableCode, .editable-code');
+            if (!editableCode) return;
+            
+            const code = editableCode.textContent || editableCode.value;
+            const outputContent = document.getElementById('outputContent');
+            const outputContainer = document.getElementById('outputContainer');
+            
+            outputContent.innerHTML = '';
+            
+            const iframe = document.createElement('iframe');
+            iframe.style.width = '100%';
+            iframe.style.height = '300px';
+            iframe.style.border = 'none';
+            iframe.style.borderRadius = '6px';
+            
+            outputContent.appendChild(iframe);
+            
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(code);
+            iframeDoc.close();
+            
+            outputContainer.style.display = 'block';
+            outputContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function runCSSCode() {
+            const editableCode = document.querySelector('#editableCode, .editable-code');
+            if (!editableCode) return;
+            
+            const cssCode = editableCode.textContent || editableCode.value;
+            const outputContent = document.getElementById('outputContent');
+            const outputContainer = document.getElementById('outputContainer');
+            
+            outputContent.innerHTML = `
+                <div style="padding:20px; background:white;">
+                    <h1 style="color: #4f46e5;">CSS Preview</h1>
+                    <p>Your CSS styles will be applied to this preview area:</p>
+                    <div id="cssPreview">
+                        <div class="box">Styled Box</div>
+                        <p>Paragraph with applied styles</p>
+                        <button>Styled Button</button>
+                    </div>
+                </div>
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = cssCode;
+            outputContent.appendChild(style);
+            
+            outputContainer.style.display = 'block';
+        }
+
+        function runJSCode() {
+            const editableCode = document.querySelector('#editableCode, .editable-code');
+            if (!editableCode) return;
+            
+            const jsCode = editableCode.textContent || editableCode.value;
+            const outputContent = document.getElementById('outputContent');
+            const outputContainer = document.getElementById('outputContainer');
+            
+            outputContent.innerHTML = '<div id="jsOutput">JavaScript Output:</div>';
+            
+            const originalLog = console.log;
+            const logs = [];
+            
+            console.log = function(...args) {
+                logs.push(args.map(arg => {
+                    if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
+                    return String(arg);
+                }).join(' '));
+                originalLog.apply(console, args);
+            };
+            
+            try {
+                eval(jsCode);
+            } catch (error) {
+                logs.push('Error: ' + error.message);
+            }
+            
+            console.log = originalLog;
+            
+            const output = document.getElementById('jsOutput');
+            output.innerHTML += '<pre>' + logs.join('\n') + '</pre>';
+            
+            outputContainer.style.display = 'block';
+        }
+
+        function runPythonCode() {
+            const editableCode = document.querySelector('#editableCode, .editable-code');
+            if (!editableCode) return;
+            
+            const pyCode = editableCode.textContent || editableCode.value;
+            const outputContent = document.getElementById('outputContent');
+            const outputContainer = document.getElementById('outputContainer');
+            
+            outputContent.innerHTML = `
+                <div style="padding:20px;">
+                    <h4>Python Execution (Simulated)</h4>
+                    <p>Note: Python code execution is simulated in the browser.</p>
+                    <p>To actually run Python, you need a Python interpreter installed locally.</p>
+                    <hr>
+                    <h5>Your Python Code:</h5>
+                    <pre style="background:#f1f5f9; padding:15px; border-radius:6px;">${pyCode.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                    <h5>Simulated Output:</h5>
+                    <pre style="background:#f1f5f9; padding:15px; border-radius:6px;">${simulatePythonOutput(pyCode)}</pre>
+                </div>
+            `;
+            
+            outputContainer.style.display = 'block';
+        }
+
+        function simulatePythonOutput(code) {
+            const lines = code.split('\n');
+            let output = [];
+            
+            lines.forEach(line => {
+                if (line.includes('print(')) {
+                    const match = line.match(/print\(['"](.+)['"]\)/);
+                    if (match) output.push(match[1]);
+                }
+            });
+            
+            return output.join('\n') || 'No output detected. Make sure to use print() statements.';
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            let totalTopics = 0;
+            let completedTopics = 0;
+            
+            Object.keys(topics).forEach(langId => {
+                totalTopics += topics[langId].length;
+                completedTopics += userProgress[langId]?.completed?.length || 0;
+            });
+            
+            const progressPercent = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0;
+            
+            progressFill.style.width = `${progressPercent}%`;
+            progressText.textContent = `${progressPercent}%`;
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                userProgress = {
+                    html: { completed: [], currentTopic: '' },
+                    css: { completed: [], currentTopic: '' },
+                    javascript: { completed: [], currentTopic: '' },
+                    python: { completed: [], currentTopic: '' }
+                };
+                
+                document.querySelectorAll('.item').forEach(item => {
+                    item.classList.remove('active');
+                    item.style.borderLeft = '';
+                });
+                
+                document.getElementById('lessonTitle').textContent = 'Computer Science Education Platform';
+                document.getElementById('lessonContent').innerHTML = `
+                    <div class="lesson-section">
+                        <div class="definition-box">
+                            <p><strong>Welcome to Blackboard 2.0</strong> - A comprehensive computer science learning platform designed by professors for students.</p>
+                        </div>
+                        
+                        <h2>Available Languages</h2>
+                        <ul>
+                            <li><strong>HTML</strong> - The foundation of web pages</li>
+                            <li><strong>CSS</strong> - Styling and layout</li>
+                            <li><strong>JavaScript</strong> - Web programming language</li>
+                            <li><strong>Python</strong> - Versatile high-level language</li>
+                        </ul>
+                    </div>
+                `;
+                
+                document.getElementById('outputContainer').style.display = 'none';
+                document.getElementById('topicPlaceholder').style.display = 'block';
+                document.getElementById('topicSidebar').innerHTML = '<h3><i class="fas fa-book-open"></i> Topics</h3><p id="topicPlaceholder">Select a language to view detailed topics</p>';
+                
+                updateProgress();
+            }
+        }
+
+        // ============ HTML CONTENT FUNCTIONS ============
+        function getHTMLIntroduction() {
+            return `
+                <div class="lesson-section">
+                    <h2>Introduction to HTML</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>HTML (HyperText Markup Language)</strong> is the standard markup language for documents designed to be displayed in a web browser. It defines the structure and content of web pages using markup tags and elements.</p>
+                    </div>
+                    
+                    <h3>What is HTML?</h3>
+                    <p>HTML is not a programming language; it's a markup language that tells web browsers how to structure web pages. You can think of it as the skeleton or foundation of every website you visit on the internet.</p>
+                    
+                    <h3>How HTML Works</h3>
+                    <p>HTML uses tags enclosed in angle brackets to define elements. These elements tell the browser how to display content:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Basic HTML Structure</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;My First Web Page&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Hello, World!&lt;/h1&gt;
+        &lt;p&gt;This is my first HTML page.&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Try It Yourself</h3>
+                    <p>Edit the code below and click "Run Code" to see the result:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>HTML Playground</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Web Page&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #4f46e5; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to HTML!&lt;/h1&gt;
+    &lt;p&gt;This is a paragraph. You can edit this text!&lt;/p&gt;
+    &lt;ul&gt;
+        &lt;li&gt;HTML is easy to learn&lt;/li&gt;
+        &lt;li&gt;You can create web pages quickly&lt;/li&gt;
+        &lt;li&gt;It's the foundation of web development&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runHTMLCode()">
+                        <i class="fas fa-play"></i> Run Code
+                    </button>
+                    
+                    <div class="note-box">
+                        <p><strong>Key Concept:</strong> HTML elements are the building blocks of web pages. Each element consists of an opening tag, content, and a closing tag. Some elements (like &lt;img&gt;) are self-closing.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getHTMLDocumentStructure() {
+            return `
+                <div class="lesson-section">
+                    <h2>HTML Document Structure</h2>
+                    
+                    <div class="definition-box">
+                        <p>Every HTML document follows a specific structure that browsers expect. Understanding this structure is crucial for creating valid, well-formed web pages.</p>
+                    </div>
+                    
+                    <h3>The DOCTYPE Declaration</h3>
+                    <p>The first line of any HTML document should be the DOCTYPE declaration. It tells the browser which version of HTML you're using:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>DOCTYPE Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;!-- HTML5 (Current standard) --&gt;
+&lt;!DOCTYPE html&gt;</code></pre>
+                    </div>
+                    
+                    <h3>The &lt;html&gt; Element</h3>
+                    <p>The <code>&lt;html&gt;</code> element is the root element of every HTML page. It wraps all content on the page:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>HTML Element with Language Attribute</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+    &lt;!-- All content goes here --&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    
+                    <h3>The &lt;head&gt; Element</h3>
+                    <p>The <code>&lt;head&gt;</code> element contains meta-information about the document that isn't displayed to users:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Head Element Contents</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Website - Home&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;</code></pre>
+                    </div>
+                    
+                    <h3>The &lt;body&gt; Element</h3>
+                    <p>The <code>&lt;body&gt;</code> element contains all the visible content of the page:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Body Element Structure</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Website Title&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/about"&gt;About&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        &lt;article&gt;
+            &lt;h2&gt;Article Title&lt;/h2&gt;
+            &lt;p&gt;Article content...&lt;/p&gt;
+        &lt;/article&gt;
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;&copy; 2024 My Website&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Complete Document Structure</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Complete HTML5 Document Template</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Complete HTML Structure&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;My Website&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;a href="#"&gt;Home&lt;/a&gt;
+            &lt;a href="#"&gt;About&lt;/a&gt;
+            &lt;a href="#"&gt;Contact&lt;/a&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        &lt;h2&gt;Welcome&lt;/h2&gt;
+        &lt;p&gt;This is the main content.&lt;/p&gt;
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;&copy; 2024&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runHTMLCode()">
+                        <i class="fas fa-play"></i> Run Complete Example
+                    </button>
+                </div>
+            `;
+        }
+
+        function getHTMLHeadings() {
+            return `
+                <div class="lesson-section">
+                    <h2>Headings and Semantic Structure</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>HTML headings</strong> are used to define the hierarchical structure of your content. There are six levels of headings, from &lt;h1&gt; (most important) to &lt;h6&gt; (least important).</p>
+                    </div>
+                    
+                    <h3>Heading Levels</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>All Heading Levels</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;h1&gt;This is heading 1 - Main Title&lt;/h1&gt;
+&lt;h2&gt;This is heading 2 - Major Section&lt;/h2&gt;
+&lt;h3&gt;This is heading 3 - Subsection&lt;/h3&gt;
+&lt;h4&gt;This is heading 4 - Sub-subsection&lt;/h4&gt;
+&lt;h5&gt;This is heading 5 - Minor heading&lt;/h5&gt;
+&lt;h6&gt;This is heading 6 - Smallest heading&lt;/h6&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Use only one <code>&lt;h1&gt;</code> per page (the main title)</li>
+                        <li>Don't skip heading levels (e.g., go from h2 to h4)</li>
+                        <li>Use headings for structure, not just for bold text</li>
+                    </ul>
+                    
+                    <h3>Example: Article Structure</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Proper Heading Hierarchy</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Heading Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Complete Guide to Web Development&lt;/h1&gt;
+    
+    &lt;section&gt;
+        &lt;h2&gt;1. Introduction to HTML&lt;/h2&gt;
+        &lt;p&gt;HTML is the foundation.&lt;/p&gt;
+        
+        &lt;h3&gt;1.1 Basic HTML Tags&lt;/h3&gt;
+        &lt;p&gt;Understanding basic tags.&lt;/p&gt;
+    &lt;/section&gt;
+    
+    &lt;section&gt;
+        &lt;h2&gt;2. CSS Styling&lt;/h2&gt;
+        &lt;p&gt;CSS makes websites look beautiful.&lt;/p&gt;
+        
+        &lt;h3&gt;2.1 Selectors and Properties&lt;/h3&gt;
+        &lt;p&gt;Learn how to target elements.&lt;/p&gt;
+    &lt;/section&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runHTMLCode()">
+                        <i class="fas fa-play"></i> Run Heading Example
+                    </button>
+                </div>
+            `;
+        }
+
+        function getHTMLParagraphs() {
+            return `
+                <div class="lesson-section">
+                    <h2>Paragraphs and Text Formatting</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Paragraphs</strong> in HTML are defined with the &lt;p&gt; tag. They are block-level elements that represent a block of text.</p>
+                    </div>
+                    
+                    <h3>The Paragraph Element</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Basic Paragraph Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;p&gt;This is a paragraph. It can contain multiple sentences.&lt;/p&gt;
+&lt;p&gt;This is another paragraph. Notice the spacing between paragraphs.&lt;/p&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Line Breaks</h3>
+                    <p>The &lt;br&gt; tag creates a line break without starting a new paragraph.</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Line Break Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;p&gt;This is the first line.&lt;br&gt;
+This is the second line.&lt;br&gt;
+This is the third line.&lt;/p&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Text Formatting Tags</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Text Formatting Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;b&gt;Bold text&lt;/b&gt;
+&lt;strong&gt;Important text&lt;/strong&gt;
+&lt;i&gt;Italic text&lt;/i&gt;
+&lt;em&gt;Emphasized text&lt;/em&gt;
+&lt;u&gt;Underlined text&lt;/u&gt;
+&lt;mark&gt;Highlighted text&lt;/mark&gt;
+&lt;small&gt;Smaller text&lt;/small&gt;
+&lt;sub&gt;Subscript&lt;/sub&gt; and &lt;sup&gt;Superscript&lt;/sup&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Complete Example</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Text Formatting Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;Text Formatting Demo&lt;/h1&gt;
+    
+    &lt;p&gt;&lt;b&gt;This is bold&lt;/b&gt; and &lt;i&gt;this is italic&lt;/i&gt;&lt;/p&gt;
+    
+    &lt;p&gt;&lt;strong&gt;This is important&lt;/strong&gt; and &lt;em&gt;this is emphasized&lt;/em&gt;&lt;/p&gt;
+    
+    &lt;p&gt;&lt;mark&gt;This is highlighted&lt;/mark&gt; and &lt;u&gt;this is underlined&lt;/u&gt;&lt;/p&gt;
+    
+    &lt;p&gt;H&lt;sub&gt;2&lt;/sub&gt;O is water (subscript)&lt;/p&gt;
+    
+    &lt;p&gt;E = mc&lt;sup&gt;2&lt;/sup&gt; (superscript)&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runHTMLCode()">
+                        <i class="fas fa-play"></i> Run Text Formatting Example
+                    </button>
+                </div>
+            `;
+        }
+
+        function getHTMLLists() {
+            return `
+                <div class="lesson-section">
+                    <h2>HTML Lists</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>HTML lists</strong> allow you to group related items together. There are three types of lists: ordered lists (&lt;ol&gt;), unordered lists (&lt;ul&gt;), and description lists (&lt;dl&gt;).</p>
+                    </div>
+                    
+                    <h3>Unordered Lists</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Unordered List Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;ul&gt;
+    &lt;li&gt;Apples&lt;/li&gt;
+    &lt;li&gt;Bananas&lt;/li&gt;
+    &lt;li&gt;Oranges&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Ordered Lists</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Ordered List Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;ol&gt;
+    &lt;li&gt;First step&lt;/li&gt;
+    &lt;li&gt;Second step&lt;/li&gt;
+    &lt;li&gt;Third step&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ol type="A"&gt;
+    &lt;li&gt;Option A&lt;/li&gt;
+    &lt;li&gt;Option B&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Nested Lists</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Nested Lists Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h2&gt;Shopping List&lt;/h2&gt;
+    
+    &lt;ul&gt;
+        &lt;li&gt;Fruits
+            &lt;ul&gt;
+                &lt;li&gt;Apples&lt;/li&gt;
+                &lt;li&gt;Bananas&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/li&gt;
+        &lt;li&gt;Vegetables
+            &lt;ul&gt;
+                &lt;li&gt;Carrots&lt;/li&gt;
+                &lt;li&gt;Broccoli&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runHTMLCode()">
+                        <i class="fas fa-play"></i> Run Nested Lists Example
+                    </button>
+                </div>
+            `;
+        }
+
+        function getHTMLLinks() {
+            return `
+                <div class="lesson-section">
+                    <h2>HTML Links (Anchor Tags)</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>HTML links</strong> are defined with the &lt;a&gt; (anchor) tag. They allow users to navigate between web pages or to external resources.</p>
+                    </div>
+                    
+                    <h3>Basic Link Syntax</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Basic Link Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;a href="https://www.example.com"&gt;Visit Example.com&lt;/a&gt;
+&lt;a href="/about.html"&gt;About Us&lt;/a&gt;
+&lt;a href="mailto:info@example.com"&gt;Send Email&lt;/a&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Link Target</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Open in New Tab</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;a href="https://www.example.com" target="_blank"&gt;Open in New Tab&lt;/a&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Image as Link</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Image Links</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;a href="https://www.example.com"&gt;
+    &lt;img src="button.jpg" alt="Click me"&gt;
+&lt;/a&gt;</code></pre>
+                    </div>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Complete Links Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;Link Examples&lt;/h1&gt;
+    
+    &lt;p&gt;&lt;a href="https://www.google.com"&gt;Google (same tab)&lt;/a&gt;&lt;/p&gt;
+    
+    &lt;p&gt;&lt;a href="https://www.google.com" target="_blank"&gt;Google (new tab)&lt;/a&gt;&lt;/p&gt;
+    
+    &lt;p&gt;&lt;a href="mailto:someone@example.com"&gt;Send Email&lt;/a&gt;&lt;/p&gt;
+    
+    &lt;p&gt;&lt;a href="#top"&gt;Back to Top&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runHTMLCode()">
+                        <i class="fas fa-play"></i> Run Links Example
+                    </button>
+                </div>
+            `;
+        }
+
+        // ============ CSS CONTENT FUNCTIONS ============
+        function getCSSIntroduction() {
+            return `
+                <div class="lesson-section">
+                    <h2>Introduction to CSS</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>CSS (Cascading Style Sheets)</strong> is the language used to style HTML documents. It controls colors, layouts, fonts, and more.</p>
+                    </div>
+                    
+                    <h3>Three Ways to Add CSS</h3>
+                    
+                    <h4>1. Inline CSS</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Inline CSS Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;h1 style="color: blue;"&gt;Blue Heading&lt;/h1&gt;
+&lt;p style="background-color: yellow;"&gt;Yellow Background&lt;/p&gt;</code></pre>
+                    </div>
+                    
+                    <h4>2. Internal CSS</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Internal CSS Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;head&gt;
+    &lt;style&gt;
+        h1 { color: blue; }
+        p { background-color: yellow; }
+    &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+                    </div>
+                    
+                    <h4>3. External CSS</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>External CSS (styles.css)</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>/* styles.css */
+h1 { color: blue; }
+p { background-color: yellow; }</code></pre>
+                    </div>
+                    
+                    <h3>CSS Syntax</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>CSS Syntax</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>selector {
+    property: value;
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>CSS Introduction - Live Example</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;CSS Introduction&lt;/title&gt;
+    &lt;style&gt;
+        h1 {
+            color: #4f46e5;
+            text-align: center;
+        }
+        
+        .highlight {
+            background-color: yellow;
+            padding: 5px;
+        }
+        
+        #special {
+            color: white;
+            background-color: #0891b2;
+            padding: 15px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to CSS&lt;/h1&gt;
+    
+    &lt;p&gt;Regular paragraph.&lt;/p&gt;
+    
+    &lt;p class="highlight"&gt;This uses a class selector.&lt;/p&gt;
+    
+    &lt;div id="special"&gt;This uses an ID selector.&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run CSS Example
+                    </button>
+                    
+                    <div class="note-box">
+                        <p><strong>Key Points:</strong> 
+                        <ul>
+                            <li>CSS stands for Cascading Style Sheets</li>
+                            <li>Classes (.classname) can be used multiple times</li>
+                            <li>IDs (#idname) should be unique</li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCSSSelectors() {
+            return `
+                <div class="lesson-section">
+                    <h2>CSS Selectors and Specificity</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>CSS Selectors</strong> are patterns used to select the HTML elements you want to style.</p>
+                    </div>
+                    
+                    <h3>Basic Selectors</h3>
+                    
+                    <h4>1. Element Selector</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Element Selector</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>p {
+    color: blue;
+    font-size: 16px;
+}</code></pre>
+                    </div>
+                    
+                    <h4>2. Class Selector (.)</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Class Selector</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}</code></pre>
+                    </div>
+                    
+                    <h4>3. ID Selector (#)</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>ID Selector</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>#header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}</code></pre>
+                    </div>
+                    
+                    <h3>Pseudo-classes (:)</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Pseudo-class Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>a:hover { color: red; }
+li:first-child { font-weight: bold; }
+input:focus { border-color: blue; }</code></pre>
+                    </div>
+                    
+                    <h3>Complete Selector Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>All Selectors in Action</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        /* Element selector */
+        h1 { color: #4f46e5; }
+        
+        /* Class selector */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        /* ID selector */
+        #main-title {
+            border-bottom: 3px solid #4f46e5;
+        }
+        
+        /* Pseudo-class */
+        button:hover {
+            background: #4338ca;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 id="main-title"&gt;CSS Selectors&lt;/h1&gt;
+    
+    &lt;div class="card"&gt;
+        &lt;p&gt;This is inside a card (class selector).&lt;/p&gt;
+        &lt;button&gt;Hover over me!&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Selectors Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getCSSBoxModel() {
+            return `
+                <div class="lesson-section">
+                    <h2>CSS Box Model</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>The CSS Box Model</strong> describes how every HTML element is rendered as a rectangular box with content, padding, border, and margin.</p>
+                    </div>
+                    
+                    <h3>Box Model Components</h3>
+                    
+                    <h4>1. Content</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Content Area</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>div {
+    width: 300px;
+    height: 200px;
+}</code></pre>
+                    </div>
+                    
+                    <h4>2. Padding</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Padding Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>div {
+    padding: 20px; /* All sides */
+    padding: 10px 20px; /* top/bottom, left/right */
+    padding-top: 10px;
+}</code></pre>
+                    </div>
+                    
+                    <h4>3. Border</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Border Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>div {
+    border: 2px solid black;
+    border-radius: 10px; /* Rounded corners */
+}</code></pre>
+                    </div>
+                    
+                    <h4>4. Margin</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Margin Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>div {
+    margin: 20px; /* All sides */
+    margin: 0 auto; /* Center horizontally */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Box Sizing</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>content-box vs border-box</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>/* content-box (default) */
+.box {
+    width: 300px;
+    padding: 20px;
+    border: 5px solid black;
+    box-sizing: content-box;
+    /* Total width = 300 + 40 + 10 = 350px */
+}
+
+/* border-box (modern approach) */
+.box {
+    width: 300px;
+    padding: 20px;
+    border: 5px solid black;
+    box-sizing: border-box;
+    /* Total width = 300px */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Box Model Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Box Model in Action</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        * {
+            box-sizing: border-box;
+        }
+        
+        .box {
+            width: 300px;
+            height: 200px;
+            padding: 20px;
+            border: 5px solid #4f46e5;
+            margin: 30px auto;
+            background: #e0f2fe;
+            text-align: center;
+            line-height: 150px;
+        }
+        
+        .box p {
+            margin: 0;
+            background: white;
+            padding: 10px;
+            border: 1px dashed #0891b2;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;CSS Box Model Demo&lt;/h1&gt;
+    
+    &lt;div class="box"&gt;
+        &lt;p&gt;Content Area&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;p&gt;This box has: width 300px, padding 20px, border 5px, margin 30px&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Box Model Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getCSSColors() {
+            return `
+                <div class="lesson-section">
+                    <h2>Colors and Backgrounds</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>CSS provides multiple ways to specify colors</strong> and various background properties to style elements.</p>
+                    </div>
+                    
+                    <h3>Color Formats</h3>
+                    
+                    <h4>1. Named Colors</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Named Colors</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>color: red;
+color: blue;
+color: green;
+color: white;
+color: black;
+color: yellow;</code></pre>
+                    </div>
+                    
+                    <h4>2. Hexadecimal (Hex)</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Hex Colors</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>color: #ff0000;  /* red */
+color: #00ff00;  /* green */
+color: #0000ff;  /* blue */
+color: #4f46e5;  /* purple */
+color: #000000;  /* black */
+color: #ffffff;  /* white */</code></pre>
+                    </div>
+                    
+                    <h4>3. RGB/RGBA</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>RGB and RGBA</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>color: rgb(255, 0, 0);      /* red */
+color: rgb(0, 255, 0);      /* green */
+color: rgb(0, 0, 255);      /* blue */
+color: rgba(255, 0, 0, 0.5); /* red with 50% opacity */</code></pre>
+                    </div>
+                    
+                    <h4>4. HSL/HSLA</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>HSL and HSLA</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>color: hsl(0, 100%, 50%);     /* red */
+color: hsl(120, 100%, 50%);   /* green */
+color: hsl(240, 100%, 50%);   /* blue */
+color: hsla(0, 100%, 50%, 0.5); /* red with 50% opacity */</code></pre>
+                    </div>
+                    
+                    <h3>Background Properties</h3>
+                    
+                    <h4>Background Color</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Background Color</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>div {
+    background-color: #4f46e5;
+    background-color: rgb(79, 70, 229);
+}</code></pre>
+                    </div>
+                    
+                    <h4>Background Image</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Background Image</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>div {
+    background-image: url('image.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}</code></pre>
+                    </div>
+                    
+                    <h4>Gradient Backgrounds</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Gradient Examples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>/* Linear Gradient */
+div {
+    background: linear-gradient(to right, red, blue);
+    background: linear-gradient(45deg, #4f46e5, #0891b2);
+}
+
+/* Radial Gradient */
+div {
+    background: radial-gradient(circle, red, blue);
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Colors Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Colors and Backgrounds Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .color-box {
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            display: inline-block;
+            text-align: center;
+            line-height: 100px;
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .hex { background-color: #4f46e5; }
+        .rgb { background-color: rgb(79, 70, 229); }
+        .rgba { background-color: rgba(79, 70, 229, 0.5); }
+        .gradient { background: linear-gradient(45deg, #4f46e5, #0891b2); }
+        .image { 
+            background-image: url('https://via.placeholder.com/200x100/4f46e5/ffffff?text=Background');
+            background-size: cover;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Colors and Backgrounds&lt;/h1&gt;
+    
+    &lt;div class="color-box hex"&gt;HEX&lt;/div&gt;
+    &lt;div class="color-box rgb"&gt;RGB&lt;/div&gt;
+    &lt;div class="color-box rgba"&gt;RGBA 50%&lt;/div&gt;
+    &lt;div class="color-box gradient"&gt;Gradient&lt;/div&gt;
+    &lt;div class="color-box image"&gt;Image&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Colors Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getCSSTypography() {
+            return `
+                <div class="lesson-section">
+                    <h2>Typography and Fonts</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Typography in CSS</strong> controls the appearance of text, including font family, size, weight, line height, and more.</p>
+                    </div>
+                    
+                    <h3>Font Properties</h3>
+                    
+                    <h4>Font Family</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Font Family</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    font-family: 'Times New Roman', serif;
+}
+
+.special {
+    font-family: 'Courier New', monospace;
+}</code></pre>
+                    </div>
+                    
+                    <h4>Font Size</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Font Size Units</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>p {
+    font-size: 16px;     /* pixels */
+    font-size: 1.2em;    /* relative to parent */
+    font-size: 1.2rem;   /* relative to root */
+    font-size: 100%;     /* percentage */
+}</code></pre>
+                    </div>
+                    
+                    <h4>Font Weight</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Font Weight</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>p {
+    font-weight: normal;   /* 400 */
+    font-weight: bold;     /* 700 */
+    font-weight: 300;      /* light */
+    font-weight: 900;      /* extra bold */
+}</code></pre>
+                    </div>
+                    
+                    <h4>Font Style</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Font Style</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>p {
+    font-style: normal;
+    font-style: italic;
+    font-style: oblique;
+}</code></pre>
+                    </div>
+                    
+                    <h3>Text Properties</h3>
+                    
+                    <h4>Text Alignment</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Text Align</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>p {
+    text-align: left;
+    text-align: right;
+    text-align: center;
+    text-align: justify;
+}</code></pre>
+                    </div>
+                    
+                    <h4>Text Decoration</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Text Decoration</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>a {
+    text-decoration: none;    /* remove underline */
+}
+
+u {
+    text-decoration: underline;
+}
+
+.strike {
+    text-decoration: line-through;
+}</code></pre>
+                    </div>
+                    
+                    <h4>Line Height</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Line Height</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>p {
+    line-height: 1.5;    /* unitless - relative to font size */
+    line-height: 20px;   /* fixed height */
+    line-height: 150%;   /* percentage */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Typography Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Typography Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-family: 'Times New Roman', serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: underline;
+            color: #4f46e5;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            text-align: left;
+        }
+        
+        p {
+            font-size: 16px;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+        
+        .italic {
+            font-style: italic;
+        }
+        
+        .bold {
+            font-weight: 700;
+        }
+        
+        .small {
+            font-size: 12px;
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        .mono {
+            font-family: 'Courier New', monospace;
+            background: #f0f0f0;
+            padding: 10px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Typography in CSS&lt;/h1&gt;
+    
+    &lt;h2&gt;This is a subheading (font-weight: 300)&lt;/h2&gt;
+    
+    &lt;p&gt;This is a regular paragraph with normal font weight. It uses Arial font and has a line-height of 1.6. The text is justified, which means it stretches to fill the full width of the container.&lt;/p&gt;
+    
+    &lt;p class="italic"&gt;This paragraph is italicized using font-style: italic.&lt;/p&gt;
+    
+    &lt;p class="bold"&gt;This paragraph is bold using font-weight: 700.&lt;/p&gt;
+    
+    &lt;p class="small center"&gt;This is small centered text.&lt;/p&gt;
+    
+    &lt;div class="mono"&gt;
+        This uses a monospace font (Courier New).
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Typography Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getCSSFlexbox() {
+            return `
+                <div class="lesson-section">
+                    <h2>Flexbox Layout</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Flexbox</strong> is a one-dimensional layout method for arranging items in rows or columns. It makes it easy to align items, distribute space, and create responsive designs.</p>
+                    </div>
+                    
+                    <h3>Flex Container Properties</h3>
+                    
+                    <h4>display: flex</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Creating a Flex Container</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    display: flex;  /* or inline-flex */
+}</code></pre>
+                    </div>
+                    
+                    <h4>flex-direction</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Direction of Items</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    flex-direction: row;            /* default - left to right */
+    flex-direction: row-reverse;    /* right to left */
+    flex-direction: column;         /* top to bottom */
+    flex-direction: column-reverse; /* bottom to top */
+}</code></pre>
+                    </div>
+                    
+                    <h4>justify-content (main axis)</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Horizontal Alignment</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    justify-content: flex-start;    /* default - start */
+    justify-content: flex-end;      /* end */
+    justify-content: center;        /* center */
+    justify-content: space-between; /* space between items */
+    justify-content: space-around;  /* space around items */
+    justify-content: space-evenly;  /* equal space */
+}</code></pre>
+                    </div>
+                    
+                    <h4>align-items (cross axis)</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Vertical Alignment</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    align-items: stretch;     /* default - fill height */
+    align-items: flex-start;  /* top */
+    align-items: flex-end;    /* bottom */
+    align-items: center;      /* center */
+    align-items: baseline;    /* align by text baseline */
+}</code></pre>
+                    </div>
+                    
+                    <h4>flex-wrap</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Wrapping Items</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    flex-wrap: nowrap;       /* default - no wrap */
+    flex-wrap: wrap;         /* wrap to next line */
+    flex-wrap: wrap-reverse; /* wrap in reverse */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Flex Item Properties</h3>
+                    
+                    <h4>flex-grow</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>How much items grow</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.item {
+    flex-grow: 1;  /* all items grow equally */
+    flex-grow: 2;  /* this item grows twice as much */
+}</code></pre>
+                    </div>
+                    
+                    <h4>flex-shrink</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>How much items shrink</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.item {
+    flex-shrink: 1;  /* default - can shrink */
+    flex-shrink: 0;  /* cannot shrink */
+}</code></pre>
+                    </div>
+                    
+                    <h4>flex-basis</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Initial size</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.item {
+    flex-basis: 200px;  /* initial width */
+    flex-basis: 50%;    /* percentage of container */
+}</code></pre>
+                    </div>
+                    
+                    <h4>align-self</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Override align-items for one item</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.item {
+    align-self: center;      /* center this item */
+    align-self: flex-end;    /* bottom for this item */
+    align-self: stretch;     /* stretch this item */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Flexbox Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Flexbox Layout Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            background: #f0f0f0;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .item {
+            background: #4f46e5;
+            color: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 4px;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .row {
+            flex-direction: row;
+        }
+        
+        .column {
+            flex-direction: column;
+            height: 300px;
+        }
+        
+        .center {
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .space-between {
+            justify-content: space-between;
+        }
+        
+        .wrap {
+            flex-wrap: wrap;
+        }
+        
+        .grow .item {
+            flex-grow: 1;
+        }
+        
+        .grow .item:nth-child(2) {
+            flex-grow: 2;
+            background: #0891b2;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Flexbox Examples&lt;/h1&gt;
+    
+    &lt;h2&gt;1. Row (default)&lt;/h2&gt;
+    &lt;div class="container row"&gt;
+        &lt;div class="item"&gt;Item 1&lt;/div&gt;
+        &lt;div class="item"&gt;Item 2&lt;/div&gt;
+        &lt;div class="item"&gt;Item 3&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;2. Column&lt;/h2&gt;
+    &lt;div class="container column"&gt;
+        &lt;div class="item"&gt;Item 1&lt;/div&gt;
+        &lt;div class="item"&gt;Item 2&lt;/div&gt;
+        &lt;div class="item"&gt;Item 3&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;3. Center Items&lt;/h2&gt;
+    &lt;div class="container center" style="height: 200px;"&gt;
+        &lt;div class="item"&gt;Centered&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;4. Space Between&lt;/h2&gt;
+    &lt;div class="container space-between"&gt;
+        &lt;div class="item"&gt;Left&lt;/div&gt;
+        &lt;div class="item"&gt;Center&lt;/div&gt;
+        &lt;div class="item"&gt;Right&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;5. Wrap&lt;/h2&gt;
+    &lt;div class="container wrap" style="width: 300px;"&gt;
+        &lt;div class="item"&gt;Item 1&lt;/div&gt;
+        &lt;div class="item"&gt;Item 2&lt;/div&gt;
+        &lt;div class="item"&gt;Item 3&lt;/div&gt;
+        &lt;div class="item"&gt;Item 4&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;6. Grow (different sizes)&lt;/h2&gt;
+    &lt;div class="container grow"&gt;
+        &lt;div class="item"&gt;flex-grow: 1&lt;/div&gt;
+        &lt;div class="item"&gt;flex-grow: 2&lt;/div&gt;
+        &lt;div class="item"&gt;flex-grow: 1&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Flexbox Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getCSSGrid() {
+            return `
+                <div class="lesson-section">
+                    <h2>CSS Grid Layout</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>CSS Grid</strong> is a two-dimensional layout system that allows you to create complex grid-based layouts with rows and columns.</p>
+                    </div>
+                    
+                    <h3>Grid Container Properties</h3>
+                    
+                    <h4>display: grid</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Creating a Grid Container</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    display: grid;
+}</code></pre>
+                    </div>
+                    
+                    <h4>grid-template-columns</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Defining Columns</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    grid-template-columns: 100px 200px 100px;  /* three columns */
+    grid-template-columns: 1fr 2fr 1fr;        /* fractional units */
+    grid-template-columns: repeat(3, 1fr);     /* three equal columns */
+    grid-template-columns: 100px auto 100px;   /* auto for flexible */
+}</code></pre>
+                    </div>
+                    
+                    <h4>grid-template-rows</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Defining Rows</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    grid-template-rows: 100px 200px;  /* two rows */
+    grid-template-rows: 1fr 2fr;      /* fractional units */
+    grid-template-rows: repeat(3, 100px);  /* three rows of 100px */
+}</code></pre>
+                    </div>
+                    
+                    <h4>gap</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Gaps Between Grid Items</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.container {
+    gap: 20px;               /* gap in both directions */
+    row-gap: 10px;           /* gap between rows */
+    column-gap: 20px;        /* gap between columns */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Grid Item Properties</h3>
+                    
+                    <h4>grid-column</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Spanning Columns</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.item {
+    grid-column: 1 / 3;     /* from column line 1 to 3 */
+    grid-column: 1 / -1;    /* span all columns */
+    grid-column: span 2;    /* span 2 columns */
+}</code></pre>
+                    </div>
+                    
+                    <h4>grid-row</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Spanning Rows</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.item {
+    grid-row: 1 / 3;        /* from row line 1 to 3 */
+    grid-row: span 2;       /* span 2 rows */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Grid Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>CSS Grid Layout Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .item {
+            background: #4f46e5;
+            color: white;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        /* Different grid examples */
+        .grid-2 {
+            grid-template-columns: 1fr 2fr;
+        }
+        
+        .grid-uneven {
+            grid-template-columns: 100px 1fr 200px;
+        }
+        
+        .grid-span {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        
+        .span-item {
+            background: #0891b2;
+        }
+        
+        .span-item:nth-child(1) {
+            grid-column: span 2;
+        }
+        
+        .span-item:nth-child(3) {
+            grid-column: span 3;
+        }
+        
+        .grid-area {
+            grid-template-areas:
+                "header header header"
+                "sidebar main main"
+                "footer footer footer";
+        }
+        
+        .header { grid-area: header; }
+        .sidebar { grid-area: sidebar; }
+        .main { grid-area: main; }
+        .footer { grid-area: footer; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;CSS Grid Examples&lt;/h1&gt;
+    
+    &lt;h2&gt;1. Basic 3-Column Grid&lt;/h2&gt;
+    &lt;div class="container"&gt;
+        &lt;div class="item"&gt;Item 1&lt;/div&gt;
+        &lt;div class="item"&gt;Item 2&lt;/div&gt;
+        &lt;div class="item"&gt;Item 3&lt;/div&gt;
+        &lt;div class="item"&gt;Item 4&lt;/div&gt;
+        &lt;div class="item"&gt;Item 5&lt;/div&gt;
+        &lt;div class="item"&gt;Item 6&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;2. Uneven Columns (100px, 1fr, 200px)&lt;/h2&gt;
+    &lt;div class="container grid-uneven"&gt;
+        &lt;div class="item"&gt;100px&lt;/div&gt;
+        &lt;div class="item"&gt;1fr&lt;/div&gt;
+        &lt;div class="item"&gt;200px&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;3. Spanning Items&lt;/h2&gt;
+    &lt;div class="container grid-span"&gt;
+        &lt;div class="item span-item"&gt;Span 2 columns&lt;/div&gt;
+        &lt;div class="item span-item"&gt;Normal&lt;/div&gt;
+        &lt;div class="item span-item"&gt;Span 3 columns&lt;/div&gt;
+        &lt;div class="item span-item"&gt;Normal&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;4. Grid Template Areas&lt;/h2&gt;
+    &lt;div class="container grid-area"&gt;
+        &lt;div class="item header"&gt;Header&lt;/div&gt;
+        &lt;div class="item sidebar"&gt;Sidebar&lt;/div&gt;
+        &lt;div class="item main"&gt;Main Content&lt;/div&gt;
+        &lt;div class="item footer"&gt;Footer&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Grid Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getCSSPositioning() {
+            return `
+                <div class="lesson-section">
+                    <h2>Positioning and Layout</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>CSS Positioning</strong> allows you to control where elements are placed on the page. There are five main position values: static, relative, absolute, fixed, and sticky.</p>
+                    </div>
+                    
+                    <h3>Position Property</h3>
+                    
+                    <h4>1. Static (default)</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Static Position</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.element {
+    position: static;  /* default - normal document flow */
+}</code></pre>
+                    </div>
+                    
+                    <h4>2. Relative</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Relative Position</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.element {
+    position: relative;
+    top: 20px;      /* moved down 20px from normal position */
+    left: 30px;     /* moved right 30px from normal position */
+}</code></pre>
+                    </div>
+                    
+                    <h4>3. Absolute</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Absolute Position</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.element {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* positioned relative to nearest positioned ancestor */
+}</code></pre>
+                    </div>
+                    
+                    <h4>4. Fixed</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Fixed Position</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.element {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    /* stays fixed relative to viewport */
+}</code></pre>
+                    </div>
+                    
+                    <h4>5. Sticky</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Sticky Position</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.element {
+    position: sticky;
+    top: 0;
+    /* becomes fixed after scrolling past it */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Z-Index</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Stacking Order</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>.element1 {
+    position: absolute;
+    z-index: 1;  /* lower number - behind */
+}
+
+.element2 {
+    position: absolute;
+    z-index: 2;  /* higher number - in front */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Positioning Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Positioning Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            height: 2000px; /* for scrolling */
+        }
+        
+        .container {
+            position: relative;
+            height: 300px;
+            background: #f0f0f0;
+            margin: 20px 0;
+            padding: 10px;
+        }
+        
+        .box {
+            width: 100px;
+            height: 100px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .relative {
+            position: relative;
+            background: #4f46e5;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .absolute {
+            position: absolute;
+            background: #0891b2;
+            top: 0;
+            right: 0;
+        }
+        
+        .fixed {
+            position: fixed;
+            background: #f59e0b;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .sticky {
+            position: sticky;
+            background: #10b981;
+            top: 0;
+            width: 100%;
+            height: 50px;
+        }
+        
+        .parent {
+            position: relative;
+            height: 200px;
+            background: #e0e0e0;
+        }
+        
+        .child {
+            position: absolute;
+            background: #ef4444;
+            bottom: 10px;
+            right: 10px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;CSS Positioning Examples&lt;/h1&gt;
+    
+    &lt;div class="sticky"&gt;
+        I'm sticky! I stick to the top when scrolling.
+    &lt;/div&gt;
+    
+    &lt;h2&gt;Relative Position&lt;/h2&gt;
+    &lt;div class="container"&gt;
+        &lt;div class="box relative"&gt;Relative&lt;/div&gt;
+        &lt;p&gt;Moved 20px down and 20px right from normal position&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;Absolute Position&lt;/h2&gt;
+    &lt;div class="container parent"&gt;
+        &lt;div class="box absolute"&gt;Absolute&lt;/div&gt;
+        &lt;p&gt;Positioned at top-right of the container&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;Absolute inside Relative&lt;/h2&gt;
+    &lt;div class="container" style="position: relative;"&gt;
+        &lt;div class="box child"&gt;Absolute&lt;/div&gt;
+        &lt;p&gt;Positioned at bottom-right of relative container&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="fixed"&gt;
+        Fixed Button
+    &lt;/div&gt;
+    
+    &lt;p&gt;Scroll down to see the sticky and fixed elements in action!&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Positioning Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getCSSResponsive() {
+            return `
+                <div class="lesson-section">
+                    <h2>Responsive Design</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Responsive Design</strong> ensures your website looks good on all devices - from mobile phones to desktop computers.</p>
+                    </div>
+                    
+                    <h3>Viewport Meta Tag</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Viewport Setup</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Media Queries</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Media Query Syntax</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>/* Mobile first approach */
+.element {
+    width: 100%;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .element {
+        width: 50%;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .element {
+        width: 33.333%;
+    }
+}</code></pre>
+                    </div>
+                    
+                    <h3>Common Breakpoints</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Standard Breakpoints</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>/* Mobile: 0 - 767px */
+/* Tablet: 768px - 1023px */
+/* Desktop: 1024px+ */
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* tablet styles */
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+    /* desktop styles */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Responsive Units</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Responsive Units</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>/* Relative units for responsiveness */
+.element {
+    width: 50%;              /* percentage of parent */
+    font-size: 1.2rem;       /* relative to root */
+    padding: 2vw 2vh;        /* viewport width/height */
+    margin: 5vmin;           /* smaller of vw/vh */
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Responsive Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Responsive Design Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;style&gt;
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4f46e5;
+        }
+        
+        /* Mobile first - cards stack vertically */
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .card h3 {
+            color: #4f46e5;
+            margin-top: 0;
+        }
+        
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        
+        /* Tablet styles */
+        @media (min-width: 768px) {
+            .card-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .card {
+                width: calc(50% - 10px);
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Desktop styles */
+        @media (min-width: 1024px) {
+            .card {
+                width: calc(33.333% - 14px);
+            }
+            
+            .card:hover {
+                transform: translateY(-5px);
+                transition: 0.3s;
+            }
+        }
+        
+        /* Navigation - responsive */
+        .nav {
+            background: #4f46e5;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            display: block;
+            text-align: center;
+        }
+        
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+        
+        @media (min-width: 768px) {
+            .nav ul {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .nav a {
+                padding: 0.5rem 1rem;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;nav class="nav"&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Services&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+    
+    &lt;div class="container"&gt;
+        &lt;h1&gt;Responsive Design Demo&lt;/h1&gt;
+        &lt;p&gt;Resize your browser window to see how the layout changes!&lt;/p&gt;
+        
+        &lt;div class="card-container"&gt;
+            &lt;div class="card"&gt;
+                &lt;img src="https://via.placeholder.com/300x200/4f46e5/ffffff?text=Card+1" alt="Card 1"&gt;
+                &lt;h3&gt;Card Title 1&lt;/h3&gt;
+                &lt;p&gt;This card will stack vertically on mobile, show 2 per row on tablet, and 3 per row on desktop.&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="card"&gt;
+                &lt;img src="https://via.placeholder.com/300x200/0891b2/ffffff?text=Card+2" alt="Card 2"&gt;
+                &lt;h3&gt;Card Title 2&lt;/h3&gt;
+                &lt;p&gt;Responsive design ensures your content looks great on all devices.&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="card"&gt;
+                &lt;img src="https://via.placeholder.com/300x200/f59e0b/ffffff?text=Card+3" alt="Card 3"&gt;
+                &lt;h3&gt;Card Title 3&lt;/h3&gt;
+                &lt;p&gt;Try resizing your browser to see the grid change at 768px and 1024px.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCSSCode()">
+                        <i class="fas fa-play"></i> Run Responsive Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        // ============ JAVASCRIPT CONTENT FUNCTIONS ============
+        function getJSIntroduction() {
+            return `
+                <div class="lesson-section">
+                    <h2>Introduction to JavaScript</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>JavaScript</strong> is a programming language that makes web pages interactive. It runs in the browser and can update content, animate images, and respond to user actions.</p>
+                    </div>
+                    
+                    <h3>What Can JavaScript Do?</h3>
+                    <ul>
+                        <li>Change HTML content</li>
+                        <li>Modify CSS styles</li>
+                        <li>Hide/show elements</li>
+                        <li>React to user clicks, typing, mouse movements</li>
+                        <li>Validate form data</li>
+                        <li>Create animations</li>
+                    </ul>
+                    
+                    <h3>How to Add JavaScript</h3>
+                    
+                    <h4>1. Internal JavaScript</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Internal JavaScript</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1 id="heading"&gt;Hello&lt;/h1&gt;
+    &lt;button onclick="changeText()"&gt;Click Me&lt;/button&gt;
+    
+    &lt;script&gt;
+        function changeText() {
+            document.getElementById('heading').innerHTML = 'Text Changed!';
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    
+                    <h4>2. External JavaScript</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>script.js file</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// script.js
+function changeText() {
+    document.getElementById('heading').innerHTML = 'Text Changed!';
+}</code></pre>
+                    </div>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>HTML linking external JS</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+                    </div>
+                    
+                    <h3>Console Output</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Console Methods</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>console.log('Regular message');
+console.warn('Warning!');
+console.error('Error!');</code></pre>
+                    </div>
+                    
+                    <h3>Complete Introduction Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>JavaScript Introduction</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;JavaScript Introduction&lt;/title&gt;
+    &lt;style&gt;
+        button {
+            padding: 10px 20px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 id="heading"&gt;JavaScript Demo&lt;/h1&gt;
+    
+    &lt;button onclick="changeText()"&gt;Change Text&lt;/button&gt;
+    &lt;button onclick="changeStyle()"&gt;Change Style&lt;/button&gt;
+    &lt;button onclick="showAlert()"&gt;Show Alert&lt;/button&gt;
+    
+    &lt;div id="output"&gt;
+        Output will appear here...
+    &lt;/div&gt;
+    
+    &lt;script&gt;
+        function changeText() {
+            document.getElementById('heading').innerHTML = 'Text Changed!';
+            document.getElementById('output').innerHTML = 'Heading text changed';
+            console.log('Text changed');
+        }
+        
+        function changeStyle() {
+            document.getElementById('heading').style.color = 'blue';
+            document.getElementById('output').innerHTML = 'Style changed to blue';
+        }
+        
+        function showAlert() {
+            alert('Button clicked!');
+            document.getElementById('output').innerHTML = 'Alert shown';
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runJSCode()">
+                        <i class="fas fa-play"></i> Run JavaScript Example
+                    </button>
+                    
+                    <div class="note-box">
+                        <p><strong>Key Points:</strong>
+                        <ul>
+                            <li><strong>Script tag:</strong> Where JavaScript lives in HTML</li>
+                            <li><strong>Functions:</strong> Reusable blocks of code</li>
+                            <li><strong>Events:</strong> onclick, onmouseover trigger code</li>
+                            <li><strong>DOM:</strong> Document Object Model - how JS interacts with HTML</li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getJSVariables() {
+            return `
+                <div class="lesson-section">
+                    <h2>Variables and Data Types</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Variables</strong> are containers for storing data. JavaScript has dynamic typing - variables can hold any type of data.</p>
+                    </div>
+                    
+                    <h3>Declaring Variables</h3>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>let, const, var</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// let - can be changed
+let age = 25;
+age = 26; // OK
+
+// const - cannot be changed
+const PI = 3.14159;
+// PI = 3.14; // ERROR!
+
+// var - old way, avoid using
+var oldWay = 'Avoid this';
+
+// Variable naming
+let firstName = 'John'; // camelCase
+let last_name = 'Doe';  // snake_case
+let $dollar = 'ok';     // $ allowed
+let _private = 'ok';    // _ allowed</code></pre>
+                    </div>
+                    
+                    <h3>Data Types</h3>
+                    
+                    <h4>1. Number</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Number Type</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let integer = 42;
+let decimal = 3.14;
+let negative = -10;
+let notANumber = NaN; // Invalid math result</code></pre>
+                    </div>
+                    
+                    <h4>2. String</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>String Type</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let single = 'Single quotes';
+let double = "Double quotes";
+let template = \`Template literals\`;
+
+// Template literals allow variables
+let name = 'John';
+let greeting = \`Hello, \${name}!\`; // "Hello, John!"
+
+// String methods
+let text = 'JavaScript';
+console.log(text.length);        // 10
+console.log(text.toUpperCase()); // "JAVASCRIPT"
+console.log(text[0]);            // "J"</code></pre>
+                    </div>
+                    
+                    <h4>3. Boolean</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Boolean Type</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let isLoggedIn = true;
+let isAdmin = false;
+
+// Booleans from comparisons
+let isGreater = 5 > 3; // true</code></pre>
+                    </div>
+                    
+                    <h4>4. Undefined & Null</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Undefined and Null</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let x; // undefined (declared but no value)
+let empty = null; // null (intentionally empty)</code></pre>
+                    </div>
+                    
+                    <h4>5. Object</h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Object Type</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// Object literal
+let person = {
+    firstName: 'John',
+    lastName: 'Doe',
+    age: 30
+};
+
+// Access properties
+console.log(person.firstName); // "John"
+
+// Array (special object)
+let fruits = ['Apple', 'Banana', 'Orange'];
+console.log(fruits[0]); // "Apple"</code></pre>
+                    </div>
+                    
+                    <h3>Type Checking</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>typeof Operator</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>console.log(typeof 42);      // "number"
+console.log(typeof 'Hello');  // "string"
+console.log(typeof true);     // "boolean"
+console.log(typeof {});       // "object"
+console.log(typeof []);       // "object"</code></pre>
+                    </div>
+                    
+                    <h3>Complete Variables Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Variables Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;JavaScript Variables Demo&lt;/h1&gt;
+    
+    &lt;button onclick="showVariables()"&gt;Show Variables&lt;/button&gt;
+    
+    &lt;div id="output" style="margin-top:20px; padding:10px; background:#f0f0f0;"&gt;&lt;/div&gt;
+    
+    &lt;script&gt;
+        function showVariables() {
+            let output = '';
+            
+            // Numbers
+            let age = 25;
+            let price = 19.99;
+            output += 'Numbers: ' + age + ' (int), ' + price + ' (float)\\n';
+            
+            // Strings
+            let name = 'John';
+            let greeting = \`Hello, \${name}!\`;
+            output += 'Strings: ' + name + ', ' + greeting + '\\n';
+            
+            // Booleans
+            let isStudent = true;
+            output += 'Boolean: ' + isStudent + '\\n';
+            
+            // Objects
+            let person = {name: 'John', age: 30};
+            output += 'Object: ' + JSON.stringify(person) + '\\n';
+            
+            // Arrays
+            let fruits = ['Apple', 'Banana'];
+            output += 'Array: ' + fruits.join(', ') + '\\n';
+            
+            // Type checking
+            output += '\\nTypes:\\n';
+            output += 'typeof 42: ' + typeof 42 + '\\n';
+            output += 'typeof "hello": ' + typeof "hello" + '\\n';
+            
+            document.getElementById('output').innerText = output;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runJSCode()">
+                        <i class="fas fa-play"></i> Run Variables Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getJSOperators() {
+            return `
+                <div class="lesson-section">
+                    <h2>Operators and Expressions</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Operators</strong> perform operations on values. JavaScript has arithmetic, assignment, comparison, and logical operators.</p>
+                    </div>
+                    
+                    <h3>1. Arithmetic Operators</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Arithmetic</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let a = 10, b = 3;
+
+console.log(a + b); // 13 (Addition)
+console.log(a - b); // 7  (Subtraction)
+console.log(a * b); // 30 (Multiplication)
+console.log(a / b); // 3.33 (Division)
+console.log(a % b); // 1  (Modulus/Remainder)
+console.log(a ** b); // 1000 (Exponent)
+
+// Increment/Decrement
+let x = 5;
+x++; // x = 6
+x--; // x = 5</code></pre>
+                    </div>
+                    
+                    <h3>2. Assignment Operators</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Assignment</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let x = 10;      // Basic assignment
+
+x += 5;  // x = x + 5 (15)
+x -= 3;  // x = x - 3 (12)
+x *= 2;  // x = x * 2 (24)
+x /= 4;  // x = x / 4 (6)
+x %= 4;  // x = x % 4 (2)</code></pre>
+                    </div>
+                    
+                    <h3>3. Comparison Operators</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Comparison</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let a = 5, b = '5', c = 10;
+
+// Equal to (value only)
+console.log(a == b);   // true
+
+// Equal value and type
+console.log(a === b);  // false
+
+// Not equal
+console.log(a != c);   // true
+
+// Greater/Less than
+console.log(a > c);    // false
+console.log(a < c);    // true
+
+// Ternary operator
+let age = 18;
+let status = age >= 18 ? 'Adult' : 'Minor';
+console.log(status); // "Adult"</code></pre>
+                    </div>
+                    
+                    <h3>4. Logical Operators</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Logical</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let a = true, b = false;
+
+console.log(a && a); // true (AND)
+console.log(a && b); // false
+console.log(a || b); // true (OR)
+console.log(b || b); // false
+console.log(!a);     // false (NOT)</code></pre>
+                    </div>
+                    
+                    <h3>Complete Operators Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Operators Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;JavaScript Operators Demo&lt;/h1&gt;
+    
+    &lt;button onclick="showOperators()"&gt;Run Operators Demo&lt;/button&gt;
+    
+    &lt;div id="output" style="margin-top:20px; padding:10px; background:#f0f0f0; white-space:pre;"&gt;&lt;/div&gt;
+    
+    &lt;script&gt;
+        function showOperators() {
+            let output = '';
+            
+            // Arithmetic
+            let a = 10, b = 3;
+            output += 'ARITHMETIC:\\n';
+            output += a + ' + ' + b + ' = ' + (a + b) + '\\n';
+            output += a + ' - ' + b + ' = ' + (a - b) + '\\n';
+            output += a + ' * ' + b + ' = ' + (a * b) + '\\n';
+            output += a + ' / ' + b + ' = ' + (a / b) + '\\n';
+            output += a + ' % ' + b + ' = ' + (a % b) + '\\n\\n';
+            
+            // Comparison
+            output += 'COMPARISON:\\n';
+            output += '5 == "5": ' + (5 == "5") + '\\n';
+            output += '5 === "5": ' + (5 === "5") + '\\n';
+            output += '5 > 3: ' + (5 > 3) + '\\n\\n';
+            
+            // Logical
+            output += 'LOGICAL:\\n';
+            output += 'true && false: ' + (true && false) + '\\n';
+            output += 'true || false: ' + (true || false) + '\\n';
+            output += '!true: ' + (!true) + '\\n\\n';
+            
+            // Ternary
+            let age = 20;
+            output += 'TERNARY:\\n';
+            output += 'age = 20 → ' + (age >= 18 ? 'Adult' : 'Minor');
+            
+            document.getElementById('output').innerText = output;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runJSCode()">
+                        <i class="fas fa-play"></i> Run Operators Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getJSControlFlow() {
+            return `
+                <div class="lesson-section">
+                    <h2>Control Flow (Conditionals)</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Control flow</strong> determines which code runs based on conditions. Use if, else if, else statements.</p>
+                    </div>
+                    
+                    <h3>if Statement</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>if Statement</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let age = 18;
+
+if (age >= 18) {
+    console.log("You can vote");
+    console.log("This runs if condition is true");
+}
+console.log("This always runs");</code></pre>
+                    </div>
+                    
+                    <h3>if-else Statement</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>if-else</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let temperature = 25;
+
+if (temperature > 30) {
+    console.log("It's hot!");
+} else {
+    console.log("It's not hot");
+}</code></pre>
+                    </div>
+                    
+                    <h3>if-else if-else</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Multiple Conditions</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let score = 85;
+
+if (score >= 90) {
+    grade = "A";
+} else if (score >= 80) {
+    grade = "B";
+} else if (score >= 70) {
+    grade = "C";
+} else if (score >= 60) {
+    grade = "D";
+} else {
+    grade = "F";
+}
+console.log("Grade: " + grade); // Grade: B</code></pre>
+                    </div>
+                    
+                    <h3>Nested if</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Nested Conditions</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let num = 15;
+
+if (num > 0) {
+    console.log("Positive");
+    if (num % 2 == 0) {
+        console.log("Even");
+    } else {
+        console.log("Odd");
+    }
+} else {
+    console.log("Negative or zero");
+}</code></pre>
+                    </div>
+                    
+                    <h3>Switch Statement</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>switch</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let day = "Monday";
+
+switch(day) {
+    case "Monday":
+        console.log("Start of week");
+        break;
+    case "Friday":
+        console.log("TGIF!");
+        break;
+    case "Saturday":
+    case "Sunday":
+        console.log("Weekend!");
+        break;
+    default:
+        console.log("Midweek");
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Control Flow Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Control Flow Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;Control Flow Demo&lt;/h1&gt;
+    
+    &lt;button onclick="checkGrade()"&gt;Check Grade&lt;/button&gt;
+    &lt;button onclick="checkDay()"&gt;Check Day&lt;/button&gt;
+    
+    &lt;div id="output" style="margin-top:20px; padding:10px; background:#f0f0f0;"&gt;&lt;/div&gt;
+    
+    &lt;script&gt;
+        function checkGrade() {
+            let score = prompt("Enter your score (0-100):", "85");
+            score = Number(score);
+            let grade;
+            
+            if (score >= 90) {
+                grade = "A";
+            } else if (score >= 80) {
+                grade = "B";
+            } else if (score >= 70) {
+                grade = "C";
+            } else if (score >= 60) {
+                grade = "D";
+            } else {
+                grade = "F";
+            }
+            
+            document.getElementById('output').innerHTML = 
+                "Score: " + score + "&lt;br&gt;Grade: " + grade;
+        }
+        
+        function checkDay() {
+            let day = prompt("Enter a day:", "Monday");
+            let message;
+            
+            switch(day.toLowerCase()) {
+                case "monday":
+                case "tuesday":
+                case "wednesday":
+                case "thursday":
+                    message = "Weekday - Keep working!";
+                    break;
+                case "friday":
+                    message = "TGIF! Weekend is coming!";
+                    break;
+                case "saturday":
+                case "sunday":
+                    message = "Weekend! Time to relax!";
+                    break;
+                default:
+                    message = "Invalid day";
+            }
+            
+            document.getElementById('output').innerHTML = 
+                "Day: " + day + "&lt;br&gt;" + message;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runJSCode()">
+                        <i class="fas fa-play"></i> Run Control Flow Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getJSLoops() {
+            return `
+                <div class="lesson-section">
+                    <h2>Loops and Iteration</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Loops</strong> let you repeat code multiple times. JavaScript has for loops, while loops, and do-while loops.</p>
+                    </div>
+                    
+                    <h3>for Loop</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>for Loop</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// Basic for loop
+for (let i = 0; i < 5; i++) {
+    console.log("Count: " + i);
+}
+
+// Loop through array
+let fruits = ["apple", "banana", "orange"];
+for (let i = 0; i < fruits.length; i++) {
+    console.log(fruits[i]);
+}</code></pre>
+                    </div>
+                    
+                    <h3>while Loop</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>while Loop</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let count = 1;
+while (count <= 5) {
+    console.log("Count: " + count);
+    count++;
+}
+
+// while with break
+let num = 1;
+while (true) {
+    console.log(num);
+    num++;
+    if (num > 5) break;
+}</code></pre>
+                    </div>
+                    
+                    <h3>do-while Loop</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>do-while Loop</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let i = 1;
+do {
+    console.log("Number: " + i);
+    i++;
+} while (i <= 3);
+// Always runs at least once</code></pre>
+                    </div>
+                    
+                    <h3>for...of Loop (ES6)</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>for...of Loop</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let colors = ["red", "green", "blue"];
+
+for (let color of colors) {
+    console.log(color);
+}
+
+// Works with strings too
+let text = "Hello";
+for (let char of text) {
+    console.log(char);
+}</code></pre>
+                    </div>
+                    
+                    <h3>for...in Loop</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>for...in Loop (for objects)</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>let person = {name: "John", age: 30, city: "NYC"};
+
+for (let key in person) {
+    console.log(key + ": " + person[key]);
+}</code></pre>
+                    </div>
+                    
+                    <h3>break and continue</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Loop Control</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// break - exit loop
+for (let i = 0; i < 10; i++) {
+    if (i == 5) break;
+    console.log(i); // Prints 0-4
+}
+
+// continue - skip iteration
+for (let i = 0; i < 5; i++) {
+    if (i == 2) continue;
+    console.log(i); // Prints 0,1,3,4
+}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Loops Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Loops Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;JavaScript Loops Demo&lt;/h1&gt;
+    
+    &lt;button onclick="demoLoops()"&gt;Run Loops Demo&lt;/button&gt;
+    
+    &lt;div id="output" style="margin-top:20px; padding:10px; background:#f0f0f0; white-space:pre;"&gt;&lt;/div&gt;
+    
+    &lt;script&gt;
+        function demoLoops() {
+            let output = '';
+            
+            // for loop
+            output += 'FOR LOOP (0 to 4):\\n';
+            for (let i = 0; i < 5; i++) {
+                output += i + ' ';
+            }
+            output += '\\n\\n';
+            
+            // while loop
+            output += 'WHILE LOOP (1 to 5):\\n';
+            let count = 1;
+            while (count <= 5) {
+                output += count + ' ';
+                count++;
+            }
+            output += '\\n\\n';
+            
+            // Loop through array
+            output += 'ARRAY ITEMS:\\n';
+            let fruits = ['Apple', 'Banana', 'Orange'];
+            for (let i = 0; i < fruits.length; i++) {
+                output += fruits[i] + '\\n';
+            }
+            output += '\\n';
+            
+            // for...of (modern)
+            output += 'FOR...OF (colors):\\n';
+            let colors = ['Red', 'Green', 'Blue'];
+            for (let color of colors) {
+                output += color + ' ';
+            }
+            output += '\\n\\n';
+            
+            // Nested loops - multiplication table
+            output += 'MULTIPLICATION TABLE:\\n';
+            for (let i = 1; i <= 5; i++) {
+                for (let j = 1; j <= 5; j++) {
+                    output += (i * j).toString().padStart(3, ' ');
+                }
+                output += '\\n';
+            }
+            
+            document.getElementById('output').innerText = output;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runJSCode()">
+                        <i class="fas fa-play"></i> Run Loops Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getJSFunctions() {
+            return `
+                <div class="lesson-section">
+                    <h2>Functions and Scope</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Functions</strong> are reusable blocks of code that perform specific tasks. They help organize code and avoid repetition.</p>
+                    </div>
+                    
+                    <h3>Function Declaration</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Basic Function</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// Function declaration
+function greet() {
+    console.log("Hello!");
+}
+
+// Call the function
+greet(); // "Hello!"</code></pre>
+                    </div>
+                    
+                    <h3>Parameters and Arguments</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Function with Parameters</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>function greet(name) {
+    console.log("Hello, " + name + "!");
+}
+
+greet("John"); // "Hello, John!"
+greet("Alice"); // "Hello, Alice!"</code></pre>
+                    </div>
+                    
+                    <h3>Return Values</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Return Statement</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>function add(a, b) {
+    return a + b;
+}
+
+let sum = add(5, 3);
+console.log(sum); // 8
+
+// Functions without return return undefined</code></pre>
+                    </div>
+                    
+                    <h3>Function Expressions</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Function Expression</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>const multiply = function(a, b) {
+    return a * b;
+};
+
+console.log(multiply(4, 5)); // 20</code></pre>
+                    </div>
+                    
+                    <h3>Arrow Functions (ES6)</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Arrow Functions</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// Arrow function
+const square = (x) => {
+    return x * x;
+};
+
+// Shorter form (single expression)
+const double = x => x * 2;
+
+console.log(square(4)); // 16
+console.log(double(5)); // 10</code></pre>
+                    </div>
+                    
+                    <h3>Default Parameters</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Default Values</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>function greet(name = "Guest") {
+    console.log("Hello, " + name + "!");
+}
+
+greet("John"); // "Hello, John!"
+greet(); // "Hello, Guest!"</code></pre>
+                    </div>
+                    
+                    <h3>Scope</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Variable Scope</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>// Global scope
+let globalVar = "I'm global";
+
+function test() {
+    // Local scope
+    let localVar = "I'm local";
+    console.log(globalVar); // OK
+    console.log(localVar);  // OK
+}
+
+console.log(globalVar); // OK
+// console.log(localVar); // Error!</code></pre>
+                    </div>
+                    
+                    <h3>Complete Functions Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Functions Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;JavaScript Functions Demo&lt;/h1&gt;
+    
+    &lt;button onclick="demoFunctions()"&gt;Run Functions Demo&lt;/button&gt;
+    
+    &lt;div id="output" style="margin-top:20px; padding:10px; background:#f0f0f0; white-space:pre;"&gt;&lt;/div&gt;
+    
+    &lt;script&gt;
+        function demoFunctions() {
+            let output = '';
+            
+            // Regular function
+            function add(a, b) {
+                return a + b;
+            }
+            
+            // Function expression
+            const subtract = function(a, b) {
+                return a - b;
+            };
+            
+            // Arrow function
+            const multiply = (a, b) => a * b;
+            
+            // Function with default parameter
+            function greet(name = "Guest") {
+                return "Hello, " + name + "!";
+            }
+            
+            // Test the functions
+            output += 'add(10, 5) = ' + add(10, 5) + '\\n';
+            output += 'subtract(10, 5) = ' + subtract(10, 5) + '\\n';
+            output += 'multiply(10, 5) = ' + multiply(10, 5) + '\\n';
+            output += 'greet("John") = ' + greet("John") + '\\n';
+            output += 'greet() = ' + greet() + '\\n';
+            
+            // Function with multiple returns
+            function getGrade(score) {
+                if (score >= 90) return 'A';
+                if (score >= 80) return 'B';
+                if (score >= 70) return 'C';
+                if (score >= 60) return 'D';
+                return 'F';
+            }
+            
+            output += '\\nGrade for 85: ' + getGrade(85) + '\\n';
+            output += 'Grade for 45: ' + getGrade(45) + '\\n';
+            
+            document.getElementById('output').innerText = output;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runJSCode()">
+                        <i class="fas fa-play"></i> Run Functions Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        // ============ PYTHON CONTENT FUNCTIONS ============
+        function getPythonIntroduction() {
+            return `
+                <div class="lesson-section">
+                    <h2>Introduction to Python</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Python</strong> is a high-level, interpreted programming language known for its simplicity and readability. It's great for beginners and powerful enough for experts.</p>
+                    </div>
+                    
+                    <h3>Why Python?</h3>
+                    <ul>
+                        <li>Easy to read - clean syntax that reads like English</li>
+                        <li>No compilation needed - run code directly</li>
+                        <li>No need to declare variable types</li>
+                        <li>Works on Windows, Mac, Linux</li>
+                    </ul>
+                    
+                    <h3>Python Syntax Basics</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python Syntax</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># This is a comment
+print("Hello, World!")
+
+# Variables - no declaration needed
+name = "John"        # String
+age = 25            # Integer
+height = 5.9        # Float
+is_student = True   # Boolean
+
+# Indentation matters!
+if age >= 18:
+    print("Adult")  # Indented block
+    print("You can vote")
+else:
+    print("Minor")</code></pre>
+                    </div>
+                    
+                    <h3>Complete Introduction Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python Introduction Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true"># Python Introduction Demo
+print("=" * 40)
+print("WELCOME TO PYTHON")
+print("=" * 40)
+
+# Variables and data types
+name = "Alice"
+age = 25
+height = 5.6
+is_programmer = True
+
+print(f"Name: {name} (type: {type(name)})")
+print(f"Age: {age} (type: {type(age)})")
+print(f"Height: {height} (type: {type(height)})")
+print(f"Programmer: {is_programmer} (type: {type(is_programmer)})")
+
+# Simple input
+name = input("What's your name? ")
+print(f"Nice to meet you, {name}!")
+
+# Simple calculation
+num1 = float(input("Enter first number: "))
+num2 = float(input("Enter second number: "))
+print(f"{num1} + {num2} = {num1 + num2}")
+
+# Conditional
+age = int(input("Enter your age: "))
+if age >= 18:
+    print("You are an adult")
+else:
+    print("You are a minor")
+    print(f"{18 - age} years until adulthood")</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runPythonCode()">
+                        <i class="fas fa-play"></i> Run Python Demo
+                    </button>
+                    
+                    <div class="note-box">
+                        <p><strong>Key Python Concepts:</strong>
+                        <ul>
+                            <li><strong>Indentation:</strong> Python uses indentation (usually 4 spaces) for code blocks</li>
+                            <li><strong>Dynamic Typing:</strong> Variables can change type</li>
+                            <li><strong>Comments:</strong> # for single line comments</li>
+                            <li><strong>print():</strong> Built-in function to display output</li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPythonBasics() {
+            return `
+                <div class="lesson-section">
+                    <h2>Basic Syntax and Data Types</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Python's syntax</strong> is designed to be clean and readable. Understanding basic data types is essential.</p>
+                    </div>
+                    
+                    <h3>Numbers</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Numeric Types</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Integer (int)
+age = 25
+temperature = -10
+
+# Float (decimal)
+price = 19.99
+pi = 3.14159
+
+# Basic operations
+print(10 + 3)    # 13 (addition)
+print(10 - 3)    # 7  (subtraction)
+print(10 * 3)    # 30 (multiplication)
+print(10 / 3)    # 3.33 (division)
+print(10 // 3)   # 3 (integer division)
+print(10 % 3)    # 1 (remainder)
+print(10 ** 3)   # 1000 (exponent)</code></pre>
+                    </div>
+                    
+                    <h3>Strings</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>String Operations</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Creating strings
+name = "John"
+city = 'New York'
+multiline = """This is a
+multi-line string"""
+
+# String methods
+text = "Python"
+print(text.upper())      # "PYTHON"
+print(text.lower())      # "python"
+print(len(text))         # 6
+print(text[0])           # "P" (first character)
+print(text[-1])          # "n" (last character)
+
+# String formatting (f-strings)
+name = "Alice"
+age = 25
+print(f"My name is {name} and I'm {age}")
+
+# Concatenation
+print("Hello" + " " + "World")  # "Hello World"</code></pre>
+                    </div>
+                    
+                    <h3>Booleans</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Boolean Values</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>is_student = True
+is_employed = False
+
+# Boolean from comparisons
+print(5 > 3)      # True
+print(5 == 5)     # True
+print(5 != 5)     # False
+
+# Boolean operators
+print(True and False)   # False
+print(True or False)    # True
+print(not True)         # False</code></pre>
+                    </div>
+                    
+                    <h3>Type Conversion</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Converting Types</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># String to number
+num_str = "123"
+num_int = int(num_str)      # 123
+num_float = float(num_str)  # 123.0
+
+# Number to string
+age = 25
+age_str = str(age)          # "25"
+
+# Input always returns string
+user_input = input("Enter a number: ")
+number = int(user_input)    # Convert to int</code></pre>
+                    </div>
+                    
+                    <h3>Complete Basics Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python Basics Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true"># Python Basics Demo
+print("=" * 50)
+print("PYTHON DATA TYPES")
+print("=" * 50)
+
+# Numbers
+print("\n🔢 NUMBERS")
+a, b = 15, 4
+print(f"Addition: {a} + {b} = {a + b}")
+print(f"Division: {a} / {b} = {a / b}")
+print(f"Floor division: {a} // {b} = {a // b}")
+print(f"Modulus: {a} % {b} = {a % b}")
+
+# Strings
+print("\n📝 STRINGS")
+text = "Python Programming"
+print(f"Original: '{text}'")
+print(f"Uppercase: {text.upper()}")
+print(f"Length: {len(text)}")
+print(f"First 6 chars: '{text[:6]}'")
+
+# String formatting
+name = "Alice"
+age = 25
+print(f"\nMy name is {name} and I'm {age}")
+
+# Booleans
+print("\n✅ BOOLEANS")
+print(f"10 > 5: {10 > 5}")
+print(f"10 == 5: {10 == 5}")
+print(f"True and False: {True and False}")
+
+# Type conversion
+print("\n🔄 TYPE CONVERSION")
+num_str = "123"
+num_int = int(num_str)
+print(f"String '{num_str}' to int: {num_int}")</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runPythonCode()">
+                        <i class="fas fa-play"></i> Run Python Basics Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getPythonControlFlow() {
+            return `
+                <div class="lesson-section">
+                    <h2>Control Flow</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Control flow</strong> determines which code runs based on conditions. Python uses if/elif/else and loops.</p>
+                    </div>
+                    
+                    <h3>if Statements</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>if/elif/else</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>age = 18
+if age >= 18:
+    print("You can vote")
+
+# if-else
+temperature = 25
+if temperature > 30:
+    print("Hot!")
+else:
+    print("Not hot")
+
+# if-elif-else
+score = 85
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+else:
+    grade = "F"
+print(f"Grade: {grade}")</code></pre>
+                    </div>
+                    
+                    <h3>for Loops</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>for Loop</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Loop through range
+for i in range(5):  # 0 to 4
+    print(i)
+
+# Loop through list
+fruits = ["apple", "banana", "orange"]
+for fruit in fruits:
+    print(fruit)
+
+# Loop through string
+for char in "Python":
+    print(char)
+
+# Loop with index
+for i, fruit in enumerate(fruits):
+    print(f"{i}: {fruit}")</code></pre>
+                    </div>
+                    
+                    <h3>while Loops</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>while Loop</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>count = 1
+while count <= 5:
+    print(f"Count: {count}")
+    count += 1
+
+# while with break
+num = 1
+while True:
+    print(num)
+    num += 1
+    if num > 5:
+        break</code></pre>
+                    </div>
+                    
+                    <h3>Loop Control</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>break and continue</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># break - exit loop
+for i in range(10):
+    if i == 5:
+        break
+    print(i)  # Prints 0-4
+
+# continue - skip iteration
+for i in range(5):
+    if i == 2:
+        continue
+    print(i)  # Prints 0,1,3,4</code></pre>
+                    </div>
+                    
+                    <h3>Complete Control Flow Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Control Flow Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true"># Python Control Flow Demo
+print("=" * 50)
+print("CONTROL FLOW DEMO")
+print("=" * 50)
+
+# 1. CONDITIONALS
+print("\n1️⃣ GRADE CALCULATOR")
+score = 85
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+elif score >= 60:
+    grade = "D"
+else:
+    grade = "F"
+print(f"Score: {score} → Grade: {grade}")
+
+# 2. FOR LOOP - Multiplication Table
+print("\n2️⃣ MULTIPLICATION TABLE")
+number = 7
+for i in range(1, 11):
+    print(f"{number} x {i:2} = {number * i:3}")
+
+# 3. FOR LOOP - List iteration
+print("\n3️⃣ FRUIT LIST")
+fruits = ["apple", "banana", "orange", "grape"]
+for fruit in fruits:
+    print(f"- {fruit}")
+
+# 4. WHILE LOOP - Countdown
+print("\n4️⃣ COUNTDOWN")
+count = 5
+while count > 0:
+    print(f"Countdown: {count}")
+    count -= 1
+print("Blast off! 🚀")
+
+# 5. NESTED LOOPS - Pattern
+print("\n5️⃣ PATTERN")
+for i in range(1, 6):
+    for j in range(i):
+        print("*", end="")
+    print()
+
+# 6. BREAK EXAMPLE
+print("\n6️⃣ BREAK DEMO")
+print("Numbers until 5:")
+for i in range(1, 11):
+    if i == 5:
+        break
+    print(i, end=" ")
+print("\nLoop ended at 5")
+
+print("\n" + "=" * 50)
+print("DEMO COMPLETE!")
+print("=" * 50)</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runPythonCode()">
+                        <i class="fas fa-play"></i> Run Control Flow Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getPythonFunctions() {
+            return `
+                <div class="lesson-section">
+                    <h2>Functions and Modules</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Functions</strong> are reusable blocks of code. They help organize code and avoid repetition.</p>
+                    </div>
+                    
+                    <h3>Defining Functions</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Basic Function</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>def greet():
+    print("Hello!")
+
+# Call the function
+greet()  # "Hello!"</code></pre>
+                    </div>
+                    
+                    <h3>Parameters</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Function with Parameters</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>def greet(name):
+    print(f"Hello, {name}!")
+
+greet("John")   # "Hello, John!"
+greet("Alice")  # "Hello, Alice!"</code></pre>
+                    </div>
+                    
+                    <h3>Return Values</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Return Statement</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>def add(a, b):
+    return a + b
+
+result = add(5, 3)
+print(result)  # 8
+
+def is_even(num):
+    return num % 2 == 0
+
+print(is_even(4))  # True
+print(is_even(5))  # False</code></pre>
+                    </div>
+                    
+                    <h3>Default Parameters</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Default Values</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>def greet(name="Guest"):
+    print(f"Hello, {name}!")
+
+greet("John")    # "Hello, John!"
+greet()          # "Hello, Guest!"</code></pre>
+                    </div>
+                    
+                    <h3>Multiple Returns</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Return Multiple Values</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>def get_min_max(numbers):
+    return min(numbers), max(numbers)
+
+values = [3, 1, 7, 2, 9]
+minimum, maximum = get_min_max(values)
+print(f"Min: {minimum}, Max: {maximum}")</code></pre>
+                    </div>
+                    
+                    <h3>Complete Functions Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Functions Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true"># Python Functions Demo
+print("=" * 50)
+print("FUNCTIONS DEMO")
+print("=" * 50)
+
+# Basic function
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Alice"))
+
+# Calculator functions
+def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+
+def multiply(a, b):
+    return a * b
+
+def divide(a, b):
+    if b == 0:
+        return "Error: Division by zero"
+    return a / b
+
+print("\n📊 CALCULATOR")
+x, y = 10, 3
+print(f"{x} + {y} = {add(x, y)}")
+print(f"{x} - {y} = {subtract(x, y)}")
+print(f"{x} * {y} = {multiply(x, y)}")
+print(f"{x} / {y} = {divide(x, y)}")
+
+# Function with default parameter
+def power(base, exponent=2):
+    return base ** exponent
+
+print(f"\n⚡ POWER FUNCTION")
+print(f"5^2 = {power(5)}")
+print(f"5^3 = {power(5, 3)}")
+
+# Function that checks if number is even
+def is_even(num):
+    return num % 2 == 0
+
+print(f"\n🔢 EVEN CHECKER")
+numbers = [1, 2, 3, 4, 5, 6]
+for num in numbers:
+    print(f"{num} is even: {is_even(num)}")
+
+# Function with multiple returns
+def analyze_numbers(numbers):
+    return min(numbers), max(numbers), sum(numbers) / len(numbers)
+
+values = [10, 20, 30, 40, 50]
+minimum, maximum, average = analyze_numbers(values)
+print(f"\n📈 STATISTICS")
+print(f"Numbers: {values}")
+print(f"Min: {minimum}, Max: {maximum}, Average: {average}")
+
+print("\n" + "=" * 50)
+print("DEMO COMPLETE!")
+print("=" * 50)</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runPythonCode()">
+                        <i class="fas fa-play"></i> Run Functions Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getPythonDataStructures() {
+            return `
+                <div class="lesson-section">
+                    <h2>Data Structures</h2>
+                    
+                    <div class="definition-box">
+                        <p><strong>Data structures</strong> are ways of organizing and storing data. Python has several built-in data structures.</p>
+                    </div>
+                    
+                    <h3>Lists</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Lists</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Creating lists
+fruits = ["apple", "banana", "orange"]
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", 3.14, True]
+
+# Accessing items
+print(fruits[0])      # "apple" (first)
+print(fruits[-1])     # "orange" (last)
+print(fruits[1:3])    # ["banana", "orange"] (slice)
+
+# Modifying lists
+fruits.append("grape")        # Add to end
+fruits.insert(1, "mango")     # Insert at position
+fruits.remove("banana")       # Remove item
+popped = fruits.pop()         # Remove and return last
+print(fruits)
+
+# List operations
+print(len(fruits))            # Length
+print("apple" in fruits)      # Check if exists
+for fruit in fruits:
+    print(fruit)</code></pre>
+                    </div>
+                    
+                    <h3>Tuples (Immutable)</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Tuples</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Creating tuples (can't be changed)
+point = (3, 4)
+colors = ("red", "green", "blue")
+single = (1,)  # Comma needed for single item
+
+# Accessing items
+print(point[0])      # 3
+print(point[1])      # 4
+
+# Tuple unpacking
+x, y = point
+print(f"x={x}, y={y}")
+
+# Tuples are immutable
+# point[0] = 5  # This would cause an error!</code></pre>
+                    </div>
+                    
+                    <h3>Dictionaries</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Dictionaries</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Creating dictionaries
+person = {
+    "name": "John",
+    "age": 30,
+    "city": "New York"
+}
+
+# Accessing values
+print(person["name"])      # "John"
+print(person.get("age"))   # 30
+print(person.get("phone", "Not found"))  # Default value
+
+# Modifying dictionaries
+person["email"] = "john@example.com"  # Add new key
+person["age"] = 31                     # Update value
+del person["city"]                      # Remove key
+
+# Looping through dictionaries
+for key in person:
+    print(f"{key}: {person[key]}")
+
+for key, value in person.items():
+    print(f"{key}: {value}")</code></pre>
+                    </div>
+                    
+                    <h3>Sets</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Sets (unique items)</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Creating sets
+numbers = {1, 2, 3, 3, 4, 4, 5}  # {1, 2, 3, 4, 5} (duplicates removed)
+fruits = set(["apple", "banana", "apple"])  # {"apple", "banana"}
+
+# Set operations
+numbers.add(6)           # Add item
+numbers.remove(3)        # Remove item
+print(2 in numbers)      # Check membership
+
+# Set operations
+set1 = {1, 2, 3, 4}
+set2 = {3, 4, 5, 6}
+
+print(set1 | set2)  # Union: {1,2,3,4,5,6}
+print(set1 & set2)  # Intersection: {3,4}
+print(set1 - set2)  # Difference: {1,2}</code></pre>
+                    </div>
+                    
+                    <h3>Complete Data Structures Example</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Data Structures Demo</span>
+                            <button class="copy-btn"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <pre id="editableCode" class="editable-code" contenteditable="true"># Python Data Structures Demo
+print("=" * 50)
+print("DATA STRUCTURES DEMO")
+print("=" * 50)
+
+# 1. LISTS
+print("\n📋 LISTS")
+fruits = ["apple", "banana", "orange", "grape"]
+print(f"Original list: {fruits}")
+print(f"First item: {fruits[0]}")
+print(f"Last item: {fruits[-1]}")
+print(f"Slice [1:3]: {fruits[1:3]}")
+
+fruits.append("mango")
+print(f"After append: {fruits}")
+fruits.sort()
+print(f"After sort: {fruits}")
+
+# 2. TUPLES
+print("\n📦 TUPLES (immutable)")
+coordinates = (10, 20)
+print(f"Coordinates: {coordinates}")
+x, y = coordinates
+print(f"Unpacked: x={x}, y={y}")
+
+# 3. DICTIONARIES
+print("\n📚 DICTIONARIES")
+student = {
+    "name": "Alice",
+    "age": 20,
+    "courses": ["Math", "Physics"]
+}
+print(f"Student: {student}")
+print(f"Name: {student['name']}")
+print(f"Age: {student.get('age')}")
+print(f"Major: {student.get('major', 'Not specified')}")
+
+# Add new key
+student["grade"] = "A"
+print(f"After adding grade: {student}")
+
+# Loop through dictionary
+print("\nDictionary items:")
+for key, value in student.items():
+    print(f"  {key}: {value}")
+
+# 4. SETS
+print("\n🎯 SETS (unique items)")
+numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+unique_numbers = set(numbers)
+print(f"Original list: {numbers}")
+print(f"Unique set: {unique_numbers}")
+
+set_a = {1, 2, 3, 4}
+set_b = {3, 4, 5, 6}
+print(f"\nSet A: {set_a}")
+print(f"Set B: {set_b}")
+print(f"Union: {set_a | set_b}")
+print(f"Intersection: {set_a & set_b}")
+print(f"Difference A-B: {set_a - set_b}")
+
+print("\n" + "=" * 50)
+print("DEMO COMPLETE!")
+print("=" * 50)</pre>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runPythonCode()">
+                        <i class="fas fa-play"></i> Run Data Structures Demo
+                    </button>
+                </div>
+            `;
+        }
+
+        // Additional placeholder functions for completeness
+        function getHTMLImages() { return "<div class='lesson-section'><h2>Images and Media</h2><p>Content coming soon...</p></div>"; }
+        function getHTMLTables() { return "<div class='lesson-section'><h2>HTML Tables</h2><p>Content coming soon...</p></div>"; }
+        function getHTMLForms() { return "<div class='lesson-section'><h2>HTML Forms</h2><p>Content coming soon...</p></div>"; }
+        function getHTMLSemantic() { return "<div class='lesson-section'><h2>Semantic HTML5 Elements</h2><p>Content coming soon...</p></div>"; }
+        function getHTMLMeta() { return "<div class='lesson-section'><h2>Meta Tags and SEO</h2><p>Content coming soon...</p></div>"; }
+        function getHTMLAccessibility() { return "<div class='lesson-section'><h2>Web Accessibility (ARIA)</h2><p>Content coming soon...</p></div>"; }
+
+        function getCSSColors() { return "<div class='lesson-section'><h2>Colors and Backgrounds</h2><p>Content coming soon...</p></div>"; }
+        function getCSSTypography() { return "<div class='lesson-section'><h2>Typography and Fonts</h2><p>Content coming soon...</p></div>"; }
+        function getCSSFlexbox() { return "<div class='lesson-section'><h2>Flexbox Layout</h2><p>Content coming soon...</p></div>"; }
+        function getCSSGrid() { return "<div class='lesson-section'><h2>CSS Grid Layout</h2><p>Content coming soon...</p></div>"; }
+        function getCSSPositioning() { return "<div class='lesson-section'><h2>Positioning and Layout</h2><p>Content coming soon...</p></div>"; }
+        function getCSSResponsive() { return "<div class='lesson-section'><h2>Responsive Design</h2><p>Content coming soon...</p></div>"; }
+        function getCSSAnimations() { return "<div class='lesson-section'><h2>Animations and Transitions</h2><p>Content coming soon...</p></div>"; }
+        function getCSSVariables() { return "<div class='lesson-section'><h2>CSS Variables</h2><p>Content coming soon...</p></div>"; }
+        function getCSSBestPractices() { return "<div class='lesson-section'><h2>Best Practices</h2><p>Content coming soon...</p></div>"; }
+
+        function getJSArrays() { return "<div class='lesson-section'><h2>Arrays and Array Methods</h2><p>Content coming soon...</p></div>"; }
+        function getJSObjects() { return "<div class='lesson-section'><h2>Objects and OOP</h2><p>Content coming soon...</p></div>"; }
+        function getJSDOM() { return "<div class='lesson-section'><h2>DOM Manipulation</h2><p>Content coming soon...</p></div>"; }
+        function getJSEvents() { return "<div class='lesson-section'><h2>Events and Event Handling</h2><p>Content coming soon...</p></div>"; }
+        function getJSAsync() { return "<div class='lesson-section'><h2>Asynchronous JavaScript</h2><p>Content coming soon...</p></div>"; }
+        function getJSES6() { return "<div class='lesson-section'><h2>ES6+ Modern Features</h2><p>Content coming soon...</p></div>"; }
+
+        function getPythonOOP() { return "<div class='lesson-section'><h2>Object-Oriented Programming</h2><p>Content coming soon...</p></div>"; }
+        function getPythonFileHandling() { return "<div class='lesson-section'><h2>File Handling</h2><p>Content coming soon...</p></div>"; }
+        function getPythonExceptions() { return "<div class='lesson-section'><h2>Exception Handling</h2><p>Content coming soon...</p></div>"; }
+        function getPythonModules() { return "<div class='lesson-section'><h2>Modules and Packages</h2><p>Content coming soon...</p></div>"; }
+        function getPythonLibraries() { return "<div class='lesson-section'><h2>Popular Libraries</h2><p>Content coming soon...</p></div>"; }
+        function getPythonDecorators() { return "<div class='lesson-section'><h2>Decorators and Generators</h2><p>Content coming soon...</p></div>"; }
+        function getPythonBestPractices() { return "<div class='lesson-section'><h2>Best Practices</h2><p>Content coming soon...</p></div>"; }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Question Bank Generator | Blackboard 2.0</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #4338ca;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #64748b;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --card-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--darker);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+       /* NAVBAR */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.logo:hover .logo-image {
+  transform: rotate(-5deg) scale(1.1);
+}
+
+.logo-text {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--gray-dark);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 8px 0;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.nav-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--darker);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+}
+        /* Main Container */
+       /* Add this to your existing CSS - just after the header styles or in the main container section */
+
+/* Fix for fixed header - push content down */
+.main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 2rem 2rem 2rem; /* Increased top padding to account for fixed header */
+}
+
+/* Adjust for smaller screens */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 90px 1.5rem 1.5rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 80px 1rem 1rem 1rem;
+    }
+}
+        /* Header Section */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-dark);
+            font-size: 1.1rem;
+        }
+
+        /* Generator Card */
+        .generator-card {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--dark);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            filter: brightness(110%);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            color: var(--gray-dark);
+            transition: var(--transition);
+        }
+
+        .tab:hover {
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        /* Questions Grid */
+        .questions-container {
+            display: none;
+        }
+
+        .questions-container.active {
+            display: block;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .question-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .question-type {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .type-mcq { background: rgba(79, 70, 229, 0.1); color: var(--primary); }
+        .type-normal { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .option-item {
+            padding: 0.75rem;
+            background: var(--light-gray);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .option-item.correct {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success);
+        }
+
+        .answer-section {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--success);
+        }
+
+        .explanation {
+            background: rgba(79, 70, 229, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .rating-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stars {
+            display: flex;
+            gap: 0.25rem;
+            color: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .stars i.active {
+            color: var(--warning);
+        }
+
+        .stars i:hover {
+            color: var(--warning);
+        }
+
+        /* Quiz Mode - Game Style */
+        .quiz-game-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-hover);
+            color: white;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .quiz-game-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .quiz-game-stat {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        .quiz-game-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .quiz-game-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .quiz-game-timer {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-game-timer.warning {
+            color: #fbbf24;
+            animation: pulse 1s infinite;
+        }
+
+        .quiz-game-timer.danger {
+            color: #ef4444;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .quiz-game-progress {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-game-progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-game-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .quiz-game-question-number {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .quiz-game-question {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .quiz-game-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-game-option {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-game-option:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .quiz-game-option.selected {
+            background: rgba(79, 70, 229, 0.5);
+            border-color: white;
+        }
+
+        .quiz-game-option-letter {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .quiz-game-normal-input {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            color: white;
+            font-size: 1.1rem;
+            width: 100%;
+            min-height: 150px;
+            margin-bottom: 2rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .quiz-game-normal-input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .quiz-game-normal-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .quiz-game-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .quiz-game-nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-game-nav-btn:hover:not(:disabled) {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .quiz-game-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .quiz-game-submit-btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            border: none;
+            padding: 0.75rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .quiz-game-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+
+        /* Quiz Results */
+        .quiz-game-results {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .quiz-game-result-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-game-result-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-game-result-answer {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .quiz-game-result-answer.correct {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .quiz-game-result-answer.wrong {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .quiz-game-result-icon {
+            font-size: 1.2rem;
+        }
+
+        .quiz-game-result-explanation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(79, 70, 229, 0.2);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .quiz-game-score-card {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-game-score {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-game-score-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .quiz-game-accuracy {
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quiz-game-time {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .quiz-game-restart-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .quiz-game-restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Export Options */
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quiz-game-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .quiz-game-stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+            
+            .quiz-game-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+       
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1 class="page-title">AI Question Bank Generator</h1>
+            <p class="page-subtitle">Generate high-quality questions, play quiz games, and track your performance</p>
+        </div>
+
+        <!-- Generator Form -->
+        <div class="generator-card">
+            <h2 style="margin-bottom: 1.5rem;">Generate New Question Bank</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Topic / Subject <span style="color: var(--danger);">*</span></label>
+                    <input type="text" class="form-input" id="topic" placeholder="e.g., Python Programming, World History, Calculus" value="Python Programming" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Difficulty Level</label>
+                    <select class="form-select" id="difficulty">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate" selected>Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                        <option value="mixed">Mixed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Number of Questions</label>
+                    <select class="form-select" id="questionCount">
+                        <option value="5">5 Questions</option>
+                        <option value="10" selected>10 Questions</option>
+                        <option value="15">15 Questions</option>
+                        <option value="20">20 Questions</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Additional Context / Focus Areas (Optional)</label>
+                <textarea class="form-textarea" id="context" placeholder="e.g., Focus on functions and loops, Include real-world examples..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Question Types</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="includeMCQ" checked> Multiple Choice Questions
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="includeNormal" checked> Normal Questions
+                    </label>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button class="btn btn-primary" id="generateBtn">
+                    <i class="fas fa-magic"></i> Generate Questions
+                </button>
+                <button class="btn btn-secondary" id="clearBtn">
+                    <i class="fas fa-eraser"></i> Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p style="color: var(--gray-dark);">AI is generating questions...</p>
+            <p style="font-size: 0.9rem; color: var(--gray);"> This may take a few seconds</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" style="display: none;">
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="questions">📋 Question Bank</div>
+                <div class="tab" data-tab="quiz">🎮 Play Quiz Game</div>
+                <div class="tab" data-tab="analytics">📊 Performance Analytics</div>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="export-buttons">
+                <button class="btn btn-secondary" id="exportJSONBtn">
+                    <i class="fas fa-code"></i> Export JSON
+                </button>
+                <button class="btn btn-secondary" id="exportTXTBtn">
+                    <i class="fas fa-file-alt"></i> Export Text
+                </button>
+            </div>
+
+            <!-- Questions Tab -->
+            <div class="questions-container active" id="questionsTab">
+                <div id="questionsList"></div>
+            </div>
+
+            <!-- Quiz Game Tab -->
+            <div class="questions-container" id="quizTab">
+                <div id="quizGameContainer"></div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="questions-container" id="analyticsTab">
+                <div class="analytics-grid" id="analyticsContainer">
+                    <!-- Analytics will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // OPENROUTER API INTEGRATION - REAL AI QUESTIONS
+        // ============================================
+        
+        // !!! IMPORTANT: Replace with your actual OpenRouter API key !!!
+        const OPENROUTER_API_KEY = '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'; // Get from https://openrouter.ai/keys
+        
+        class OpenRouterGenerator {
+            constructor(apiKey) {
+                this.apiKey = apiKey;
+                this.apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
+            }
+
+            async generateQuestions(topic, difficulty, count, context, includeMCQ, includeNormal) {
+                const prompt = this.buildPrompt(topic, difficulty, count, context, includeMCQ, includeNormal);
+                
+                try {
+                    const response = await fetch(this.apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.apiKey}`,
+                            'HTTP-Referer': window.location.origin,
+                            'X-Title': 'AI Question Bank Generator'
+                        },
+                        body: JSON.stringify({
+                            model: 'openai/gpt-3.5-turbo', // You can change to other models
+                            messages: [
+                                {
+                                    role: 'system',
+                                    content: 'You are a professional educational content creator. Generate high-quality questions with detailed explanations. Always respond with valid JSON only.'
+                                },
+                                {
+                                    role: 'user',
+                                    content: prompt
+                                }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 4000
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.text();
+                        console.error('OpenRouter API Error:', errorData);
+                        throw new Error(`API returned ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return this.parseResponse(data);
+                } catch (error) {
+                    console.error('Error calling OpenRouter API:', error);
+                    alert('API call failed. Using fallback questions instead.');
+                    return this.getFallbackQuestions(topic, count, includeMCQ, includeNormal);
+                }
+            }
+
+            buildPrompt(topic, difficulty, count, context, includeMCQ, includeNormal) {
+                const types = [];
+                if (includeMCQ) types.push('multiple choice questions (with 4 options, mark correct answer)');
+                if (includeNormal) types.push('essay questions (with detailed answers)');
+                
+                // Force exactly "count" questions. The AI must respect the type distribution.
+                return `Generate EXACTLY ${count} educational questions about "${topic}" at ${difficulty} level.
+                
+                Additional context: ${context || 'No specific context, generate general questions'}
+                
+                IMPORTANT: You MUST generate exactly ${count} questions. Question types: ${types.join(' and ')}.
+                - If both types are selected, distribute questions roughly evenly (e.g., about half MCQ, half normal).
+                - If only one type is selected, all questions must be that type.
+                
+                FORMATTING RULES:
+                1. Return ONLY a valid JSON object, no other text.
+                2. For MCQ questions, include exactly 4 options.
+                3. Mark correct answer with the full text, not just letter.
+                4. Include detailed explanations for all questions.
+                
+                Use this exact JSON structure:
+                {
+                    "questions": [
+                        {
+                            "id": 1,
+                            "type": "mcq",
+                            "question": "question text here",
+                            "options": ["option1", "option2", "option3", "option4"],
+                            "correctAnswer": "correct option text",
+                            "explanation": "detailed explanation why this is correct",
+                            "difficulty": "${difficulty}",
+                            "topic": "${topic}"
+                        },
+                        {
+                            "id": 2,
+                            "type": "normal",
+                            "question": "essay question text",
+                            "correctAnswer": "detailed answer with key points",
+                            "explanation": "explanation of what makes a good answer",
+                            "difficulty": "${difficulty}",
+                            "topic": "${topic}"
+                        }
+                    ]
+                }`;
+            }
+
+            parseResponse(data) {
+                try {
+                    const content = data.choices[0].message.content;
+                    // Extract JSON from the response (in case AI adds extra text)
+                    const jsonMatch = content.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        const parsed = JSON.parse(jsonMatch[0]);
+                        return parsed.questions;
+                    }
+                } catch (e) {
+                    console.error('Error parsing OpenRouter response:', e);
+                }
+                return null;
+            }
+
+            getFallbackQuestions(topic, count, includeMCQ, includeNormal) {
+                const questions = [];
+                
+                // Determine exact numbers based on selections
+                let mcqCount = 0, normalCount = 0;
+                if (includeMCQ && includeNormal) {
+                    mcqCount = Math.floor(count / 2);
+                    normalCount = count - mcqCount; // ensures total = count
+                } else if (includeMCQ) {
+                    mcqCount = count;
+                } else if (includeNormal) {
+                    normalCount = count;
+                }
+
+                // Generate MCQ questions
+                for (let i = 0; i < mcqCount; i++) {
+                    questions.push({
+                        id: i + 1,
+                        type: 'mcq',
+                        question: `Sample MCQ ${i+1}: What is a fundamental concept in ${topic}?`,
+                        options: [
+                            `Basic principle of ${topic}`,
+                            `Advanced theory of ${topic}`,
+                            `Historical development of ${topic}`,
+                            `Future applications of ${topic}`
+                        ],
+                        correctAnswer: `Basic principle of ${topic}`,
+                        explanation: `Understanding the basic principles of ${topic} is essential before moving to advanced concepts. This forms the foundation of the subject.`,
+                        difficulty: 'intermediate',
+                        topic: topic,
+                        rating: 0
+                    });
+                }
+
+                // Generate Normal questions
+                for (let i = 0; i < normalCount; i++) {
+                    const idx = mcqCount + i + 1;
+                    questions.push({
+                        id: idx,
+                        type: 'normal',
+                        question: `Essay ${i+1}: Explain the importance of ${topic} in real-world applications. Provide specific examples.`,
+                        correctAnswer: `${topic} plays a crucial role in various fields. For example, in technology, it helps solve complex problems. In education, it develops critical thinking. The practical applications include problem-solving, innovation, and efficiency improvements.`,
+                        explanation: `A good answer should include specific examples, real-world applications, and demonstrate understanding of how ${topic} impacts different areas.`,
+                        difficulty: 'intermediate',
+                        topic: topic,
+                        rating: 0
+                    });
+                }
+
+                return questions;
+            }
+        }
+
+        // Main Application Class
+        class QuestionBankApp {
+            constructor() {
+                // Initialize with OpenRouter API
+                this.generator = new OpenRouterGenerator(OPENROUTER_API_KEY);
+                this.questions = [];
+                this.quizState = {
+                    currentIndex: 0,
+                    answers: [],
+                    score: 0,
+                    timeStart: null,
+                    timeEnd: null,
+                    completed: false,
+                    showResults: false
+                };
+                this.timerInterval = null;
+                
+                this.init();
+            }
+
+            init() {
+                // DOM Elements
+                this.generateBtn = document.getElementById('generateBtn');
+                this.clearBtn = document.getElementById('clearBtn');
+                this.loadingSpinner = document.getElementById('loadingSpinner');
+                this.resultsSection = document.getElementById('resultsSection');
+                this.questionsList = document.getElementById('questionsList');
+                this.quizGameContainer = document.getElementById('quizGameContainer');
+                this.analyticsContainer = document.getElementById('analyticsContainer');
+                
+                // Tabs
+                this.tabs = document.querySelectorAll('.tab');
+                this.tabContainers = document.querySelectorAll('.questions-container');
+                
+                // Export buttons
+                this.exportJSONBtn = document.getElementById('exportJSONBtn');
+                this.exportTXTBtn = document.getElementById('exportTXTBtn');
+                
+                // Bind events
+                this.bindEvents();
+                
+                // Check if API key is set
+                if (OPENROUTER_API_KEY === 'YOUR_OPENROUTER_API_KEY_HERE') {
+                    console.warn('Please set your OpenRouter API key in the OPENROUTER_API_KEY variable');
+                }
+            }
+
+            bindEvents() {
+                this.generateBtn.addEventListener('click', () => this.generateQuestions());
+                this.clearBtn.addEventListener('click', () => this.clearForm());
+                
+                this.tabs.forEach(tab => {
+                    tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+                });
+                
+                this.exportJSONBtn.addEventListener('click', () => this.exportJSON());
+                this.exportTXTBtn.addEventListener('click', () => this.exportTXT());
+            }
+
+            async generateQuestions() {
+                const topic = document.getElementById('topic').value;
+                const difficulty = document.getElementById('difficulty').value;
+                const count = parseInt(document.getElementById('questionCount').value);
+                const context = document.getElementById('context').value;
+                const includeMCQ = document.getElementById('includeMCQ').checked;
+                const includeNormal = document.getElementById('includeNormal').checked;
+
+                if (!topic) {
+                    alert('Please enter a topic');
+                    return;
+                }
+
+                if (!includeMCQ && !includeNormal) {
+                    alert('Please select at least one question type');
+                    return;
+                }
+
+                // Show loading
+                this.loadingSpinner.style.display = 'block';
+                this.resultsSection.style.display = 'none';
+                this.generateBtn.disabled = true;
+
+                try {
+                    // Generate questions using OpenRouter API
+                    let generated = await this.generator.generateQuestions(
+                        topic, difficulty, count, context, includeMCQ, includeNormal
+                    );
+
+                    // Post-process: ensure exact count and correct types
+                    if (generated && generated.length > 0) {
+                        // Filter by selected types
+                        generated = generated.filter(q => 
+                            (includeMCQ && q.type === 'mcq') || (includeNormal && q.type === 'normal')
+                        );
+                        
+                        // If we have more than needed, truncate. If less, fill with fallback.
+                        if (generated.length > count) {
+                            generated = generated.slice(0, count);
+                        } else if (generated.length < count) {
+                            const fallback = this.generator.getFallbackQuestions(topic, count - generated.length, includeMCQ, includeNormal);
+                            generated = generated.concat(fallback);
+                        }
+                    } else {
+                        // If API fails completely, use fallback that respects types and count
+                        generated = this.generator.getFallbackQuestions(topic, count, includeMCQ, includeNormal);
+                    }
+
+                    // Ensure correct IDs and ratings
+                    this.questions = generated.map((q, index) => {
+                        q.id = index + 1;
+                        q.rating = q.rating || 0;
+                        return q;
+                    });
+
+                    // Render
+                    this.renderQuestions();
+                    this.resetQuiz();
+                    this.renderQuizGame();
+                    this.renderAnalytics();
+                    
+                    // Show results
+                    this.resultsSection.style.display = 'block';
+                    this.switchTab('questions');
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while generating questions.');
+                } finally {
+                    this.loadingSpinner.style.display = 'none';
+                    this.generateBtn.disabled = false;
+                }
+            }
+
+            renderQuestions() {
+                if (!this.questionsList) return;
+
+                this.questionsList.innerHTML = this.questions.map(q => `
+                    <div class="question-card" data-id="${q.id}">
+                        <div class="question-header">
+                            <span class="question-type ${q.type === 'mcq' ? 'type-mcq' : 'type-normal'}">
+                                ${q.type === 'mcq' ? 'Multiple Choice' : 'Essay Question'}
+                            </span>
+                            <span style="color: var(--gray-dark); font-size: 0.9rem;">
+                                <i class="fas fa-signal"></i> ${q.difficulty}
+                            </span>
+                        </div>
+                        
+                        <div class="question-text">${q.id}. ${q.question}</div>
+                        
+                        ${q.type === 'mcq' ? `
+                            <div class="options-grid">
+                                ${q.options.map((opt, idx) => `
+                                    <div class="option-item ${opt === q.correctAnswer ? 'correct' : ''}">
+                                        <span>${String.fromCharCode(65 + idx)}.</span> ${opt}
+                                        ${opt === q.correctAnswer ? '<i class="fas fa-check" style="color: var(--success); margin-left: auto;"></i>' : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <div class="answer-section">
+                                <strong>Model Answer:</strong> ${q.correctAnswer}
+                            </div>
+                        `}
+                        
+                        <div class="explanation">
+                            <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                            <strong>Explanation:</strong> ${q.explanation}
+                        </div>
+                        
+                        <div class="rating-section">
+                            <span style="color: var(--gray-dark);">Rate this question:</span>
+                            <div class="stars" data-id="${q.id}">
+                                ${[1,2,3,4,5].map(star => `
+                                    <i class="fas fa-star ${q.rating >= star ? 'active' : ''}" 
+                                       data-rating="${star}" onclick="app.rateQuestion(${q.id}, ${star})"></i>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            resetQuiz() {
+                this.quizState = {
+                    currentIndex: 0,
+                    answers: new Array(this.questions.length).fill(null),
+                    score: 0,
+                    timeStart: null,
+                    timeEnd: null,
+                    completed: false,
+                    showResults: false
+                };
+                
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                }
+            }
+
+            renderQuizGame() {
+                if (!this.quizGameContainer) return;
+
+                if (this.quizState.completed && this.quizState.showResults) {
+                    this.renderQuizResults();
+                    return;
+                }
+
+                const q = this.questions[this.quizState.currentIndex];
+                const totalQuestions = this.questions.length;
+                const answeredCount = this.quizState.answers.filter(a => a !== null).length;
+                const progress = ((this.quizState.currentIndex) / totalQuestions) * 100;
+
+                this.quizGameContainer.innerHTML = `
+                    <div class="quiz-game-container">
+                        <div class="quiz-game-header">
+                            <div class="quiz-game-stats">
+                                <div class="quiz-game-stat">
+                                    <div class="quiz-game-stat-value">${this.quizState.score}</div>
+                                    <div class="quiz-game-stat-label">Score</div>
+                                </div>
+                                <div class="quiz-game-stat">
+                                    <div class="quiz-game-stat-value">${answeredCount}/${totalQuestions}</div>
+                                    <div class="quiz-game-stat-label">Answered</div>
+                                </div>
+                            </div>
+                            <div class="quiz-game-timer" id="quizTimer">00:00</div>
+                        </div>
+
+                        <div class="quiz-game-progress">
+                            <div class="quiz-game-progress-bar">
+                                <div class="quiz-game-progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div class="quiz-game-question-number">
+                                Question ${this.quizState.currentIndex + 1} of ${totalQuestions}
+                            </div>
+                        </div>
+
+                        <div class="quiz-game-question">
+                            ${q.question}
+                        </div>
+
+                        ${q.type === 'mcq' ? `
+                            <div class="quiz-game-options">
+                                ${q.options.map((opt, idx) => {
+                                    const letter = String.fromCharCode(65 + idx);
+                                    const isSelected = this.quizState.answers[this.quizState.currentIndex] === opt;
+                                    return `
+                                        <div class="quiz-game-option ${isSelected ? 'selected' : ''}" 
+                                             onclick="app.selectQuizAnswer('${opt.replace(/'/g, "\\'")}')">
+                                            <span class="quiz-game-option-letter">${letter}</span>
+                                            ${opt}
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        ` : `
+                            <textarea class="quiz-game-normal-input" 
+                                      id="normalAnswerInput"
+                                      placeholder="Type your answer here...">${this.quizState.answers[this.quizState.currentIndex] || ''}</textarea>
+                        `}
+
+                        <div class="quiz-game-footer">
+                            <button class="quiz-game-nav-btn" ${this.quizState.currentIndex === 0 ? 'disabled' : ''} 
+                                    onclick="app.prevQuizQuestion()">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            
+                            ${this.quizState.currentIndex === totalQuestions - 1 ? `
+                                <button class="quiz-game-submit-btn" onclick="app.submitQuiz()">
+                                    <i class="fas fa-check-circle"></i> Submit Quiz
+                                </button>
+                            ` : `
+                                <button class="quiz-game-nav-btn" onclick="app.nextQuizQuestion()">
+                                    Next <i class="fas fa-arrow-right"></i>
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+
+                // Start timer if not started
+                if (!this.quizState.timeStart) {
+                    this.quizState.timeStart = Date.now();
+                    this.startQuizTimer();
+                }
+
+                // Add input listener for normal questions
+                if (q.type === 'normal') {
+                    const input = document.getElementById('normalAnswerInput');
+                    if (input) {
+                        input.addEventListener('input', (e) => {
+                            this.quizState.answers[this.quizState.currentIndex] = e.target.value;
+                        });
+                    }
+                }
+            }
+
+            selectQuizAnswer(answer) {
+                this.quizState.answers[this.quizState.currentIndex] = answer;
+                this.renderQuizGame();
+            }
+
+            prevQuizQuestion() {
+                if (this.quizState.currentIndex > 0) {
+                    this.quizState.currentIndex--;
+                    this.renderQuizGame();
+                }
+            }
+
+            nextQuizQuestion() {
+                if (this.quizState.currentIndex < this.questions.length - 1) {
+                    this.quizState.currentIndex++;
+                    this.renderQuizGame();
+                }
+            }
+
+            startQuizTimer() {
+                this.timerInterval = setInterval(() => {
+                    if (!this.quizState.timeStart) return;
+                    
+                    const elapsed = Math.floor((Date.now() - this.quizState.timeStart) / 1000);
+                    const timerElement = document.getElementById('quizTimer');
+                    
+                    if (timerElement) {
+                        const minutes = Math.floor(elapsed / 60);
+                        const seconds = elapsed % 60;
+                        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        
+                        // Add warning classes
+                        if (elapsed > 300) { // 5 minutes
+                            timerElement.classList.add('danger');
+                        } else if (elapsed > 180) { // 3 minutes
+                            timerElement.classList.add('warning');
+                        }
+                    }
+                }, 1000);
+            }
+
+            submitQuiz() {
+                // Calculate score
+                this.quizState.score = 0;
+                this.questions.forEach((q, idx) => {
+                    const userAnswer = this.quizState.answers[idx];
+                    if (userAnswer) {
+                        if (q.type === 'mcq') {
+                            if (userAnswer === q.correctAnswer) {
+                                this.quizState.score++;
+                            }
+                        } else {
+                            // Simple keyword matching for normal questions
+                            const keywords = q.correctAnswer.toLowerCase().split(' ').filter(w => w.length > 3);
+                            const userWords = userAnswer.toLowerCase().split(' ');
+                            const matches = keywords.filter(k => userWords.some(w => w.includes(k)));
+                            if (matches.length / keywords.length > 0.5) { // 50% keyword match
+                                this.quizState.score += 0.5;
+                            }
+                        }
+                    }
+                });
+
+                this.quizState.timeEnd = Date.now();
+                this.quizState.completed = true;
+                this.quizState.showResults = true;
+                
+                clearInterval(this.timerInterval);
+                this.renderQuizGame();
+            }
+
+            renderQuizResults() {
+                const totalQuestions = this.questions.length;
+                const score = this.quizState.score;
+                const percentage = ((score / totalQuestions) * 100).toFixed(1);
+                const timeTaken = Math.floor((this.quizState.timeEnd - this.quizState.timeStart) / 1000);
+                const minutes = Math.floor(timeTaken / 60);
+                const seconds = timeTaken % 60;
+
+                const resultsHTML = `
+                    <div class="quiz-game-container">
+                        <div class="quiz-game-score-card">
+                            <div class="quiz-game-score">${score}/${totalQuestions}</div>
+                            <div class="quiz-game-score-label">Final Score</div>
+                            <div class="quiz-game-accuracy">Accuracy: ${percentage}%</div>
+                            <div class="quiz-game-time">Time: ${minutes}:${seconds.toString().padStart(2, '0')}</div>
+                            <button class="quiz-game-restart-btn" onclick="app.resetQuiz()">
+                                <i class="fas fa-redo"></i> Play Again
+                            </button>
+                        </div>
+
+                        <div class="quiz-game-results">
+                            <h3 style="margin-bottom: 1rem;">Question Review</h3>
+                            ${this.questions.map((q, idx) => {
+                                const userAnswer = this.quizState.answers[idx] || 'Not answered';
+                                const isCorrect = q.type === 'mcq' ? 
+                                    userAnswer === q.correctAnswer :
+                                    this.isAnswerCorrect(q, userAnswer);
+                                
+                                return `
+                                    <div class="quiz-game-result-item">
+                                        <div class="quiz-game-result-question">
+                                            ${idx + 1}. ${q.question}
+                                        </div>
+                                        <div class="quiz-game-result-answer ${isCorrect ? 'correct' : 'wrong'}">
+                                            <span class="quiz-game-result-icon">
+                                                <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                                            </span>
+                                            <div>
+                                                <strong>Your answer:</strong> ${userAnswer}
+                                            </div>
+                                        </div>
+                                        <div class="quiz-game-result-answer correct">
+                                            <span class="quiz-game-result-icon">
+                                                <i class="fas fa-check-circle"></i>
+                                            </span>
+                                            <div>
+                                                <strong>Correct answer:</strong> ${q.correctAnswer}
+                                            </div>
+                                        </div>
+                                        <div class="quiz-game-result-explanation">
+                                            <i class="fas fa-info-circle"></i>
+                                            <strong>Explanation:</strong> ${q.explanation}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+
+                this.quizGameContainer.innerHTML = resultsHTML;
+            }
+
+            isAnswerCorrect(q, userAnswer) {
+                if (!userAnswer || userAnswer === 'Not answered') return false;
+                
+                const keywords = q.correctAnswer.toLowerCase().split(' ').filter(w => w.length > 3);
+                const userWords = userAnswer.toLowerCase().split(' ');
+                const matches = keywords.filter(k => userWords.some(w => w.includes(k)));
+                return matches.length / keywords.length > 0.5;
+            }
+
+            renderAnalytics() {
+                if (!this.analyticsContainer) return;
+
+                const totalQuestions = this.questions.length;
+                const mcqCount = this.questions.filter(q => q.type === 'mcq').length;
+                const normalCount = this.questions.filter(q => q.type === 'normal').length;
+                
+                let avgRating = this.questions.reduce((sum, q) => sum + (q.rating || 0), 0) / totalQuestions;
+                avgRating = avgRating.toFixed(1);
+
+                this.analyticsContainer.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                        <div class="analytics-card">
+                            <h4>Question Statistics</h4>
+                            <div style="margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Total Questions:</span>
+                                    <span style="font-weight: 600;">${totalQuestions}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>MCQ Questions:</span>
+                                    <span style="font-weight: 600;">${mcqCount}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Essay Questions:</span>
+                                    <span style="font-weight: 600;">${normalCount}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Average Rating:</span>
+                                    <span style="font-weight: 600; color: var(--warning);">${avgRating}/5 ⭐</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analytics-card">
+                            <h4>Question Types</h4>
+                            <div style="margin-top: 1rem;">
+                                <div style="background: var(--light-gray); height: 30px; border-radius: 15px; overflow: hidden; margin-bottom: 1rem;">
+                                    <div style="width: ${(mcqCount/totalQuestions)*100}%; height: 100%; background: var(--primary); float: left;"></div>
+                                    <div style="width: ${(normalCount/totalQuestions)*100}%; height: 100%; background: var(--success); float: left;"></div>
+                                </div>
+                                <div style="display: flex; gap: 1rem;">
+                                    <span><span style="color: var(--primary);">■</span> MCQ: ${mcqCount}</span>
+                                    <span><span style="color: var(--success);">■</span> Essay: ${normalCount}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analytics-card">
+                            <h4>Difficulty Distribution</h4>
+                            <div style="margin-top: 1rem;">
+                                ${['beginner', 'intermediate', 'advanced'].map(level => {
+                                    const count = this.questions.filter(q => q.difficulty === level).length;
+                                    return `
+                                        <div style="margin-bottom: 0.5rem;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                                <span>${level.charAt(0).toUpperCase() + level.slice(1)}</span>
+                                                <span>${count}</span>
+                                            </div>
+                                            <div style="background: var(--light-gray); height: 8px; border-radius: 4px;">
+                                                <div style="width: ${(count/totalQuestions)*100}%; height: 100%; background: var(--accent); border-radius: 4px;"></div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            rateQuestion(questionId, rating) {
+                const question = this.questions.find(q => q.id === questionId);
+                if (question) {
+                    question.rating = rating;
+                    this.renderQuestions();
+                    this.renderAnalytics();
+                }
+            }
+
+            switchTab(tabName) {
+                this.tabs.forEach(t => t.classList.remove('active'));
+                this.tabContainers.forEach(c => c.classList.remove('active'));
+                
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                document.getElementById(`${tabName}Tab`).classList.add('active');
+                
+                // Refresh quiz view if switching to quiz tab
+                if (tabName === 'quiz') {
+                    this.renderQuizGame();
+                }
+            }
+
+            clearForm() {
+                document.getElementById('topic').value = '';
+                document.getElementById('context').value = '';
+                document.getElementById('difficulty').value = 'intermediate';
+                document.getElementById('questionCount').value = '10';
+                document.getElementById('includeMCQ').checked = true;
+                document.getElementById('includeNormal').checked = true;
+            }
+
+            exportJSON() {
+                const dataStr = JSON.stringify(this.questions, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', `questions_${Date.now()}.json`);
+                linkElement.click();
+            }
+
+            exportTXT() {
+                let text = 'QUESTION BANK\n';
+                text += '='.repeat(50) + '\n\n';
+                
+                this.questions.forEach(q => {
+                    text += `${q.id}. ${q.question}\n`;
+                    if (q.type === 'mcq') {
+                        q.options.forEach((opt, idx) => {
+                            text += `   ${String.fromCharCode(65 + idx)}. ${opt}\n`;
+                        });
+                        text += `   ✓ Correct: ${q.correctAnswer}\n`;
+                    } else {
+                        text += `   Answer: ${q.correctAnswer}\n`;
+                    }
+                    text += `   Explanation: ${q.explanation}\n`;
+                    text += '-'.repeat(40) + '\n\n';
+                });
+
+                const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', `questions_${Date.now()}.txt`);
+                linkElement.click();
+            }
+        }
+
+        // Initialize app
+        const app = new QuestionBankApp();
+        window.app = app;
+    </script>
+</body>
+</html>

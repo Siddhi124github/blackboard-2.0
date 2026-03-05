@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blackboard 2.0 · interactive learning platform</title>
+
+<!-- fonts & icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Gloria+Hallelujah&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-light: #c7d2fe;
+  --secondary: #0891b2;
+  --accent: #f59e0b;
+  --light: #ffffff;
+  --light-gray: #f8fafc;
+  --gray: #94a3b8;
+  --gray-dark: #475569;
+  --dark: #1e293b;
+  --darker: #0f172a;
+  --card-bg: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.92);
+  --border-color: #e2e8f0;
+  --shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 25px 45px -10px rgba(79, 70, 229, 0.2);
+  --glass-edge: rgba(255, 255, 255, 0.5);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+body {
+  background: linear-gradient(145deg, #f9fafc 0%, #f1f5f9 100%);
+  color: var(--darker);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ==========  NAVIGATION (YOUR ORIGINAL NAV, INTACT)  ========== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 60px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  box-shadow: 0 8px 25px -8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.logo-image {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(145deg, var(--primary), var(--secondary));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  filter: drop-shadow(0 8px 12px rgba(79, 70, 229, 0.3));
+  transition: all 0.2s ease;
+}
+
+.logo:hover .logo-image {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.logo-text {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(130deg, #2c3e9b, #0f5e7a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.3px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--gray-dark);
+  font-size: 14.5px;
+  font-weight: 550;
+  padding: 8px 9px;
+  border-radius: 40px;
+  transition: all 0.15s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link i {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+  background: rgba(79, 70, 229, 0.05);
+}
+
+/* Auth buttons in nav */
+.auth-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: 15px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
+}
+
+.btn-solid {
+  background: linear-gradient(130deg, var(--primary), var(--secondary));
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+  white-space: nowrap;
+}
+
+.btn-solid:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(79, 70, 229, 0.4);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+/* ========== LOGIN/SIGNUP MODALS ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 32px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.modal-overlay.active .modal-container {
+  transform: translateY(0);
+}
+
+.modal-header {
+  padding: 30px 30px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--light-gray);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--gray-dark);
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: var(--gray);
+  color: white;
+}
+
+.modal-logo {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  margin: 0 auto 15px;
+}
+
+.modal-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--darker);
+  margin-bottom: 8px;
+}
+
+.modal-header p {
+  color: var(--gray-dark);
+  font-size: 15px;
+}
+
+.modal-body {
+  padding: 0 30px 30px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--darker);
+  margin-bottom: 6px;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background: var(--light-gray);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0 15px;
+  transition: all 0.2s;
+}
+
+.input-wrapper:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.input-wrapper i {
+  color: var(--gray);
+  font-size: 16px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 15px 12px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  outline: none;
+}
+
+.input-wrapper input::placeholder {
+  color: var(--gray);
+}
+
+.password-toggle {
+  cursor: pointer;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray-dark);
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.modal-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+}
+
+.modal-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.4);
+}
+
+.divider {
+  text-align: center;
+  position: relative;
+  margin: 20px 0;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+.divider span {
+  background: white;
+  padding: 0 15px;
+  color: var(--gray);
+  font-size: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.social-login {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--darker);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.social-btn:hover {
+  background: var(--light-gray);
+  transform: translateY(-2px);
+}
+
+.social-btn i {
+  font-size: 18px;
+}
+
+.social-btn.google i { color: #DB4437; }
+.social-btn.github i { color: #333; }
+.social-btn.microsoft i { color: #00A4EF; }
+
+.modal-footer {
+  text-align: center;
+  color: var(--gray-dark);
+  font-size: 14px;
+}
+
+.modal-footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ========== IMPROVED FEATURES SECTION ========== */
+.features-section {
+  padding: 100px 60px;
+  background: var(--light);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.section-title {
+  font-size: 44px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: 2px;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: var(--gray-dark);
+  max-width: 700px;
+  margin: 30px auto 0;
+  line-height: 1.7;
+}
+
+/* Features category tabs */
+.features-category {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.category-tab {
+  padding: 12px 28px;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-dark);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.category-tab i {
+  font-size: 16px;
+}
+
+.category-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.category-tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25);
+}
+
+/* Features grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  border-radius: 28px;
+  padding: 35px 30px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.feature-card:hover::before {
+  transform: scaleX(1);
+}
+
+.feature-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(79, 70, 229, 0.3);
+}
+
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(8, 145, 178, 0.08));
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  font-size: 32px;
+  color: var(--primary);
+  transition: all 0.3s;
+}
+
+.feature-card:hover .feature-icon {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 15px 25px rgba(79, 70, 229, 0.25);
+}
+
+.feature-card h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: var(--darker);
+  font-weight: 700;
+}
+
+.feature-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.feature-tag {
+  background: rgba(79, 70, 229, 0.06);
+  color: var(--primary);
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.feature-card p {
+  color: var(--gray-dark);
+  line-height: 1.7;
+  font-size: 15px;
+  margin-bottom: 25px;
+  flex-grow: 1;
+}
+
+.feature-more {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.3s ease;
+  font-size: 15px;
+  margin-top: auto;
+}
+
+.feature-more:hover {
+  gap: 12px;
+}
+
+.feature-more i {
+  transition: transform 0.3s;
+}
+
+.feature-more:hover i {
+  transform: translateX(5px);
+}
+
+/* Stats section */
+.stats-section {
+  padding: 80px 60px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.03), rgba(8, 145, 178, 0.03));
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 30px;
+  background: white;
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+.stat-number {
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.stat-label {
+  color: var(--gray-dark);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Hero section (your original) */
+.hero-section {
+  padding: 140px 20px 80px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(79,70,229,0.06) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(8,145,178,0.06) 0%, transparent 50%);
+  z-index: -1;
+}
+
+.chalkboard-hero {
+  width: 100%;
+  max-width: 1300px;
+  position: relative;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100%{ transform: translateY(0px); }
+  50%{ transform: translateY(-15px); }
+}
+
+.chalkboard-wrapper {
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border: 2px solid var(--border-color);
+  border-radius: 24px;
+  padding: 80px 60px;
+  box-shadow: var(--shadow), 0 40px 80px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.9) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.chalkboard-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.02) 1px, rgba(0,0,0,0.02) 2px),
+                    repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.02) 1px, rgba(0,0,0,0.02) 2px);
+  pointer-events: none;
+}
+
+.chalkboard-content {
+  position: relative;
+  z-index: 2;
+}
+
+.typewriter-container {
+  margin-bottom: 35px;
+}
+
+.typewriter-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 68px;
+  color: var(--darker);
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 4px solid var(--primary);
+  width: 0;
+  animation: typing 3.5s steps(40,end) forwards, blink-caret 0.8s step-end infinite;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from,to { border-color: transparent; }
+  50% { border-color: var(--primary); }
+}
+
+.chalk-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  color: var(--gray-dark);
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 3.8s;
+  margin-bottom: 30px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.chalk-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 19px;
+  color: var(--gray-dark);
+  line-height: 1.8;
+  max-width: 800px;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 4.2s;
+  margin-bottom: 40px;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 4.6s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-btn {
+  padding: 16px 34px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.6s ease;
+}
+
+.hero-btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 8px 30px rgba(79,70,229,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(79,70,229,0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  box-shadow: 0 8px 25px rgba(79,70,229,0.1);
+}
+
+.btn-secondary:hover {
+  background: rgba(79,70,229,0.05);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(79,70,229,0.2);
+}
+
+.chalk-tools {
+  position: absolute;
+  bottom: -20px;
+  right: 40px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.tool-item {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 18px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.tool-item:hover {
+  transform: translateY(-5px) rotate(15deg);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* CTA section */
+.cta-section {
+  padding: 90px 60px;
+  background: linear-gradient(135deg, rgba(79,70,229,0.05), rgba(8,145,178,0.05));
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-title {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 25px;
+  color: var(--darker);
+  line-height: 1.3;
+}
+
+.cta-text {
+  font-size: 17px;
+  color: var(--gray-dark);
+  max-width: 650px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+.cta-button {
+  padding: 18px 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 30px rgba(79,70,229,0.3);
+}
+
+.cta-button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 35px rgba(79,70,229,0.4);
+}
+
+/* Footer */
+footer {
+  background: var(--light);
+  padding: 60px 60px 25px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+}
+
+.footer-logo-image {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.footer-logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-tagline {
+  color: var(--gray-dark);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.footer-links h3 {
+  font-size: 18px;
+  margin-bottom: 22px;
+  color: var(--darker);
+  font-weight: 600;
+}
+
+.footer-links ul {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: var(--gray-dark);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 25px;
+  border-top: 1px solid var(--border-color);
+  color: var(--gray);
+  font-size: 13px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .stats-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav-container {
+    padding: 12px 30px;
+  }
+  
+  .typewriter-text {
+    font-size: 52px;
+  }
+  
+  .chalk-subtitle {
+    font-size: 28px;
+  }
+  
+  .features-section,
+  .cta-section {
+    padding: 80px 40px;
+  }
+  
+  .chalkboard-wrapper {
+    padding: 70px 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .nav-menu {
+    position: fixed;
+    top: 75px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 75px);
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 40px 20px;
+    gap: 18px;
+    transition: left 0.3s ease;
+    z-index: 999;
+    border-top: 1px solid var(--border-color);
+    overflow-y: auto;
+  }
+  
+  .nav-menu.active {
+    left: 0;
+  }
+  
+  .nav-link,
+  .features-toggle {
+    width: 100%;
+    text-align: left;
+    padding: 14px 18px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+  
+  .auth-buttons {
+    width: 100%;
+    flex-direction: column;
+    margin-left: 0;
+  }
+  
+  .btn-outline,
+  .btn-solid {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .typewriter-text {
+    font-size: 38px;
+    white-space: normal;
+    border-right: none;
+    animation: none;
+    width: 100%;
+    opacity: 1;
+  }
+  
+  .chalk-subtitle {
+    font-size: 24px;
+    animation: none;
+    opacity: 1;
+  }
+  
+  .chalk-description {
+    font-size: 17px;
+    animation: none;
+    opacity: 1;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    animation: none;
+    opacity: 1;
+  }
+  
+  .features-section,
+  .cta-section,
+  footer {
+    padding: 60px 25px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-title {
+    font-size: 32px;
+  }
+  
+  .features-category {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .category-tab {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .typewriter-text {
+    font-size: 32px;
+  }
+  
+  .chalk-subtitle {
+    font-size: 20px;
+  }
+  
+  .hero-btn,
+  .cta-button {
+    padding: 15px 25px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .chalkboard-wrapper {
+    padding: 40px 20px;
+  }
+  
+  .section-title {
+    font-size: 28px;
+  }
+  
+  .logo-text {
+    font-size: 22px;
+  }
+  
+  .logo-image {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .modal-container {
+    width: 95%;
+  }
+  
+  .modal-body {
+    padding: 0 20px 20px;
+  }
+  
+  .social-login {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <a href="#home" class="nav-link"><i class="fas fa-home"></i> Home</a>
+      <a href="learn.html" class="nav-link"><i class="fas fa-code"></i> Learn Code</a>
+      <a href="game.html" class="nav-link"><i class="fas fa-gamepad"></i> DS & ML</a>
+      <a href="lecture.html" class="nav-link"><i class="fas fa-video"></i> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"><i class="fas fa-calendar-check"></i> Attendance</a>
+      <a href="assigment.html" class="nav-link"><i class="fas fa-pen"></i> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"><i class="fas fa-book"></i> Library</a>
+      <a href="questionbank.html" class="nav-link"><i class="fas fa-database"></i> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"><i class="fas fa-layer-group"></i> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"><i class="fas fa-comments"></i> Doubts Forum</a>
+      
+      <div class="auth-buttons">
+        <button class="btn-outline" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button class="btn-solid" id="signupBtn"><i class="fas fa-user-plus"></i> Sign Up</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <button class="modal-close" id="closeLoginModal"><i class="fas fa-times"></i></button>
+      <div class="modal-logo"><i class="fas fa-chalkboard"></i></div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to continue your learning journey</p>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label>Email</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" placeholder="Enter your email" id="loginEmail">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Enter your password" id="loginPassword">
+          <i class="fas fa-eye password-toggle" id="toggleLoginPassword"></i>
+        </div>
+      </div>
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox"> Remember me
+        </label>
+        <a href="#" class="forgot-link">Forgot Password?</a>
+      </div>
+      <button class="modal-btn" id="doLogin"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+      
+      <div class="divider"><span>OR CONTINUE WITH</span></div>
+      
+      <div class="social-login">
+        <button class="social-btn google"><i class="fab fa-google"></i> Google</button>
+        <button class="social-btn github"><i class="fab fa-github"></i> GitHub</button>
+        <button class="social-btn microsoft"><i class="fab fa-microsoft"></i> Microsoft</button>
+      </div>
+      
+      <div class="modal-footer">
+        Don't have an account? <a id="switchToSignup">Sign up for free</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signupModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <button class="modal-close" id="closeSignupModal"><i class="fas fa-times"></i></button>
+      <div class="modal-logo"><i class="fas fa-chalkboard"></i></div>
+      <h2>Create Account</h2>
+      <p>Start your interactive learning experience</p>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label>Full Name</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Enter your full name" id="signupName">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Email</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" placeholder="Enter your email" id="signupEmail">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Create a password" id="signupPassword">
+          <i class="fas fa-eye password-toggle" id="toggleSignupPassword"></i>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Confirm Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Confirm your password" id="signupConfirmPassword">
+          <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
+        </div>
+      </div>
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox"> I agree to the <a href="#" style="color: var(--primary);">Terms of Service</a> and <a href="#" style="color: var(--primary);">Privacy Policy</a>
+        </label>
+      </div>
+      <button class="modal-btn" id="doSignup"><i class="fas fa-user-plus"></i> Create Account</button>
+      
+      <div class="divider"><span>OR SIGN UP WITH</span></div>
+      
+      <div class="social-login">
+        <button class="social-btn google"><i class="fab fa-google"></i> Google</button>
+        <button class="social-btn github"><i class="fab fa-github"></i> GitHub</button>
+        <button class="social-btn microsoft"><i class="fab fa-microsoft"></i> Microsoft</button>
+      </div>
+      
+      <div class="modal-footer">
+        Already have an account? <a id="switchToLogin">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hero Section (your original) -->
+<section class="hero-section" id="home">
+  <div class="hero-background"></div>
+  <div class="chalkboard-hero">
+    <div class="chalkboard-wrapper">
+      <div class="chalkboard-content">
+        <div class="typewriter-container">
+  <h1 class="typewriter-text">Blackboard 2.0</h1>
+</div>
+<h2 class="chalk-subtitle">One Platform. Endless Possibilities.</h2>
+<p class="chalk-description">A unified academic ecosystem for students and faculty. From interactive coding practice with live editors to data structure visualizations, real-time lectures, automated attendance, assignment management, digital library, AI-powered question bank generation, smart flashcards, and collaborative doubt solving—everything you need in one place.</p>
+<div class="hero-actions">
+  <button class="hero-btn btn-primary" id="heroStartBtn"><i class="fas fa-graduation-cap"></i> Join as Student</button>
+  <button class="hero-btn btn-secondary" id="facultyBtn"><i class="fas fa-chalkboard-teacher"></i> Join as Faculty</button>
+</div>
+      </div>
+      <div class="chalk-tools">
+        <div class="tool-item"><i class="fas fa-chalkboard"></i></div>
+        <div class="tool-item"><i class="fas fa-pen"></i></div>
+        <div class="tool-item"><i class="fas fa-eraser"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Improved Features Section with proper navigation -->
+<section class="features-section" id="features">
+  <div class="section-header">
+    <h2 class="section-title">Powerful Learning Features</h2>
+    <p class="section-subtitle">Everything you need to master coding, data structures, and machine learning in one unified platform</p>
+  </div>
+  
+  <!-- Category Tabs -->
+  <div class="features-category">
+    <button class="category-tab active" data-category="all"><i class="fas fa-th-large"></i> All Features</button>
+    <button class="category-tab" data-category="coding"><i class="fas fa-code"></i> Coding</button>
+    <button class="category-tab" data-category="dsml"><i class="fas fa-brain"></i> DS & ML</button>
+    <button class="category-tab" data-category="classroom"><i class="fas fa-chalkboard-teacher"></i> Classroom</button>
+    <button class="category-tab" data-category="tools"><i class="fas fa-tools"></i> Tools</button>
+  </div>
+  
+  <!-- Features Grid -->
+  <div class="features-grid">
+    <!-- Learn Coding -->
+    <div class="feature-card" data-category="coding">
+      <div class="feature-icon"><i class="fas fa-code"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">HTML/CSS</span>
+        <span class="feature-tag">JavaScript</span>
+        <span class="feature-tag">Python</span>
+        <span class="feature-tag">Java</span>
+      </div>
+      <h3>Learn Coding</h3>
+      <p>Multi-language code editor with real-time execution. Write, run, and debug code in HTML, CSS, JS, Python, and Java with instant output.</p>
+      <a href="learn.html" class="feature-more">Start Coding <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- DS & ML Visualization -->
+    <div class="feature-card" data-category="dsml">
+      <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">Stack</span>
+        <span class="feature-tag">Queue</span>
+        <span class="feature-tag">Tree</span>
+        <span class="feature-tag">ML Models</span>
+      </div>
+      <h3>DS & ML Visualization</h3>
+      <p>Interactive visualizations for data structures and ML models. Perform push/pop on stacks, insert/delete in linked lists, and watch ML algorithms in action.</p>
+      <a href="game.html" class="feature-more">Explore Visualizer <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- Live Lectures -->
+    <div class="feature-card" data-category="classroom">
+      <div class="feature-icon"><i class="fas fa-video"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">WebRTC</span>
+        <span class="feature-tag">Screen Share</span>
+        <span class="feature-tag">Code Share</span>
+        <span class="feature-tag">Recording</span>
+      </div>
+      <h3>Live Lectures</h3>
+      <p>Real-time video lectures with screen sharing, code sharing, chat, hand-raising, and automatic recording. Perfect for interactive online classes.</p>
+      <a href="lecture.html" class="feature-more">Join Lecture <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- Attendance System -->
+    <div class="feature-card" data-category="classroom">
+      <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">Auto Marking</span>
+        <span class="feature-tag">Session ID</span>
+        <span class="feature-tag">Reports</span>
+      </div>
+      <h3>Smart Attendance</h3>
+      <p>Automated attendance system with unique session IDs. Students mark attendance with one click. Real-time reports and low attendance alerts.</p>
+      <a href="attendnce tracker.html" class="feature-more">Track Attendance <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- Assignment Module -->
+    <div class="feature-card" data-category="classroom">
+      <div class="feature-icon"><i class="fas fa-pen"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">Upload</span>
+        <span class="feature-tag">Submit</span>
+        <span class="feature-tag">Grade</span>
+        <span class="feature-tag">Feedback</span>
+      </div>
+      <h3>Assignments</h3>
+      <p>Complete assignment management. Faculty can upload assignments with deadlines. Students submit work online. Track pending/completed status.</p>
+      <a href="assigment.html" class="feature-more">View Assignments <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- Digital Library -->
+    <div class="feature-card" data-category="tools">
+      <div class="feature-icon"><i class="fas fa-book"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">PDFs</span>
+        <span class="feature-tag">Videos</span>
+        <span class="feature-tag">Notes</span>
+        <span class="feature-tag">Recommendations</span>
+      </div>
+      <h3>Digital Library</h3>
+      <p>Central repository for study materials. Upload and download books, notes, and resources. Smart recommendations based on your interests.</p>
+      <a href="uploadfiles.html" class="feature-more">Browse Library <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- Question Bank Generator -->
+    <div class="feature-card" data-category="tools">
+      <div class="feature-icon"><i class="fas fa-database"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">MCQ</span>
+        <span class="feature-tag">Descriptive</span>
+        <span class="feature-tag">AI-Powered</span>
+      </div>
+      <h3>Question Bank</h3>
+      <p>AI-assisted question generation. Create MCQs and descriptive questions from any topic or text. Export to PDF. Perfect for exam preparation.</p>
+      <a href="questionbank.html" class="feature-more">Generate Questions <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- Flashcard Generator -->
+    <div class="feature-card" data-category="tools">
+      <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">Active Recall</span>
+        <span class="feature-tag">Spaced Repetition</span>
+        <span class="feature-tag">Study Notes</span>
+      </div>
+      <h3>Flashcard Generator</h3>
+      <p>Convert study notes into digital flashcards. Specify number of cards, focus area, and complexity. Track your progress with spaced repetition.</p>
+      <a href="flashcard.html" class="feature-more">Create Flashcards <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <!-- Doubt Solving Forum -->
+    <div class="feature-card" data-category="classroom">
+      <div class="feature-icon"><i class="fas fa-comments"></i></div>
+      <div class="feature-tags">
+        <span class="feature-tag">Q&A</span>
+        <span class="feature-tag">Voting</span>
+        <span class="feature-tag">Code Sharing</span>
+      </div>
+      <h3>Doubt Solving</h3>
+      <p>Community forum for academic doubts. Post questions, get answers from peers and faculty. Upvote/downvote answers for quality control.</p>
+      <a href="doubt-clearning.html" class="feature-more">Ask Doubts <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<div class="stats-section">
+  <div class="stat-item">
+    <div class="stat-number">50K+</div>
+    <div class="stat-label">Active Students</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">1000+</div>
+    <div class="stat-label">Coding Challenges</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">500+</div>
+    <div class="stat-label">Educational Institutes</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">95%</div>
+    <div class="stat-label">Success Rate</div>
+  </div>
+</div>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="cta-container">
+    <h2 class="cta-title">Ready to Transform Your Learning?</h2>
+    <p class="cta-text">Join thousands of students and developers who are already mastering new skills with Blackboard 2.0. No credit card required to start your free trial.</p>
+    <button class="cta-button" id="ctaStartBtn"><i class="fas fa-graduation-cap"></i> Start Learning Free for 14 Days</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-image"><i class="fas fa-chalkboard"></i></div>
+        <span class="footer-logo-text">Blackboard 2.0</span>
+      </a>
+      <p class="footer-tagline">Transforming education through interactive technology. Empowering the next generation of developers, data scientists, and innovators.</p>
+    </div>
+    <div class="footer-links">
+      <h3>Platform</h3>
+      <ul>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Features</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Case Studies</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Updates</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Tutorials</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h3>Connect</h3>
+      <ul>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Twitter</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Blackboard 2.0. All rights reserved. · <a href="#" style="color: var(--gray-dark); text-decoration: none;">Privacy Policy</a> · <a href="#" style="color: var(--gray-dark); text-decoration: none;">Terms of Service</a></p>
+    <p style="margin-top: 10px;">Made with <i class="fas fa-heart" style="color: var(--primary);"></i> for the developer community</p>
+  </div>
+</footer>
+
+<script>
+// Mobile menu toggle
+const mobileBtn = document.getElementById('mobileMenuBtn');
+const navMenu = document.getElementById('navMenu');
+mobileBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  navMenu.classList.toggle('active');
+  mobileBtn.innerHTML = navMenu.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+});
+
+// Close mobile menu when clicking link
+document.querySelectorAll('.nav-menu a, .nav-menu button').forEach(item => {
+  item.addEventListener('click', () => {
+    if (navMenu.classList.contains('active')) {
+      navMenu.classList.remove('active');
+      mobileBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+  });
+});
+
+// Scroll effect
+window.addEventListener('scroll', () => {
+  const navContainer = document.querySelector('.nav-container');
+  if (window.scrollY > 50) {
+    navContainer.style.background = 'rgba(255,255,255,0.98)';
+    navContainer.style.boxShadow = '0 10px 30px -5px rgba(0,0,0,0.12)';
+    navContainer.style.padding = '10px 60px';
+  } else {
+    navContainer.style.background = 'rgba(255,255,255,0.92)';
+    navContainer.style.boxShadow = '0 8px 25px -8px rgba(0,0,0,0.1)';
+    navContainer.style.padding = '12px 60px';
+  }
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+    const target = document.querySelector(targetId);
+    if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+  });
+});
+
+// Typewriter observer
+const tw = document.querySelector('.typewriter-text');
+if (tw) {
+  new IntersectionObserver((e) => {
+    e.forEach(entry => {
+      if (entry.isIntersecting) {
+        tw.style.animation = 'none';
+        tw.offsetHeight;
+        tw.style.animation = 'typing 3.5s steps(40, end) forwards, blink-caret 0.8s step-end infinite';
+      }
+    });
+  }, { threshold: 0.5 }).observe(tw);
+}
+
+// ========== MODAL FUNCTIONALITY ==========
+const loginModal = document.getElementById('loginModal');
+const signupModal = document.getElementById('signupModal');
+const loginBtn = document.getElementById('loginBtn');
+const signupBtn = document.getElementById('signupBtn');
+const closeLogin = document.getElementById('closeLoginModal');
+const closeSignup = document.getElementById('closeSignupModal');
+const switchToSignup = document.getElementById('switchToSignup');
+const switchToLogin = document.getElementById('switchToLogin');
+const heroStartBtn = document.getElementById('heroStartBtn');
+const ctaStartBtn = document.getElementById('ctaStartBtn');
+
+// Open modals
+loginBtn.addEventListener('click', () => {
+  loginModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
+signupBtn.addEventListener('click', () => {
+  signupModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
+heroStartBtn.addEventListener('click', () => {
+  signupModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
+ctaStartBtn.addEventListener('click', () => {
+  signupModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
+// Close modals
+function closeModals() {
+  loginModal.classList.remove('active');
+  signupModal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+closeLogin.addEventListener('click', closeModals);
+closeSignup.addEventListener('click', closeModals);
+
+// Switch between modals
+switchToSignup.addEventListener('click', (e) => {
+  e.preventDefault();
+  loginModal.classList.remove('active');
+  signupModal.classList.add('active');
+});
+
+switchToLogin.addEventListener('click', (e) => {
+  e.preventDefault();
+  signupModal.classList.remove('active');
+  loginModal.classList.add('active');
+});
+
+// Close when clicking outside
+window.addEventListener('click', (e) => {
+  if (e.target === loginModal) closeModals();
+  if (e.target === signupModal) closeModals();
+});
+
+// Password visibility toggle
+document.querySelectorAll('.password-toggle').forEach(toggle => {
+  toggle.addEventListener('click', function() {
+    const input = this.previousElementSibling;
+    if (input.type === 'password') {
+      input.type = 'text';
+      this.classList.remove('fa-eye');
+      this.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      this.classList.remove('fa-eye-slash');
+      this.classList.add('fa-eye');
+    }
+  });
+});
+
+// ========== FEATURES CATEGORY FILTER ==========
+const categoryTabs = document.querySelectorAll('.category-tab');
+const featureCards = document.querySelectorAll('.feature-card');
+
+categoryTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Remove active class from all tabs
+    categoryTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    const category = tab.getAttribute('data-category');
+    
+    featureCards.forEach(card => {
+      if (category === 'all' || card.getAttribute('data-category') === category) {
+        card.style.display = 'flex';
+        card.style.animation = 'fadeIn 0.5s ease';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// ========== DEMO LOGIN/SIGNUP (for demonstration) ==========
+document.getElementById('doLogin').addEventListener('click', () => {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  if (email && password) {
+    alert(`Welcome back! Logging in as ${email}`);
+    closeModals();
+  } else {
+    alert('Please enter email and password');
+  }
+});
+
+document.getElementById('doSignup').addEventListener('click', () => {
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  const confirm = document.getElementById('signupConfirmPassword').value;
+  
+  if (!name || !email || !password || !confirm) {
+    alert('Please fill all fields');
+    return;
+  }
+  
+  if (password !== confirm) {
+    alert('Passwords do not match');
+    return;
+  }
+  
+  alert(`Account created for ${name}! Welcome to Blackboard 2.0`);
+  closeModals();
+});
+</script>
+</body>
+</html>

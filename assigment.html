@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackboard 2.0 - Complete Assignment System</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #c7d2fe;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #64748b;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --info: #3b82f6;
+            --info-light: #dbeafe;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: #f0f7ff;
+            min-height: 100vh;
+            padding-top: 90px;
+        }
+
+        /* NAVBAR */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .logo:hover .logo-image {
+            transform: rotate(-5deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--gray-dark);
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--darker);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 20px auto 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Auth Container */
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray-dark);
+            transition: all 0.3s;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            background: var(--primary-light);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #0e7490;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard-header {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .institute-info {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .card h3 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3 i {
+            color: var(--primary);
+        }
+
+        .assignment-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .assignment-item {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .assignment-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .assignment-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .assignment-subject {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .assignment-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .assignment-meta i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+
+        .deadline-warning {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .deadline-normal {
+            color: var(--success);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .status-submitted {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .status-late {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .status-graded {
+            background: var(--info-light);
+            color: var(--info);
+        }
+
+        .submission-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .submission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .submission-item:last-child {
+            border-bottom: none;
+        }
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .student-email {
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+        }
+
+        .submission-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .marks-input {
+            width: 80px;
+            padding: 0.3rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .feedback-input {
+            width: 200px;
+            padding: 0.3rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .action-icon {
+            cursor: pointer;
+            margin: 0 0.3rem;
+            color: var(--gray-dark);
+            transition: all 0.3s;
+        }
+
+        .action-icon:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .download-icon {
+            color: var(--success);
+        }
+
+        .download-icon:hover {
+            color: #059669;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: var(--primary-light);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: var(--success-light);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .alert-warning {
+            background: var(--warning-light);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .alert-danger {
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: var(--dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-dark);
+        }
+
+        .file-input {
+            border: 2px dashed var(--primary);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .file-input:hover {
+            background: var(--primary-light);
+        }
+
+        .file-input-small {
+            border: 2px dashed var(--primary);
+            padding: 1rem;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .file-input-small:hover {
+            background: var(--primary-light);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .material-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .material-notice {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .material-timetable {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .material-study {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .material-syllabus {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .material-other {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        .optional-badge {
+            background: var(--gray);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+
+        .text-only-notice {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+            margin-top: 0.5rem;
+        }
+    
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--darker);
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+       
+<header>
+  <div class="nav-container" id="navContainer">
+    <a href="#" class="logo">
+      <div class="logo-image"><i class="fas fa-chalkboard"></i></div>
+      <span class="logo-text">Blackboard 2.0</span>
+    </a>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="nav-menu" id="navMenu">
+      <!-- original links exactly as they were (plus home) -->
+      <a href="index.html" class="nav-link"> Home</a>
+      <a href="learn.html" class="nav-link"> Learn Code</a>
+      <a href="game.html" class="nav-link"> DS & ML</a>
+      <a href="lecture.html" class="nav-link"> Live Lectures</a>
+      <a href="attendnce tracker.html" class="nav-link"> Attendance</a>
+      <a href="assigment.html" class="nav-link"> Assignments</a>
+      <a href="uploadfiles.html" class="nav-link"> Library</a>
+      <a href="questionbank.html" class="nav-link"> Question Bank</a>
+      <a href="flashcard.html" class="nav-link"> Flashcards</a>
+      <a href="doubt-clearning.html" class="nav-link"> Doubts Forum</a>
+      
+      
+    </nav>
+  </div>
+</header>
+
+    <div class="main-container">
+        <!-- Auth Section -->
+        <div id="authSection">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form active">
+                    <h2 style="margin-bottom: 1.5rem;">Login to Assignment System</h2>
+                    
+                    <div class="form-group">
+                        <label>Login As</label>
+                        <select id="loginRole" onchange="toggleLoginFields()">
+                            <option value="professor">Professor</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+
+                    <div id="professorLoginFields">
+                        <div class="form-group">
+                            <label>Institute Name</label>
+                            <input type="text" id="loginProfInstitute" placeholder="Enter institute name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Professor ID</label>
+                            <input type="text" id="loginProfId" placeholder="Enter professor ID" required>
+                        </div>
+                    </div>
+
+                    <div id="studentLoginFields" style="display: none;">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="loginStudentName" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Institute Name</label>
+                            <input type="text" id="loginStudentInstitute" placeholder="Enter institute name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginStudentEmail" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professor Dashboard -->
+        <div id="professorDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-chalkboard-teacher"></i> Professor Dashboard</h2>
+                <div>
+                    <span id="profWelcome" style="margin-right: 1rem;"></span>
+                    <button class="btn-small btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <div id="profInstituteInfo" class="institute-info"></div>
+
+            <div class="stats-grid" id="profStats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalAssignments">0</div>
+                    <div class="stat-label">Total Assignments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeAssignments">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalSubmissions">0</div>
+                    <div class="stat-label">Submissions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pendingGrading">0</div>
+                    <div class="stat-label">Pending Grading</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMaterials">0</div>
+                    <div class="stat-label">Materials</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="switchProfTab('create')">Create Assignment</div>
+                <div class="tab" onclick="switchProfTab('assignments')">My Assignments</div>
+                <div class="tab" onclick="switchProfTab('submissions')">Submissions</div>
+                <div class="tab" onclick="switchProfTab('materials')">Notices & Materials</div>
+            </div>
+
+            <!-- Create Assignment Tab -->
+            <div id="profCreateTab" class="tab-content active">
+                <div class="card">
+                    <h3><i class="fas fa-plus-circle"></i> Create New Assignment</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Assignment Title</label>
+                            <input type="text" id="assignmentTitle" placeholder="e.g., Chapter 5 Exercise">
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select id="assignmentSubject">
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Class</label>
+                            <select id="assignmentClass">
+                                <option value="">Select Class</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Total Marks</label>
+                            <input type="number" id="assignmentMarks" placeholder="e.g., 100">
+                        </div>
+                        <div class="form-group">
+                            <label>Deadline</label>
+                            <input type="datetime-local" id="assignmentDeadline">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="assignmentDescription" rows="4" placeholder="Enter assignment details..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Attachment (Optional) <span class="optional-badge">Optional</span></label>
+                        <div class="file-input-small" onclick="document.getElementById('assignmentFile').click()">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 1.5rem; color: var(--primary);"></i>
+                            <p>Click to upload file (PDF, DOC, ZIP) - Optional</p>
+                            <input type="file" id="assignmentFile" style="display: none;" accept=".pdf,.doc,.docx,.zip">
+                        </div>
+                        <div id="selectedFile" style="margin-top: 0.5rem;"></div>
+                    </div>
+                    <button class="btn" onclick="createAssignment()">Create Assignment</button>
+                </div>
+            </div>
+
+            <!-- My Assignments Tab -->
+            <div id="profAssignmentsTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-tasks"></i> My Assignments</h3>
+                    <div class="assignment-list" id="profAssignmentsList">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submissions Tab -->
+            <div id="profSubmissionsTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-check-circle"></i> Submissions to Grade</h3>
+                    <div class="filter-bar">
+                        <select id="gradeAssignmentSelect" onchange="loadSubmissionsForGrading()">
+                            <option value="">Select Assignment</option>
+                        </select>
+                    </div>
+                    <div id="submissionsList" class="submission-list">
+                        Select an assignment to view submissions
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials Tab -->
+            <div id="profMaterialsTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-upload"></i> Upload Notice / Material</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Material Type</label>
+                            <select id="materialType">
+                                <option value="notice">📢 Notice/Announcement</option>
+                                <option value="timetable">📅 Timetable</option>
+                                <option value="study_material">📚 Study Material</option>
+                                <option value="syllabus">📋 Syllabus</option>
+                                <option value="other">📎 Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>For Class (optional - leave empty for all)</label>
+                            <input type="text" id="materialClass" placeholder="e.g., TYBSC CS, FYBSC IT">
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" id="materialTitle" placeholder="e.g., Winter Exam Timetable">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description / Content</label>
+                        <textarea id="materialDescription" rows="4" placeholder="Enter notice content or description..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Attachment (Optional) </label>
+                        <div class="file-input-small" onclick="document.getElementById('materialFile').click()">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 1.5rem; color: var(--primary);"></i>
+                            <p>Click to upload file (PDF, DOC, Image, etc.) - Optional</p>
+                            <input type="file" id="materialFile" style="display: none;">
+                        </div>
+                        <div id="materialFileInfo" style="margin-top: 0.5rem;"></div>
+                    </div>
+                    <button class="btn" onclick="uploadMaterial()">Upload Material</button>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-file-alt"></i> Uploaded Materials</h3>
+                    <div class="filter-bar">
+                        <select id="filterMaterialType" onchange="loadMaterials()">
+                            <option value="">All Types</option>
+                            <option value="notice">📢 Notices</option>
+                            <option value="timetable">📅 Timetables</option>
+                            <option value="study_material">📚 Study Materials</option>
+                            <option value="syllabus">📋 Syllabus</option>
+                            <option value="other">📎 Other</option>
+                        </select>
+                    </div>
+                    <div id="materialsList" class="assignment-list">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Dashboard -->
+        <div id="studentDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-user-graduate"></i> Student Dashboard</h2>
+                <div>
+                    <span id="studentWelcome" style="margin-right: 1rem;"></span>
+                    <button class="btn-small btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <div id="studentInstituteInfo" class="institute-info"></div>
+
+            <div class="stats-grid" id="studentStats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalStudentAssignments">0</div>
+                    <div class="stat-label">Total Assignments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="submittedCount">0</div>
+                    <div class="stat-label">Submitted</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pendingCount">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="averageMarks">0</div>
+                    <div class="stat-label">Average Marks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="newMaterialsCount">0</div>
+                    <div class="stat-label">New Materials</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="switchStudentTab('pending')">Pending Assignments</div>
+                <div class="tab" onclick="switchStudentTab('submitted')">Submitted</div>
+                <div class="tab" onclick="switchStudentTab('graded')">Graded</div>
+                <div class="tab" onclick="switchStudentTab('materials')">Notices & Materials</div>
+            </div>
+
+            <!-- Pending Assignments Tab -->
+            <div id="studentPendingTab" class="tab-content active">
+                <div class="card">
+                    <h3><i class="fas fa-clock"></i> Pending Assignments</h3>
+                    <div class="assignment-list" id="pendingAssignmentsList">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submitted Assignments Tab -->
+            <div id="studentSubmittedTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-check-circle"></i> Submitted Assignments</h3>
+                    <div class="assignment-list" id="submittedAssignmentsList">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graded Assignments Tab -->
+            <div id="studentGradedTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-star"></i> Graded Assignments</h3>
+                    <div class="assignment-list" id="gradedAssignmentsList">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Materials Tab -->
+            <div id="studentMaterialsTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-file-alt"></i> Notices & Materials</h3>
+                    <div class="filter-bar">
+                        <select id="studentFilterMaterialType" onchange="loadStudentMaterials()">
+                            <option value="">All Types</option>
+                            <option value="notice">📢 Notices</option>
+                            <option value="timetable">📅 Timetables</option>
+                            <option value="study_material">📚 Study Materials</option>
+                            <option value="syllabus">📋 Syllabus</option>
+                            <option value="other">📎 Other</option>
+                        </select>
+                    </div>
+                    <div id="studentMaterialsList" class="assignment-list">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submission Modal -->
+    <div id="submissionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Submit Assignment</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalAssignmentInfo" style="margin-bottom: 1rem;"></div>
+            <div class="form-group">
+                <label>Your Submission (Text or File)</label>
+                <textarea id="submissionText" rows="4" placeholder="You can paste your answer here..."></textarea>
+            </div>
+            <div class="file-input-small" onclick="document.getElementById('submissionFile').click()">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 1.5rem; color: var(--primary);"></i>
+                <p>Click to upload file (Optional if you entered text)</p>
+                <input type="file" id="submissionFile" style="display: none;">
+            </div>
+            <div id="submissionFileInfo" style="margin: 1rem 0;"></div>
+            <button class="btn" onclick="submitAssignment()">Submit Assignment</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase - REPLACE WITH YOUR CREDENTIALS
+        const SUPABASE_URL = 'https://wbdurdtfwhmrhahexexw.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndiZHVyZHRmd2htcmhhaGV4ZXh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3NDA4NTQsImV4cCI6MjA4NzMxNjg1NH0.WUVzMOG6gsi0Zh8cszp-K5XaK7R6E7BKFau3lFPP_e4';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Global variables
+        let currentInstitute = null;
+        let currentProfessor = null;
+        let currentStudent = null;
+        let currentAssignment = null;
+
+        // UI Functions
+        function showAuth() {
+            document.getElementById('authSection').style.display = 'block';
+        }
+
+        function switchAuthTab(tab) {
+            // Only login tab exists now
+        }
+
+        function toggleLoginFields() {
+            const role = document.getElementById('loginRole').value;
+            document.getElementById('professorLoginFields').style.display = role === 'professor' ? 'block' : 'none';
+            document.getElementById('studentLoginFields').style.display = role === 'student' ? 'block' : 'none';
+        }
+
+        function switchProfTab(tab) {
+            document.querySelectorAll('#professorDashboard .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#professorDashboard .tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'create') {
+                document.querySelectorAll('#professorDashboard .tab')[0].classList.add('active');
+                document.getElementById('profCreateTab').classList.add('active');
+            } else if (tab === 'assignments') {
+                document.querySelectorAll('#professorDashboard .tab')[1].classList.add('active');
+                document.getElementById('profAssignmentsTab').classList.add('active');
+                loadProfessorAssignments();
+            } else if (tab === 'submissions') {
+                document.querySelectorAll('#professorDashboard .tab')[2].classList.add('active');
+                document.getElementById('profSubmissionsTab').classList.add('active');
+                loadAssignmentsForGrading();
+            } else {
+                document.querySelectorAll('#professorDashboard .tab')[3].classList.add('active');
+                document.getElementById('profMaterialsTab').classList.add('active');
+                loadMaterials();
+            }
+        }
+
+        function switchStudentTab(tab) {
+            document.querySelectorAll('#studentDashboard .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#studentDashboard .tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'pending') {
+                document.querySelectorAll('#studentDashboard .tab')[0].classList.add('active');
+                document.getElementById('studentPendingTab').classList.add('active');
+                loadStudentAssignments('pending');
+            } else if (tab === 'submitted') {
+                document.querySelectorAll('#studentDashboard .tab')[1].classList.add('active');
+                document.getElementById('studentSubmittedTab').classList.add('active');
+                loadStudentAssignments('submitted');
+            } else if (tab === 'graded') {
+                document.querySelectorAll('#studentDashboard .tab')[2].classList.add('active');
+                document.getElementById('studentGradedTab').classList.add('active');
+                loadStudentAssignments('graded');
+            } else {
+                document.querySelectorAll('#studentDashboard .tab')[3].classList.add('active');
+                document.getElementById('studentMaterialsTab').classList.add('active');
+                loadStudentMaterials();
+            }
+        }
+
+        // Login
+        async function login() {
+            const role = document.getElementById('loginRole').value;
+
+            try {
+                if (role === 'professor') {
+                    const instituteName = document.getElementById('loginProfInstitute').value;
+                    const professorId = document.getElementById('loginProfId').value;
+
+                    if (!instituteName || !professorId) {
+                        alert('Please fill all fields');
+                        return;
+                    }
+
+                    const { data: institute, error: instError } = await supabaseClient
+                        .from('institutes')
+                        .select('*')
+                        .eq('name', instituteName)
+                        .maybeSingle();
+
+                    if (!institute) {
+                        alert('Institute not found');
+                        return;
+                    }
+
+                    const { data: professor, error: profError } = await supabaseClient
+                        .from('professors')
+                        .select('*')
+                        .eq('professor_id', professorId)
+                        .eq('institute_id', institute.id)
+                        .maybeSingle();
+
+                    if (!professor) {
+                        alert('Invalid professor ID');
+                        return;
+                    }
+
+                    currentInstitute = institute;
+                    currentProfessor = professor;
+                    showProfessorDashboard();
+                    
+                } else {
+                    const name = document.getElementById('loginStudentName').value;
+                    const instituteName = document.getElementById('loginStudentInstitute').value;
+                    const email = document.getElementById('loginStudentEmail').value;
+
+                    if (!name || !instituteName || !email) {
+                        alert('Please fill all fields');
+                        return;
+                    }
+
+                    const { data: institute, error: instError } = await supabaseClient
+                        .from('institutes')
+                        .select('*')
+                        .eq('name', instituteName)
+                        .maybeSingle();
+
+                    if (!institute) {
+                        alert('Institute not found');
+                        return;
+                    }
+
+                    const { data: student, error: stuError } = await supabaseClient
+                        .from('students')
+                        .select('*')
+                        .eq('name', name)
+                        .eq('email', email)
+                        .eq('institute_id', institute.id)
+                        .maybeSingle();
+
+                    if (!student) {
+                        alert('Invalid student credentials');
+                        return;
+                    }
+
+                    currentInstitute = institute;
+                    currentStudent = student;
+                    showStudentDashboard();
+                }
+            } catch (error) {
+                alert('Login error: ' + error.message);
+            }
+        }
+
+        // Show Professor Dashboard
+        async function showProfessorDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('professorDashboard').style.display = 'block';
+            
+            document.getElementById('profWelcome').innerHTML = `<i class="fas fa-user"></i> ${currentProfessor.name}`;
+            document.getElementById('profInstituteInfo').innerHTML = `
+                <div>
+                    <h3>${currentInstitute.name}</h3>
+                    <p><i class="fas fa-id-card"></i> Professor ID: ${currentProfessor.professor_id}</p>
+                </div>
+            `;
+
+            await loadProfessorSubjects();
+            await loadProfessorClasses();
+            await loadProfessorStats();
+        }
+
+        // Show Student Dashboard
+        async function showStudentDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('studentDashboard').style.display = 'block';
+            
+            document.getElementById('studentWelcome').innerHTML = `<i class="fas fa-user"></i> ${currentStudent.name}`;
+            document.getElementById('studentInstituteInfo').innerHTML = `
+                <div>
+                    <h3>${currentInstitute.name}</h3>
+                    <p><i class="fas fa-users"></i> Class: ${currentStudent.class}</p>
+                </div>
+            `;
+
+            await loadStudentStats();
+            await loadStudentAssignments('pending');
+            await loadStudentMaterials();
+        }
+
+        // Load Professor's Subjects
+        async function loadProfessorSubjects() {
+            const { data, error } = await supabaseClient
+                .from('subjects')
+                .select('*')
+                .eq('institute_id', currentInstitute.id)
+                .eq('professor_id', currentProfessor.id);
+
+            if (error) {
+                console.error('Error loading subjects:', error);
+                return;
+            }
+
+            const subjectSelect = document.getElementById('assignmentSubject');
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            if (data && data.length > 0) {
+                data.forEach(subject => {
+                    subjectSelect.innerHTML += `<option value="${subject.name}">${subject.name}</option>`;
+                });
+            }
+        }
+
+        // Load Professor's Classes
+        async function loadProfessorClasses() {
+            const { data, error } = await supabaseClient
+                .from('subjects')
+                .select('class')
+                .eq('institute_id', currentInstitute.id)
+                .eq('professor_id', currentProfessor.id);
+
+            if (error) {
+                console.error('Error loading classes:', error);
+                return;
+            }
+
+            const classes = [...new Set(data.map(s => s.class))];
+            const classSelect = document.getElementById('assignmentClass');
+            classSelect.innerHTML = '<option value="">Select Class</option>';
+            classes.forEach(cls => {
+                classSelect.innerHTML += `<option value="${cls}">${cls}</option>`;
+            });
+        }
+
+        // Create Assignment
+        async function createAssignment() {
+            const title = document.getElementById('assignmentTitle').value;
+            const subject = document.getElementById('assignmentSubject').value;
+            const studentClass = document.getElementById('assignmentClass').value;
+            const marks = document.getElementById('assignmentMarks').value;
+            const deadline = document.getElementById('assignmentDeadline').value;
+            const description = document.getElementById('assignmentDescription').value;
+
+            if (!title || !subject || !studentClass || !marks || !deadline) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            let fileUrl = null;
+            const fileInput = document.getElementById('assignmentFile');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileName = `assignments/${Date.now()}_${file.name}`;
+                
+                const { error } = await supabaseClient.storage
+                    .from('assignments')
+                    .upload(fileName, file);
+
+                if (error) {
+                    alert('Error uploading file: ' + error.message);
+                    return;
+                }
+
+                const { data: urlData } = supabaseClient.storage
+                    .from('assignments')
+                    .getPublicUrl(fileName);
+                
+                fileUrl = urlData.publicUrl;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('assignments')
+                    .insert([{
+                        institute_id: currentInstitute.id,
+                        professor_id: currentProfessor.id,
+                        title,
+                        description,
+                        subject,
+                        class: studentClass,
+                        total_marks: parseInt(marks),
+                        deadline: new Date(deadline).toISOString(),
+                        file_url: fileUrl
+                    }]);
+
+                if (error) throw error;
+
+                alert('Assignment created successfully!');
+                
+                document.getElementById('assignmentTitle').value = '';
+                document.getElementById('assignmentDescription').value = '';
+                document.getElementById('assignmentMarks').value = '';
+                document.getElementById('assignmentDeadline').value = '';
+                document.getElementById('assignmentFile').value = '';
+                document.getElementById('selectedFile').innerHTML = '';
+
+                await loadProfessorStats();
+                
+            } catch (error) {
+                alert('Error creating assignment: ' + error.message);
+            }
+        }
+
+        // Load Professor's Assignments
+        async function loadProfessorAssignments() {
+            const { data, error } = await supabaseClient
+                .from('assignments')
+                .select('*')
+                .eq('institute_id', currentInstitute.id)
+                .eq('professor_id', currentProfessor.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading assignments:', error);
+                document.getElementById('profAssignmentsList').innerHTML = 'Error loading assignments';
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                document.getElementById('profAssignmentsList').innerHTML = '<p>No assignments created yet</p>';
+                return;
+            }
+
+            let html = '';
+            data.forEach(assignment => {
+                const deadline = new Date(assignment.deadline);
+                const now = new Date();
+                const isActive = deadline > now;
+
+                html += `
+                    <div class="assignment-item">
+                        <div class="assignment-header">
+                            <span class="assignment-title">${assignment.title}</span>
+                            <span class="assignment-subject">${assignment.subject}</span>
+                        </div>
+                        <div class="assignment-meta">
+                            <span><i class="fas fa-users"></i> ${assignment.class}</span>
+                            <span><i class="fas fa-calendar"></i> Deadline: ${deadline.toLocaleString()}</span>
+                            <span><i class="fas fa-star"></i> Marks: ${assignment.total_marks}</span>
+                            <span class="${isActive ? 'deadline-normal' : 'deadline-warning'}">
+                                <i class="fas ${isActive ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                                ${isActive ? 'Active' : 'Expired'}
+                            </span>
+                        </div>
+                        <p style="margin-bottom: 1rem;">${assignment.description || 'No description'}</p>
+                        ${assignment.file_url ? `<a href="${assignment.file_url}" target="_blank" class="btn-small btn-secondary"><i class="fas fa-download"></i> Download Attachment</a>` : ''}
+                    </div>
+                `;
+            });
+
+            document.getElementById('profAssignmentsList').innerHTML = html;
+        }
+
+        // Load Professor Stats
+        async function loadProfessorStats() {
+            const { data: assignments, error: assignError } = await supabaseClient
+                .from('assignments')
+                .select('*')
+                .eq('institute_id', currentInstitute.id)
+                .eq('professor_id', currentProfessor.id);
+
+            if (assignError) {
+                console.error('Error loading stats:', assignError);
+                return;
+            }
+
+            document.getElementById('totalAssignments').textContent = assignments ? assignments.length : 0;
+
+            const now = new Date();
+            const active = assignments ? assignments.filter(a => new Date(a.deadline) > now).length : 0;
+            document.getElementById('activeAssignments').textContent = active;
+
+            let totalSubmissions = 0;
+            let pendingGrading = 0;
+
+            if (assignments) {
+                for (let assignment of assignments) {
+                    const { data: submissions, error: subError } = await supabaseClient
+                        .from('submissions')
+                        .select('*')
+                        .eq('assignment_id', assignment.id);
+
+                    if (!subError) {
+                        totalSubmissions += submissions.length;
+                        pendingGrading += submissions.filter(s => s.status === 'submitted' || s.status === 'late').length;
+                    }
+                }
+            }
+
+            document.getElementById('totalSubmissions').textContent = totalSubmissions;
+            document.getElementById('pendingGrading').textContent = pendingGrading;
+
+            // Load materials count
+            try {
+                const { data: materials, error: matError } = await supabaseClient
+                    .from('materials')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('professor_id', currentProfessor.id);
+
+                if (!matError) {
+                    document.getElementById('totalMaterials').textContent = materials ? materials.length : 0;
+                } else {
+                    document.getElementById('totalMaterials').textContent = '0';
+                }
+            } catch (error) {
+                document.getElementById('totalMaterials').textContent = '0';
+            }
+        }
+
+        // Load Assignments for Grading Dropdown
+        async function loadAssignmentsForGrading() {
+            const { data, error } = await supabaseClient
+                .from('assignments')
+                .select('*')
+                .eq('institute_id', currentInstitute.id)
+                .eq('professor_id', currentProfessor.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading assignments:', error);
+                return;
+            }
+
+            const select = document.getElementById('gradeAssignmentSelect');
+            select.innerHTML = '<option value="">Select Assignment</option>';
+            if (data && data.length > 0) {
+                data.forEach(assignment => {
+                    select.innerHTML += `<option value="${assignment.id}">${assignment.title} (${assignment.class})</option>`;
+                });
+            }
+        }
+
+        // Load Submissions for Grading
+        async function loadSubmissionsForGrading() {
+            const assignmentId = document.getElementById('gradeAssignmentSelect').value;
+            if (!assignmentId) {
+                document.getElementById('submissionsList').innerHTML = 'Select an assignment to view submissions';
+                return;
+            }
+
+            const { data: submissions, error: subError } = await supabaseClient
+                .from('submissions')
+                .select('*, students(name, email, student_code)')
+                .eq('assignment_id', assignmentId);
+
+            if (subError) {
+                console.error('Error loading submissions:', subError);
+                return;
+            }
+
+            if (!submissions || submissions.length === 0) {
+                document.getElementById('submissionsList').innerHTML = '<p>No submissions yet</p>';
+                return;
+            }
+
+            let html = '';
+            submissions.forEach(sub => {
+                const statusClass = sub.status === 'submitted' ? 'status-submitted' : 
+                                   sub.status === 'late' ? 'status-late' : 'status-graded';
+                
+                html += `
+                    <div class="submission-item" id="submission-${sub.id}">
+                        <div class="student-info">
+                            <span class="student-name">${sub.students.name}</span>
+                            <span class="student-email">${sub.students.email}</span>
+                        </div>
+                        <div>
+                            <span class="status-badge ${statusClass}">${sub.status}</span>
+                        </div>
+                        <div class="submission-status">
+                            ${sub.submission_file ? `<a href="${sub.submission_file}" target="_blank" class="action-icon download-icon"><i class="fas fa-download"></i></a>` : ''}
+                            <input type="number" class="marks-input" id="marks-${sub.id}" placeholder="Marks" value="${sub.marks || ''}" min="0">
+                            <input type="text" class="feedback-input" id="feedback-${sub.id}" placeholder="Feedback" value="${sub.feedback || ''}">
+                            <button class="btn-small btn-success" onclick="gradeSubmission(${sub.id})">Save</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('submissionsList').innerHTML = html;
+        }
+
+        // Grade Submission
+        async function gradeSubmission(submissionId) {
+            const marks = document.getElementById(`marks-${submissionId}`).value;
+            const feedback = document.getElementById(`feedback-${submissionId}`).value;
+
+            if (!marks) {
+                alert('Please enter marks');
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('submissions')
+                    .update({
+                        marks: parseInt(marks),
+                        feedback: feedback,
+                        status: 'graded',
+                        graded_at: new Date().toISOString(),
+                        graded_by: currentProfessor.id
+                    })
+                    .eq('id', submissionId);
+
+                if (error) throw error;
+
+                alert('Submission graded successfully!');
+                
+                const statusBadge = document.querySelector(`#submission-${submissionId} .status-badge`);
+                if (statusBadge) {
+                    statusBadge.className = 'status-badge status-graded';
+                    statusBadge.textContent = 'graded';
+                }
+
+                await loadProfessorStats();
+                
+            } catch (error) {
+                alert('Error grading submission: ' + error.message);
+            }
+        }
+
+        // Load Student Stats
+        async function loadStudentStats() {
+            const { data: assignments, error: assignError } = await supabaseClient
+                .from('assignments')
+                .select('*')
+                .eq('institute_id', currentInstitute.id)
+                .eq('class', currentStudent.class);
+
+            if (assignError) {
+                console.error('Error loading assignments:', assignError);
+                return;
+            }
+
+            document.getElementById('totalStudentAssignments').textContent = assignments ? assignments.length : 0;
+
+            const { data: submissions, error: subError } = await supabaseClient
+                .from('submissions')
+                .select('*')
+                .eq('student_id', currentStudent.id);
+
+            if (subError) {
+                console.error('Error loading submissions:', subError);
+                return;
+            }
+
+            const submitted = submissions ? submissions.length : 0;
+            const pending = (assignments ? assignments.length : 0) - submitted;
+            const graded = submissions ? submissions.filter(s => s.status === 'graded').length : 0;
+            
+            document.getElementById('submittedCount').textContent = submitted;
+            document.getElementById('pendingCount').textContent = pending;
+
+            const totalMarks = submissions ? submissions.reduce((sum, s) => sum + (s.marks || 0), 0) : 0;
+            const avgMarks = graded > 0 ? (totalMarks / graded).toFixed(1) : 0;
+            document.getElementById('averageMarks').textContent = avgMarks;
+
+            // Load new materials count
+            try {
+                const { data: materials, error: matError } = await supabaseClient
+                    .from('materials')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id);
+
+                if (!matError && materials) {
+                    const classMaterials = materials.filter(m => !m.class || m.class === currentStudent.class);
+                    const oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                    const newMaterials = classMaterials.filter(m => new Date(m.uploaded_at) > oneWeekAgo).length;
+                    document.getElementById('newMaterialsCount').textContent = newMaterials;
+                }
+            } catch (error) {
+                document.getElementById('newMaterialsCount').textContent = '0';
+            }
+        }
+
+        // Load Student Assignments by Status
+        async function loadStudentAssignments(status) {
+            const { data: assignments, error: assignError } = await supabaseClient
+                .from('assignments')
+                .select('*')
+                .eq('institute_id', currentInstitute.id)
+                .eq('class', currentStudent.class)
+                .order('deadline', { ascending: true });
+
+            if (assignError) {
+                console.error('Error loading assignments:', assignError);
+                return;
+            }
+
+            const { data: submissions, error: subError } = await supabaseClient
+                .from('submissions')
+                .select('*')
+                .eq('student_id', currentStudent.id);
+
+            if (subError) {
+                console.error('Error loading submissions:', subError);
+                return;
+            }
+
+            const submissionMap = {};
+            if (submissions) {
+                submissions.forEach(s => submissionMap[s.assignment_id] = s);
+            }
+
+            let filteredAssignments = [];
+            const now = new Date();
+
+            if (assignments) {
+                if (status === 'pending') {
+                    filteredAssignments = assignments.filter(a => !submissionMap[a.id] && new Date(a.deadline) > now);
+                } else if (status === 'submitted') {
+                    filteredAssignments = assignments.filter(a => {
+                        const sub = submissionMap[a.id];
+                        return sub && (sub.status === 'submitted' || sub.status === 'late');
+                    });
+                } else {
+                    filteredAssignments = assignments.filter(a => {
+                        const sub = submissionMap[a.id];
+                        return sub && sub.status === 'graded';
+                    });
+                }
+            }
+
+            let listId = status === 'pending' ? 'pendingAssignmentsList' : 
+                        status === 'submitted' ? 'submittedAssignmentsList' : 'gradedAssignmentsList';
+
+            if (filteredAssignments.length === 0) {
+                document.getElementById(listId).innerHTML = `<p>No ${status} assignments found</p>`;
+                return;
+            }
+
+            let html = '';
+            filteredAssignments.forEach(assignment => {
+                const deadline = new Date(assignment.deadline);
+                const submission = submissionMap[assignment.id];
+
+                html += `
+                    <div class="assignment-item">
+                        <div class="assignment-header">
+                            <span class="assignment-title">${assignment.title}</span>
+                            <span class="assignment-subject">${assignment.subject}</span>
+                        </div>
+                        <div class="assignment-meta">
+                            <span><i class="fas fa-calendar"></i> Due: ${deadline.toLocaleString()}</span>
+                            <span><i class="fas fa-star"></i> Marks: ${assignment.total_marks}</span>
+                            ${submission ? `
+                                <span class="status-badge ${submission.status === 'graded' ? 'status-graded' : submission.status === 'late' ? 'status-late' : 'status-submitted'}">
+                                    ${submission.status}
+                                </span>
+                            ` : ''}
+                        </div>
+                        <p style="margin-bottom: 1rem;">${assignment.description || 'No description'}</p>
+                        ${assignment.file_url ? `<a href="${assignment.file_url}" target="_blank" class="btn-small btn-secondary"><i class="fas fa-download"></i> Download Attachment</a>` : ''}
+                        
+                        ${status === 'pending' ? `
+                            <button class="btn-small btn-success" onclick="openSubmissionModal(${assignment.id}, '${assignment.title}')">
+                                <i class="fas fa-upload"></i> Submit
+                            </button>
+                        ` : ''}
+                        
+                        ${submission && submission.status === 'graded' ? `
+                            <div style="margin-top: 1rem; padding: 0.5rem; background: var(--success-light); border-radius: 5px;">
+                                <strong>Marks: ${submission.marks}/${assignment.total_marks}</strong><br>
+                                <strong>Feedback:</strong> ${submission.feedback || 'No feedback'}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            document.getElementById(listId).innerHTML = html;
+        }
+
+        // Upload Material (File Optional)
+        async function uploadMaterial() {
+            const type = document.getElementById('materialType').value;
+            const className = document.getElementById('materialClass').value || null;
+            const title = document.getElementById('materialTitle').value;
+            const description = document.getElementById('materialDescription').value;
+            const fileInput = document.getElementById('materialFile');
+
+            if (!title) {
+                alert('Please enter a title');
+                return;
+            }
+
+            let fileUrl = null;
+            
+            // Upload file only if selected
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileName = `materials/${Date.now()}_${file.name}`;
+
+                try {
+                    const { error: uploadError } = await supabaseClient.storage
+                        .from('assignments')
+                        .upload(fileName, file);
+
+                    if (uploadError) throw uploadError;
+
+                    const { data: urlData } = supabaseClient.storage
+                        .from('assignments')
+                        .getPublicUrl(fileName);
+                    
+                    fileUrl = urlData.publicUrl;
+                } catch (error) {
+                    alert('Error uploading file: ' + error.message);
+                    return;
+                }
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('materials')
+                    .insert([{
+                        institute_id: currentInstitute.id,
+                        professor_id: currentProfessor.id,
+                        title,
+                        description,
+                        material_type: type,
+                        class: className,
+                        file_url: fileUrl
+                    }]);
+
+                if (error) throw error;
+
+                alert('Material uploaded successfully!');
+                
+                // Clear form
+                document.getElementById('materialTitle').value = '';
+                document.getElementById('materialDescription').value = '';
+                document.getElementById('materialClass').value = '';
+                document.getElementById('materialFile').value = '';
+                document.getElementById('materialFileInfo').innerHTML = '';
+
+                // Refresh list
+                loadMaterials();
+                loadProfessorStats();
+
+            } catch (error) {
+                alert('Error uploading material: ' + error.message);
+            }
+        }
+
+        // Load Materials (Professor view)
+        async function loadMaterials() {
+            try {
+                const filterType = document.getElementById('filterMaterialType').value;
+
+                let query = supabaseClient
+                    .from('materials')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .eq('professor_id', currentProfessor.id)
+                    .order('uploaded_at', { ascending: false });
+
+                if (filterType) {
+                    query = query.eq('material_type', filterType);
+                }
+
+                const { data, error } = await query;
+
+                if (error) {
+                    if (error.message && (error.message.includes('relation') || error.message.includes('does not exist'))) {
+                        document.getElementById('materialsList').innerHTML = 
+                            '<p class="alert alert-warning">⚠️ Materials table not created yet. Please run the SQL to create the materials table.</p>';
+                        return;
+                    }
+                    console.error('Error loading materials:', error);
+                    document.getElementById('materialsList').innerHTML = 'Error loading materials';
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    document.getElementById('materialsList').innerHTML = '<p>No materials uploaded yet</p>';
+                    return;
+                }
+
+                let html = '';
+                data.forEach(material => {
+                    const typeClasses = {
+                        'notice': 'material-notice',
+                        'timetable': 'material-timetable',
+                        'study_material': 'material-study',
+                        'syllabus': 'material-syllabus',
+                        'other': 'material-other'
+                    };
+
+                    const typeLabels = {
+                        'notice': '📢 Notice',
+                        'timetable': '📅 Timetable',
+                        'study_material': '📚 Study Material',
+                        'syllabus': '📋 Syllabus',
+                        'other': '📎 Other'
+                    };
+
+                    html += `
+                        <div class="assignment-item">
+                            <div class="assignment-header">
+                                <span class="assignment-title">${material.title}</span>
+                                <span class="material-badge ${typeClasses[material.material_type]}">${typeLabels[material.material_type]}</span>
+                            </div>
+                            <div class="assignment-meta">
+                                <span><i class="fas fa-users"></i> ${material.class || 'All Classes'}</span>
+                                <span><i class="fas fa-calendar"></i> Uploaded: ${new Date(material.uploaded_at).toLocaleDateString()}</span>
+                            </div>
+                            <div style="margin-bottom: 1rem; white-space: pre-wrap;">${material.description || 'No description'}</div>
+                            ${material.file_url ? 
+                                `<a href="${material.file_url}" target="_blank" class="btn-small btn-secondary"><i class="fas fa-download"></i> Download Attachment</a>` : 
+                                '<span class="text-only-notice"><i class="fas fa-file-alt"></i> Text only - No file attached</span>'
+                            }
+                        </div>
+                    `;
+                });
+
+                document.getElementById('materialsList').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error in loadMaterials:', error);
+                document.getElementById('materialsList').innerHTML = 
+                    '<p class="alert alert-danger">⚠️ Error loading materials. Please check console.</p>';
+            }
+        }
+
+        // Load Student Materials
+        async function loadStudentMaterials() {
+            try {
+                const filterType = document.getElementById('studentFilterMaterialType')?.value || '';
+
+                let query = supabaseClient
+                    .from('materials')
+                    .select('*')
+                    .eq('institute_id', currentInstitute.id)
+                    .order('uploaded_at', { ascending: false });
+
+                if (filterType) {
+                    query = query.eq('material_type', filterType);
+                }
+
+                const { data, error } = await query;
+
+                if (error) {
+                    if (error.message && (error.message.includes('relation') || error.message.includes('does not exist'))) {
+                        document.getElementById('studentMaterialsList').innerHTML = 
+                            '<p class="alert alert-warning">⚠️ Materials table not created yet.</p>';
+                        return;
+                    }
+                    console.error('Error loading materials:', error);
+                    document.getElementById('studentMaterialsList').innerHTML = 'Error loading materials';
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    document.getElementById('studentMaterialsList').innerHTML = '<p>No materials available</p>';
+                    return;
+                }
+
+                // Filter for student's class or all classes
+                const filteredData = data.filter(m => !m.class || m.class === currentStudent.class);
+
+                if (filteredData.length === 0) {
+                    document.getElementById('studentMaterialsList').innerHTML = '<p>No materials available for your class</p>';
+                    return;
+                }
+
+                let html = '';
+                filteredData.forEach(material => {
+                    const typeClasses = {
+                        'notice': 'material-notice',
+                        'timetable': 'material-timetable',
+                        'study_material': 'material-study',
+                        'syllabus': 'material-syllabus',
+                        'other': 'material-other'
+                    };
+
+                    const typeLabels = {
+                        'notice': '📢 Notice',
+                        'timetable': '📅 Timetable',
+                        'study_material': '📚 Study Material',
+                        'syllabus': '📋 Syllabus',
+                        'other': '📎 Other'
+                    };
+
+                    html += `
+                        <div class="assignment-item">
+                            <div class="assignment-header">
+                                <span class="assignment-title">${material.title}</span>
+                                <span class="material-badge ${typeClasses[material.material_type]}">${typeLabels[material.material_type]}</span>
+                            </div>
+                            <div class="assignment-meta">
+                                <span><i class="fas fa-calendar"></i> Uploaded: ${new Date(material.uploaded_at).toLocaleDateString()}</span>
+                                ${material.class ? `<span><i class="fas fa-users"></i> Class: ${material.class}</span>` : '<span><i class="fas fa-globe"></i> All Classes</span>'}
+                            </div>
+                            <div style="margin-bottom: 1rem; white-space: pre-wrap;">${material.description || 'No description'}</div>
+                            ${material.file_url ? 
+                                `<a href="${material.file_url}" target="_blank" class="btn-small btn-secondary"><i class="fas fa-download"></i> Download Attachment</a>` : 
+                                '<span class="text-only-notice"><i class="fas fa-file-alt"></i> Text only notice</span>'
+                            }
+                        </div>
+                    `;
+                });
+
+                document.getElementById('studentMaterialsList').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error in loadStudentMaterials:', error);
+                document.getElementById('studentMaterialsList').innerHTML = 
+                    '<p class="alert alert-danger">⚠️ Error loading materials.</p>';
+            }
+        }
+
+        // Open Submission Modal
+        function openSubmissionModal(assignmentId, title) {
+            currentAssignment = { id: assignmentId, title };
+            document.getElementById('modalAssignmentInfo').innerHTML = `<h3>${title}</h3>`;
+            document.getElementById('submissionModal').classList.add('active');
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('submissionModal').classList.remove('active');
+            document.getElementById('submissionText').value = '';
+            document.getElementById('submissionFile').value = '';
+            document.getElementById('submissionFileInfo').innerHTML = '';
+        }
+
+        // Submit Assignment
+        async function submitAssignment() {
+            const text = document.getElementById('submissionText').value;
+            const fileInput = document.getElementById('submissionFile');
+
+            if (!text && fileInput.files.length === 0) {
+                alert('Please provide either text or a file');
+                return;
+            }
+
+            let fileUrl = null;
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileName = `submissions/${currentAssignment.id}_${currentStudent.id}_${Date.now()}_${file.name}`;
+                
+                const { error } = await supabaseClient.storage
+                    .from('assignments')
+                    .upload(fileName, file);
+
+                if (error) {
+                    alert('Error uploading file: ' + error.message);
+                    return;
+                }
+
+                const { data: urlData } = supabaseClient.storage
+                    .from('assignments')
+                    .getPublicUrl(fileName);
+                
+                fileUrl = urlData.publicUrl;
+            }
+
+            const { data: existing } = await supabaseClient
+                .from('submissions')
+                .select('*')
+                .eq('assignment_id', currentAssignment.id)
+                .eq('student_id', currentStudent.id)
+                .maybeSingle();
+
+            const { data: assignment } = await supabaseClient
+                .from('assignments')
+                .select('deadline')
+                .eq('id', currentAssignment.id)
+                .single();
+
+            const now = new Date();
+            const deadline = new Date(assignment.deadline);
+            const status = now > deadline ? 'late' : 'submitted';
+
+            try {
+                if (existing) {
+                    const { error } = await supabaseClient
+                        .from('submissions')
+                        .update({
+                            submission_file: fileUrl || existing.submission_file,
+                            submission_text: text || existing.submission_text,
+                            submitted_at: new Date().toISOString(),
+                            status: status
+                        })
+                        .eq('id', existing.id);
+
+                    if (error) throw error;
+                } else {
+                    const { error } = await supabaseClient
+                        .from('submissions')
+                        .insert([{
+                            assignment_id: currentAssignment.id,
+                            student_id: currentStudent.id,
+                            submission_file: fileUrl,
+                            submission_text: text,
+                            status: status
+                        }]);
+
+                    if (error) throw error;
+                }
+
+                alert('Assignment submitted successfully!');
+                closeModal();
+                await loadStudentStats();
+                await loadStudentAssignments('pending');
+                await loadStudentAssignments('submitted');
+                
+            } catch (error) {
+                alert('Error submitting assignment: ' + error.message);
+            }
+        }
+
+        // File input handlers
+        document.getElementById('assignmentFile')?.addEventListener('change', function(e) {
+            if (this.files.length) {
+                document.getElementById('selectedFile').innerHTML = `
+                    <small><i class="fas fa-check-circle" style="color: var(--success);"></i> Selected: ${this.files[0].name}</small>
+                `;
+            } else {
+                document.getElementById('selectedFile').innerHTML = '';
+            }
+        });
+
+        document.getElementById('materialFile')?.addEventListener('change', function(e) {
+            if (this.files.length) {
+                document.getElementById('materialFileInfo').innerHTML = `
+                    <small><i class="fas fa-check-circle" style="color: var(--success);"></i> Selected: ${this.files[0].name}</small>
+                `;
+            } else {
+                document.getElementById('materialFileInfo').innerHTML = '';
+            }
+        });
+
+        document.getElementById('submissionFile')?.addEventListener('change', function(e) {
+            if (this.files.length) {
+                document.getElementById('submissionFileInfo').innerHTML = `
+                    <small><i class="fas fa-check-circle" style="color: var(--success);"></i> Selected: ${this.files[0].name}</small>
+                `;
+            } else {
+                document.getElementById('submissionFileInfo').innerHTML = '';
+            }
+        });
+
+        // Logout
+        function logout() {
+            currentInstitute = null;
+            currentProfessor = null;
+            currentStudent = null;
+            
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('professorDashboard').style.display = 'none';
+            document.getElementById('studentDashboard').style.display = 'none';
+            
+            document.getElementById('loginProfInstitute').value = '';
+            document.getElementById('loginProfId').value = '';
+            document.getElementById('loginStudentName').value = '';
+            document.getElementById('loginStudentInstitute').value = '';
+            document.getElementById('loginStudentEmail').value = '';
+        }
+
+        // Initialize
+        toggleLoginFields();
+    </script>
+</body>
+</html>
