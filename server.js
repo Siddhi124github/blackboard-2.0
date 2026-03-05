@@ -9,6 +9,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Redirect root to index.html
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+
 const PORT = 3000;
 
 /* ========= HELPER FILE READ ========= */
