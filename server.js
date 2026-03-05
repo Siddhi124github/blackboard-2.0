@@ -3,13 +3,20 @@ const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
-const PORT = 3000;
+/* Serve all static files (HTML, CSS, JS) */
+app.use(express.static(__dirname));
+
+/* Home route */
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
 
 /* ========= HELPER FILE READ ========= */
 function readJSON(file) {
@@ -58,8 +65,8 @@ ${content}
         });
 
         const data = await response.json();
-
         const output = JSON.parse(data.choices[0].message.content);
+
         res.json({ questions: output });
 
     } catch (err) {
@@ -89,4 +96,9 @@ app.get('/analytics-data', (req, res) => {
     res.json(analytics);
 });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+/* ========= START SERVER ========= */
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
